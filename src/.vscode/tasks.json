@@ -1,0 +1,62 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "syncAndStartGDBdecodeur",
+            "type": "shell",
+            "command": "./syncAndStartGDB.sh ${workspaceFolder} decodeur 4560",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "syncAndStartGDBcompositeur",
+            "type": "shell",
+            "command": "./syncAndStartGDB.sh ${workspaceFolder} compositeur 4561",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "syncAndStartGDBfiltreur",
+            "type": "shell",
+            "command": "./syncAndStartGDB.sh ${workspaceFolder} filtreur 4562",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "syncAndStartGDBredimensionneur",
+            "type": "shell",
+            "command": "./syncAndStartGDB.sh ${workspaceFolder} redimensionneur 4563",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "syncAndStartGDBconvertisseur",
+            "type": "shell",
+            "command": "./syncAndStartGDB.sh ${workspaceFolder} convertisseur 4564",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "toutSynchroniser",
+            "type": "shell",
+            "command": "./syncAndStartGDB.sh ${workspaceFolder} all",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ]
+}
