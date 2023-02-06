@@ -13,7 +13,7 @@ set(SOURCE_FILTREUR allocateurMemoire.c commMemoirePartagee.c utils.c filtreur.c
 set(SOURCE_CONVERTISSEURGRIS allocateurMemoire.c commMemoirePartagee.c utils.c convertisseurgris.c)
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -g")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=armv6zk -mfpu=vfp -mfloat-abi=hard -Ofast -funroll-loops -funsafe-math-optimizations -floop-block -flto")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=armv6 -mtune=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard -Ofast -funroll-loops -funsafe-math-optimizations -floop-block -flto")
 
 SET(GCC_WARNING_FLAGS "-Wall -Wextra -Wpedantic -Wduplicated-cond -Wlogical-op -Wnull-dereference -Wshadow")
 add_definitions("${GCC_WARNING_FLAGS}")
