@@ -23,14 +23,16 @@ Dans ce laboratoire, votre tâche est d'implémenter un système de multiplexage
 
 ## 3. Préparation et outils nécessaires
 
-Ce laboratoire ne nécessite l'installation d'aucune librairie particulière. Comme pour le laboratoire 2, un projet VScode vous est fourni avec des scripts de configuration et une première structure de code. Vous pouvez le récupérer sur le dépôt Git suivant : [https://github.com/setr-ulaval/labo3-h22](https://github.com/setr-ulaval/labo3-h22). Ce dépôt contient aussi des fonctions qui vous sont fournies pour implémenter certaines fonctionnalités du système. De même, plusieurs fichiers d'en-tête (*headers*) vous sont fournis afin de vous guider dans l'implémentation du système. Votre Raspberry Pi Zero devra _être branché sur un écran_ pour pouvoir observer le résultat, puisque nous écrivons directement dans la mémoire du GPU. Utilisez le convertisseur mini-HDMI à HDMI qui vous a été fourni à cet effet.
+Ce laboratoire ne nécessite l'installation d'aucune librairie particulière. Comme pour le laboratoire 2, un projet VScode vous est fourni avec des scripts de configuration et une première structure de code. Vous pouvez le récupérer sur le dépôt Git suivant : [https://github.com/setr-ulaval/labo3-h23](https://github.com/setr-ulaval/labo3-h23). Ce dépôt contient aussi des fonctions qui vous sont fournies pour implémenter certaines fonctionnalités du système. De même, plusieurs fichiers d'en-tête (*headers*) vous sont fournis afin de vous guider dans l'implémentation du système. Votre Raspberry Pi Zero devra _être branché sur un écran_ pour pouvoir observer le résultat, puisque nous écrivons directement dans la mémoire du GPU. Utilisez le convertisseur mini-HDMI à HDMI qui vous a été fourni à cet effet.
 
 > **Note** : comme pour le laboratoire 2, vous **devez** modifier les fichiers `.vscode/launch.json` et `syncAndStartGDB.sh` pour y écrire l'adresse de votre Raspberry Pi. Attention, dans le cas du fichier `launch.json`, vous devez le faire à **5** endroits. Assurez-vous également que le dossier `/home/pi/projects/laboratoire3` existe sur votre Raspberry Pi.
+
+> **Note** : le Raspberry Pi désactive par défaut sa sortie HDMI s'il ne détecte pas d'écran au démarrage. Assurez-vous de démarrer votre Raspberry Pi _avec un écran branché_ si vous voulez éviter des problèmes d'affichage.
 
 
 ### 3.1. Fichiers de test
 
-Afin de vous permettre de tester votre approche, nous vous fournissons des [vidéos adaptées au projet](http://wcours.gel.ulaval.ca/2020/h/GIF3004/default/lab3_videos_ULV.zip) (attention : taille de 670 Mo!). Ceux-ci sont issus [des projets de la Fondation Blender](https://www.blender.org/features/projects/) et peuvent être distribués librement. Vous pouvez tester votre projet avec d'autres vidéos, mais assurez-vous que vous possédez les droits pour le faire. Notez que ces vidéos sont encodées de manière spéciale et que vous ne serez pas capables de les ouvrir avec un lecteur classique. Nous reviendrons plus loin sur les spécificités de ce format.
+Afin de vous permettre de tester votre approche, nous vous fournissons des [vidéos adaptées au projet](http://wcours.gel.ulaval.ca/2020/h/GIF3004/default/lab3_videos_ULV.zip) (attention : taille de 670 Mo!). Ceux-ci sont issus [des projets de la Fondation Blender](https://www.blender.org/features/projects/) et peuvent être distribués librement (en citant leur source). Vous pouvez tester votre projet avec d'autres vidéos, mais assurez-vous que vous possédez les droits pour le faire. Notez que ces vidéos sont encodées de manière spéciale et que vous ne serez pas capables de les ouvrir avec un lecteur classique. Nous reviendrons plus loin sur les spécificités de ce format.
 
 
 ## 4. Architecture générale
@@ -39,7 +41,7 @@ La figure suivante expose l'architecture générale du système.
 
 <img src="img/diag_architecture.png" style="width:1000px"/>
 
-Dans ce diagramme, chaque boîte correspond à un processus distinct. C'est donc dire qu'il y a 10 processus actifs dans le système exposé plus haut. Toutes les communications entre les processus se font via des espaces mémoire partagés. La plupart des processus acceptent à la fois un espace partagé en entrée et en sortie. Les processus décodeurs n'utilisent cependant qu'une sortie, puisque leur entrée est constituée d'un fichier vidéo. De même, le compositeur possède plusieurs entrées (une pour chaque flux vidéo), mais n'a pas de sortie, puisqu'il affiche directement le résultat à l'écran.
+Dans ce diagramme, chaque boîte correspond à un processus distinct. C'est donc dire qu'il y a 10 processus actifs dans le système exposé plus haut. Toutes les communications entre les processus se font via des espaces mémoire partagés. La plupart des processus acceptent à la fois un espace partagé en entrée et en sortie. Les processus décodeurs n'utilisent cependant qu'une sortie, puisque leur entrée est constituée d'un fichier vidéo au format ULV. De même, le compositeur possède plusieurs entrées (une pour chaque flux vidéo), mais n'a pas de sortie, puisqu'il affiche directement le résultat à l'écran.
 
 Tous les processus sont des processus avec des contraintes temps réel et la plupart possèdent des dépendances (par exemple, le processus de filtrage de la seconde colonne doit attendre le résultat du processus de redimensionnement, qui nécessite lui-même le résultat du processus de décodage). Il deviendra donc crucial d'assurer un bon ordonnancement de ceux-ci.
 
@@ -53,7 +55,7 @@ Les quatre premiers octets permettent de stocker une primitive de synchronisatio
 
 ### 4.2. Synchronisation
 
-La communication se faisant par espace mémoire partagé, il est important que les différents processus soient synchronisés. Par exemple, lorsque le processus écrit dans la mémoire, le lecteur doit attendre la fin de cette écriture pour lire, au risque de se retrouver avec une image composée de deux trames différentes. De même, si le processus écrivain ne peut fournir un débit suffisant, le processus lecteur ne doit pas recommencer le traitement de la même trame.
+La communication se faisant par espace mémoire partagé, il est important que les différents processus soient synchronisés. Par exemple, lorsque le processus écrit dans la mémoire, le lecteur doit attendre la fin de cette écriture pour lire, au risque de se retrouver avec une image composée de deux trames vidéo différentes. De même, si le processus écrivain ne peut fournir un débit suffisant, le processus lecteur ne doit pas recommencer inutilement le traitement de la même trame.
 
 Le problème de synchronisation est complexifié par le fait qu'il faille gérer *l'inversion de priorité*. Cela signifie que nous devons configurer les mutex avec les attributs leur permettant d'être partagés entre les processus et de tenir compte de potentielles inversions de priorité.
 
@@ -70,7 +72,7 @@ Le fichier *commMemoirePartagee.h* contient des déclarations de structure et de
 
 **Considérations importantes** : un processus temps réel ne peut être interrompu par le noyau (sauf cas spécifiques, selon l'ordonnanceur utilisé). Par conséquent, lorsque votre processus ne peut s'exécuter, vous *devez* redonner la main aux autres processus. Cela peut être fait de trois manières. Premièrement, en utilisant un appel système qui permet explicitement à l'ordonnanceur de vous interrompre (l'attente sur un mutex fait par exemple partie de ces opérations). Deuxièmement, en appelant la fonction `sched_yield` pour indiquer que vous acceptez volontairement de laisser le CPU à d'autres processus. Troisièment, en vous mettant volontairement en sommeil en utilisant `usleep`. La différence entre ces deux dernières approches est que `sched_yield` n'est qu'une **indication** donnée au noyau, qui peut très bien vous réveiller immédiatement sans passer à main à un autre processus s'il considère que vous êtes toujours le processus le plus prioritaire, alors que `usleep` force le noyau à ne pas vous réveiller pour la durée approximative que vous avez spécifiée. En d'autres termes, n'utilisez `sched_yield` que dans les cas où vous _pouvez_ laisser la main mais que vous auriez tout de même du travail à faire, et `usleep` lorsque vous n'avez rien à faire pour une période de temps approximativement connue (par exemple le temps avant la prochaine trame du vidéo).
 
-Notez finalement que la plupart des programmes sont *à la fois* des lecteurs et des écrivains!
+Notez finalement que la plupart des programmes sont *à la fois* des lecteurs et des écrivains! Ceux-ci auront donc à gérer des mutex des deux "côtés"!
 
 ### 4.3. Gestion de la mémoire
 
@@ -94,9 +96,13 @@ Tous les programmes possèdent une interface ligne de commandes similaire, soit 
 
 *flux_entree* et *flux_sortie* constituent respectivement les identifiants des zones mémoire partagées en entrée et en sortie. Les options sont quant à elles différentes selon les programmes. Parmi celles *devant être disponibles pour tous les programmes*, nous retrouvons :
 
-* "-s" qui détermine le type d'ordonnancement voulu. Il peut prendre la valeur *NORT* (ordonnancement normal), *RR* (ordonnancement temps réel avec préemption), *FIFO* (ordonnancement temps réel sans préemption) ou *DEADLINE* (ordonnancement de type plus proche échéance). Toute autre valeur est invalide. Par défaut, la valeur est "NORT". Dans le cas de l'ordonnanceur *DEADLINE*, trois autres paramètres sont optionnels et peuvent être fournis, séparés par des virgules, avec l'option "-d". Dans le cas de *NORT*, vous n'avez aucune opération à faire, puisque cette option correspond au mode par défaut de l'ordonnanceur. Dans les autres cas, vous devez utiliser *sched_setscheduler* ou *sched_setattr* pour choisir le mode d'ordonnancement demandé. Notez que les modes temps réel nécessitent les droits d'administrateur pour pouvoir être utilisés, vous devez donc lancer votre programme avec *sudo*.
+* "-s" qui détermine le type d'ordonnancement voulu. Il peut prendre la valeur *NORT* (ordonnancement normal), *RR* (ordonnancement temps réel avec préemption), *FIFO* (ordonnancement temps réel sans préemption) ou *DEADLINE* (ordonnancement de type plus proche échéance). Toute autre valeur est invalide. Par défaut, la valeur est "NORT". Dans le cas de *NORT*, vous n'avez aucune opération à faire, puisque cette option correspond au mode par défaut de l'ordonnanceur. Dans les autres cas, vous devez changer le mode de l'ordonnanceur (voir la section 4.5).
 
-Dans tous les cas, **vous pouvez assumer que les arguments donnés à vos programmes seront toujours valides** : vous n'avez pas à effectuer de vérification à cet effet. Toutefois, l'ordre des options n'est pas garanti (celui des flux_entree / flux_sortie l'est quant à lui). Nous vous recommandons fortement d'utiliser une librairie comme getopt pour vous aider dans l'analyse des arguments.
+* "-d" qui, dans le cas de l'ordonnanceur *DEADLINE*, permet de fournir les valeurs en millisecondes pour runtime, deadline et period, respectivement, séparés par des virgules. Par exemple, `-d 10,20,25` indique un runtime de 10 ms, un deadline de 20 ms et une période de 25 ms. Si l'ordonnanceur n'est pas de type *DEADLINE* (autrement dit, l'option -s ne contient pas DEADLINE), alors vous pouvez ignorer ces valeurs qui n'auront pas d'effet.
+
+Dans tous les cas, **vous pouvez assumer que les arguments donnés à vos programmes seront toujours valides** : vous n'avez pas à effectuer de vérification à cet effet. Toutefois, l'ordre des options n'est pas garanti (celui des flux_entree / flux_sortie l'est quant à lui). Nous vous recommandons fortement d'utiliser une librairie comme getopt pour vous aider dans l'analyse des arguments. 
+
+> **Remarque** : le fichier `src/convertisseurgris.c` contient une implémentation complète de l'analyse des arguments pour cet exécutable. Vous pouvez vous en inspirer pour les autres exécutables.
 
 Finalement, vous devez implémenter un mode de lancement spécial servant au débogage :
 
@@ -106,6 +112,11 @@ Finalement, vous devez implémenter un mode de lancement spécial servant au dé
 
 Dans ce mode, vous devez attribuer des valeurs aux différents paramètres. Vous êtes libres de choisir ces paramètres et ils peuvent être spécifiques à votre installation, mais assurez-vous qu'ils permettent de lancer les programmes sans erreur, puisque c'est ainsi que le mode de débogage de VScode lancera tous vos programmes.
 
+### 4.5. Changement de mode du scheduler
+
+Si l'ordonnancement demandé n'est pas *NORT*, vous devez utiliser *sched_setscheduler* ou *sched_setattr*, fournis dans le header `schedsupp.h`, pour choisir le mode d'ordonnancement demandé. Notez que les modes temps réel nécessitent les droits d'administrateur pour pouvoir être utilisés, vous devez donc lancer votre programme avec *sudo* (c'est déjà fait dans les scripts de lancement). Voyez [la page de manuel de sched_setattr](https://man7.org/linux/man-pages/man2/sched_setattr.2.html) et (une description plus complète du mode deadline)[https://man7.org/linux/man-pages/man7/sched.7.html] pour vous aider à comprendre comment faire ce changement d'ordonnanceur. C'est aussi cette dernière page qui décrit ce que signifient _runtime_, _deadline_ et _period_.
+
+> **Attention** : initialisez toutes les valeurs de la structure `sched_attr` à 0, même celles que vous n'utilisez pas! Par ailleurs, portez attention à _l'unité_ des champs deadline, runtime et period.
 
 ## 5. Modules à implémenter
 
@@ -127,7 +138,7 @@ Le décodeur est responsable de la lecture d'un fichier vidéo. Son premier argu
 
 Tout fichier ULV commence donc par 4 octets qui correspondent aux lettres S, E, T et R. Cela permet au programme de s'assurer que le fichier qu'il tente de lire est du bon format. Par la suite, 4 octets sont utilisés pour indiquer la largeur des images du vidéo, puis 4 octets pour leur hauteur et 4 octets pour le nombre de canaux. Finalement, 4 octets permettent d'indiquer le nombre d'images par seconde du vidéo (usuellement 30, mais ce nombre peut varier). Les trames du vidéo sont par la suite enregistrées une par une. Pour chaque trame, un entier non signé de 32 bits indique la taille, suivi d'un tableau d'octets. Ce tableau *ne contient pas directement l'image, mais son encodage JPEG*. Vous devez donc *décompresser* l'image, nous vous fournissons une fonction le faisant pour vous dans le fichier *jpgd.h*. Les images sont ainsi encodées à la suite, jusqu'à la dernière qui est suivie d'un entier de 4 octets contenant 0. Cette valeur n'étant pas une taille valide pour une image, vous savez alors que vous avez atteint la fin du fichier. *Vous devez alors recommencer la lecture au début du fichier, en boucle.*
 
-Afin de vous permettre d'expérimenter avec d'autres vidéos et de voir le résultat attendu, nous vous fournissons deux scripts Python, disponible sur [le dépôt Git](https://github.com/setr-ulaval/labo3-h22), capables de convertir (videoConverter.py) et de lire (videoReader.py) les vidéos au format ULV. Ceux-ci requièrent scipy et OpenCV pour fonctionner. Notez que vous n'êtes pas forcés de les utiliser et qu'aucune fonctionnalité du laboratoire ne dépend du bon fonctionnement de ces scripts, qui vous sont fournis à titre d'exemple uniquement.
+Afin de vous permettre d'expérimenter avec d'autres vidéos et de voir le résultat attendu, nous vous fournissons deux scripts Python, disponible sur [le dépôt Git](https://github.com/setr-ulaval/labo3-h23), capables de convertir (videoConverter.py) et de lire (videoReader.py) les vidéos au format ULV. Ceux-ci requièrent scipy et OpenCV pour fonctionner. Notez que vous n'êtes pas forcés de les utiliser et qu'aucune fonctionnalité du laboratoire ne dépend du bon fonctionnement de ces scripts, qui vous sont fournis à titre d'exemple uniquement.
 
 **Note importante :** l'affichage du Raspberry Pi Zero gère les images en mode BGR et non RGB (les canaux rouge et bleu sont inversés). Par conséquent, le format ULV enregistre ces images en inversant les canaux rouge et bleu. Les scripts fournis tiennent compte de cette inversion et restituent l'image en réinversant les canaux, mais ne soyez pas surpris par cette inversion de canal si vous essayez d'afficher une trame par vous-mêmes.
 
@@ -164,15 +175,40 @@ où flux_entreeN correspond au flux vidéo #N dans les schémas ci-dessous. Le p
 
 exécutera le compositeur en mode temps réel avec préemption, en affichant deux flux vidéo en simultané.
 
-Considérant l'aspect temps réel de ce laboratoire, l'utilisation d'une interface graphique est à proscrire. Par conséquent, il nous faut donc utiliser des primitives d'affichage de plus bas niveau. Dans ce laboratoire, l'affichage se fait en écrivant directement dans le *framebuffer* du système. Le *framebuffer* est un espace mémoire utilisé pour communiquer directement avec la carte graphique. C'est donc dire que nous écrirons directement la valeur de chacun des pixels dans une mémoire lue par la carte vidéo. Cette interface en est une de très bas niveau, aucune abstraction n'est fournie pour, par exemple créer des fenêtres ou des zones dans l'écran. Sa configuration peut également être malaisée. Afin de faciliter votre tâche, nous vous fournissons un fichier nommé *compositeur.c* qui contient déjà plusieurs fonctions d'affichage. Vous devez le compléter avec le code lui permettant d'aller récupérer les images dans une zone mémoire partagée. Voyez les commentaires inclus dans ce fichier pour plus de détails.
+Considérant l'aspect temps réel de ce laboratoire, l'utilisation d'une interface graphique est à proscrire. Par conséquent, il nous faut donc utiliser des primitives d'affichage de plus bas niveau. Dans ce laboratoire, l'affichage se fait en écrivant directement dans le *framebuffer* du système. Le *framebuffer* est un espace mémoire utilisé pour communiquer directement avec la carte graphique. C'est donc dire que nous écrirons directement la valeur de chacun des pixels dans une mémoire lue par la carte vidéo. Cette interface étant de très bas niveau, aucune abstraction n'est fournie pour, par exemple créer des fenêtres ou des zones dans l'écran. Sa configuration peut également être malaisée. Afin de faciliter votre tâche, nous vous fournissons un fichier nommé *compositeur.c* qui contient déjà plusieurs fonctions d'affichage. Vous devez le compléter avec le code lui permettant d'aller récupérer les images dans une zone mémoire partagée. Voyez les commentaires inclus dans ce fichier pour plus de détails.
 
-En plus d'afficher les vidéos, le compositeur doit également écrire un fichier nommé *stats.txt* contenant le nombre d'images par seconde *effectif* pour chaque source vidéo (autrement dit, le nombre d'images réellement affichées chaque seconde, et non pas le nombre théorique).
+> **Remarque** : lors de l'affichage des vidéos avec le compositeur, il se peut qu'un caractère clignorant apparaisse en bas à gauche de la première source vidéo. Cet artefact est dû au fait que nous ne désactivons pas complètement le terminal, et n'est pas important. Il ne sera pas pris en compte lors de l'évaluation. Toutefois, toute autre dégradation de la qualité de l'image indique souvent un problème.
+
+#### 5.2.1. Écriture des statistiques de fluidité
+
+En plus d'afficher les vidéos, le compositeur doit également écrire un fichier nommé *stats.txt*. Ce fichier doit être vidé à chaque nouvelle exécution (il suffit de l'ouvrir avec l'option "w" passée à `fopen()` pour l'effacer) et doit avoir le contenu suivant:
+
+```
+[TEMPS_ECOULE] Entree 1: moy=MOYENNE_FPS fps, max=TEMPS_MAXIMUM ms | Entree 2: moy=MOYENNE_FPS fps, max=TEMPS_MAXIMUM ms | Entree 3: moy=MOYENNE_FPS fps, max=TEMPS_MAXIMUM ms | Entree 4: moy=MOYENNE_FPS fps, max=TEMPS_MAXIMUM ms
+```
+
+où *TEMPS_ECOULE* est le temps écoulé depuis le lancement du compositeur, *MOYENNE_FPS* est le nombre moyen d'images par seconde durant les **5 dernières secondes** et *TEMPS_MAXIMUM* le délai **maximal** entre 2 trames affichées durant les 5 dernières secondes. *TEMPS_ECOULE*, *MOYENNE_FPS* et *TEMPS_MAXIMUM* doivent être affichés avec *un chiffre après la virgule*. À toutes les 5 secondes (environ), votre compositeur doit ajouter une nouvelle ligne au fichier contenant ces informations. Notez que vous ne devez afficher les entrées que si elles sont activent. Par exemple, voici une sortie typique pour une configuration à 3 entrées:
+
+```
+[5.0] Entree 1: moy=21.7 fps, max=108.9 ms | Entree 2: moy=21.6 fps, max=70.4 ms | Entree 3: moy=21.4 fps, max=80.1 ms | 
+[10.0] Entree 1: moy=21.2 fps, max=109.7 ms | Entree 2: moy=21.1 fps, max=109.2 ms | Entree 3: moy=21.3 fps, max=98.3 ms | 
+[15.0] Entree 1: moy=21.0 fps, max=109.2 ms | Entree 2: moy=19.9 fps, max=100.8 ms | Entree 3: moy=20.4 fps, max=98.3 ms | 
+```
+
+> **Conseil** : pour éviter que le _buffering_ ne vous joue des tours si votre programme se termine inopinément, vous pouvez utiliser `setbuf` comme dans le laboratoire 1 pour désactiver tout _buffering_ :
+
+```
+FILE *fstats = fopen("stats.txt", "w");
+setbuf(fstats, NULL);
+```
+
+
 
 ### 5.3. Redimensionneur
 
 Le redimensionneur prend en entrée une image d'une taille arbitraire et retourne en sortie la même image, mais redimensionnée aux dimensions demandées. Le redimensionnement peut être fait par une méthode des plus proches voisins (rapide, mais peu précise) ou par interpolation bilinéaire (plus lente, mais produisant de meilleurs résultats). Dans les deux cas, les fonctions opérant ce redimensionnement vous sont fournies dans le fichier *utils.h*.
 
-En plus des options normales, ce processus requiert "-w" et "-h" (largeur et hauteur des images en sortie) et "-m", qui peut prendre les valeurs 0 ou 1, 0 correspondant à un redimensionnement au plus proche voisin et 1 à une interpolation linéaire.
+En plus des options normales, ce processus requiert "-w" et "-h" (largeur et hauteur des images en sortie) et "-r", qui peut prendre les valeurs 0 ou 1, 0 correspondant à un redimensionnement au plus proche voisin et 1 à une interpolation linéaire.
 
 ```sh
 ./redimensionneur [options] flux_entree flux_sortie
@@ -180,7 +216,7 @@ En plus des options normales, ce processus requiert "-w" et "-h" (largeur et hau
 
 ### 5.4. Filtreur
 
-Le filtreur filtre l'image qu'il reçoit en entrée avec un filtre passe-bas ou passe-haut. Il écrit l'image résultante dans son espace partagé en sortie. Les fonctions opérant ces opérations de filtrage vous sont fournies dans le fichier *utils.h*. Sa ligne de commande accepte un paramètre supplémentaire "-t", qui détermine le type du filtre et peut valoir soit 0 pour un filtre passe-bas, soit 1 pour un filtre passe-haut :
+Le filtreur filtre l'image qu'il reçoit en entrée avec un filtre passe-bas ou passe-haut. Il écrit l'image résultante dans son espace partagé en sortie. Les fonctions opérant ces opérations de filtrage vous sont fournies dans le fichier *utils.h*. Sa ligne de commande accepte un paramètre supplémentaire "-f", qui détermine le type du filtre et peut valoir soit 0 pour un filtre passe-bas, soit 1 pour un filtre passe-haut :
 
 ```sh
 ./filtreur [options] flux_entree flux_sortie
@@ -193,6 +229,8 @@ Comme son nom l'indique, ce programme convertit son entrée RGB en niveaux de gr
 ```sh
 ./filtreur [options] flux_entree flux_sortie
 ```
+
+Tel que mentionné plus haut, l'analyse des arguments de ce programme en particulier est déjà codée pour vous, voyez le code pour comprendre comment l'utiliser.
 
 ## 6. Lancement des programmes
 
@@ -214,7 +252,7 @@ Attention toutefois, cette performance accrue a un prix : *vous ne serez pas en 
 
 ### 6.2. Exécution de scénarios
 
-Une fois que vos programmes sont prêts à être utilisés, vous pouvez commencer vos expérimentations utilisant différents *scénarios* (c'est-à-dire différentes configurations plus ou moins demandantes pour le Raspberry Pi). Ces scénarios sont des scripts Bash; nous vous en présentons un certain nombre dans le répertoire `configs` du dépôt.
+Une fois que vos programmes sont prêts à être utilisés, vous pouvez commencer vos expérimentations utilisant différents *scénarios* (c'est-à-dire différentes configurations plus ou moins demandantes pour le Raspberry Pi). Ces scénarios sont des scripts Bash; nous vous en présentons un certain nombre (11, pour être plus précis) dans le répertoire `configs` du dépôt.
 
 Notons que pour arrêter tous les programmes, vous devez :
 
@@ -257,17 +295,39 @@ Vous pouvez connaître la vitesse d'horloge *courante* du processeur en utilisan
 
 ### 8.2. Mise en veille de la sortie HDMI
 
-Par défaut, le Raspberry Pi Zero met en veille son GPU lorsqu'il n'y a pas d'interaction depuis un certain temps. Étant donné que vous accéderez au Raspberry Pi à distance, ce comportement est fâcheux. Pour l'éviter, éditez (en mode sudo) le fichier /boot/cmdline.txt, et ajoutez, à la fin de la ligne, le texte `consoleblank=0`.
+Par défaut, le Raspberry Pi Zero met en veille son GPU lorsqu'il n'y a pas d'interaction depuis un certain temps. Étant donné que vous accéderez au Raspberry Pi à distance, ce comportement est fâcheux. Si cela vous arrive, vous pouvez l'éviter en éditant (en mode sudo) le fichier /boot/cmdline.txt, et ajoutez, à la fin de la ligne, le texte `consoleblank=0`.
+
+### 8.3. Nombre de FPS typique pour chaque configuration
+
+Le tableau suivant récapitule le nombre d'images par seconde obtenu par notre solution ainsi que le délai maximum entre 2 images pour chaque source de chaque configuration. Pour chaque paire configuration/source, 2 nombres sont données, le premier étant le nombre d'images par seconde et le second le délai maximum en millisecondes. Notez que notre solution limite le délai entre 2 images à 35 ms minimum, soit environ 28.6 images par seconde. Notez finalement que ce tableau ne présente pas une information importante, soit la _variabilité_ de chaque mesure au fil du temps.
+
+| Configuration  | Source 1  | Source 2  | Source 3  | Source 4  |
+|---|---|---|---|---|
+| 01  | 28.6 / 36.1  | N/A  | N/A  | N/A  |
+| 02  | 25.4 / 49.3  |  25.1 / 56.1 | N/A  | N/A  |
+| 03  | 21.4 / 85.6  | 22.2 / 62.4  | 22.2 / 71.1  | N/A  |
+| 04  | 16.0 / 121.2  | 16.8 / 129.6  | 16.2 / 148.4  | 16.4 / 139.4  |
+| 05  | 7.5 / 151.0  | N/A  | N/A  | N/A  |
+| 06  | 2.0 / 533.5  | 2.0 / 537.0  | 2.0 / 534.9 | N/A  |
+| 07  | 17.5 / 70.7  | 17.5 / 71.1 | N/A | N/A  |
+| 08  | 11,4 / 133.2  | 10.7 / 126.5 | N/A | N/A  |
+| 09  | 16.1 / 116.1  | 1.9 / 1878.0  | 1.9 / 1878.0  | 2.2 / 1860.4  |
+| 10  | 13.7 / 81.1  |  9.1 / 133.6 | N/A  | N/A  |
+| 11  | 20.6 / 79.4  | 7.1 / 260.1  | 19.4 / 100.2 | N/A  |
+
+Vous ne serez pas évalués sur l'atteinte précise de ces performances. Toutefois, une performance drastiquement inférieure (moins de la moitié de la performance affichée ici, par exemple) pourra être pénalisée car elle implique une implémentation probablement incorrecte au niveau du partage mémoire et/ou de la synchronisation. De manière générale, votre solution devrait afficher de manière fluide (à l'oeil) les configurations `01_sourceUnique` et `02_deuxVideos`. Si votre implémentation est efficace, vous devriez être capable d'avoir aussi une fluidité acceptable pour `03_troisVideos` et, si elle est très efficace, une fluidité correcte (> 15 fps) pour `04_mosaique`.
 
 ## 9. Modalités d'évaluation
 
-Ce travail doit être réalisé **en équipe de deux**, la charge de travail étant à répartir équitablement entre les deux membres de l'équipe. Aucun rapport n'est à remettre, mais vous devez soumettre votre code source et une vidéo de démonstration dans monPortail avant le **24 février 2022, 9h30**. Ensuite, lors de la séance de laboratoire du **25 février 2022**, les deux équipiers doivent être en mesure individuellement d'expliquer leur approche et de démontrer le bon fonctionnement de l'ensemble de la solution de l'équipe du laboratoire. Si vous ne pouvez pas vous y présenter, contactez l'équipe pédagogique du cours dans les plus brefs délais afin de convenir d'une date d'évaluation alternative. Ce travail compte pour **15%** de la note totale du cours. Comme pour les travaux précédents, votre code doit compiler **sans avertissements** de la part de GCC.
+Ce travail doit être réalisé **en équipe de deux**, la charge de travail étant à répartir équitablement entre les deux membres de l'équipe. Aucun rapport n'est à remettre, mais vous devez soumettre votre code source dans monPortail avant le **23 février 2023, 17h30**. Ensuite, lors de la séance de laboratoire du **24 février 2023**, les deux équipiers doivent être en mesure individuellement d'expliquer leur approche et de démontrer le bon fonctionnement de l'ensemble de la solution de l'équipe du laboratoire. Si vous ne pouvez pas vous y présenter, contactez l'équipe pédagogique du cours dans les plus brefs délais afin de convenir d'une date d'évaluation alternative. Ce travail compte pour **15%** de la note totale du cours. Comme pour les travaux précédents, votre code doit compiler **sans avertissements** de la part de GCC.
 
-La démonstration vidéo devra comprendre les éléments suivants:
+Notre évaluation comprendra notamment les éléments suivants:
   1. La sortie de compilation d'un `CMake: Clean Rebuild`;
-  2. L'exécution l'un après l'autre des scripts 4, 8, 10 et 11 (fournis dans le dossier _configs_) en veillant bien à montrer le contenu de _stat.txt_ entre chaque script: les FPS de chaque vidéo doivent apparaître clairement à l'image. Afin de bien vérifier le rendu, filmez la sortie vidéo du Raspberry Pi pendant minimum une dizaine de secondes avant de montrer le fichier _stat.txt_.
+  2. L'exécution des scripts 01, 02, 04, 08, 09, 10 et 11 (fournis dans le dossier _configs_). Nous observerons également le contenu de _stats.txt_ entre chaque exécution.
+  3. Dans le cas des configurations 09, 10 et 11, nous validerons également que les changements d'ordonnanceur requis ont bien été effectués, par exemple en lançant la commande `htop` dans un autre terminal et en validant que les programmes sont bien en priorité "RT".
+  4. Notez qu'il est possible que nous vous demandions d'exécuter d'autres configurations : aucune des configurations fournies ne devrait faire planter vos programmes.
+  5. Une discussion sur les résultats que vous obtenez pour ces diverses configurations et sur votre implémentation.
  
-Comme il n'y a pas de possibilité d'enregistrer la sortie video autrement qu'avec du matériel spécialisé, vous pourrez utiliser une caméra pour filmer votre écran directement, attention à veiller que le texte y soit bien lisible.
 
 Le barème d'évaluation détaillé sera le suivant (laboratoire noté sur 20 points) :
 
