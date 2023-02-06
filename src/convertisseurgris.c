@@ -11,6 +11,8 @@
 
 
 int main(int argc, char* argv[]){
+    // On desactive le buffering pour les printf(), pour qu'il soit possible de les voir depuis votre ordinateur
+	setbuf(stdout, NULL);
     
     // Écrivez le code permettant de convertir une image en niveaux de gris, en utilisant la
     // fonction convertToGray de utils.c. Votre code doit lire une image depuis une zone mémoire 

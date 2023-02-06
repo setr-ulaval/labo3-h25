@@ -11,6 +11,8 @@
 
 
 int main(int argc, char* argv[]){
+    // On desactive le buffering pour les printf(), pour qu'il soit possible de les voir depuis votre ordinateur
+	setbuf(stdout, NULL);
     
     // Écrivez le code permettant de redimensionner une image (en utilisant les fonctions précodées
     // dans utils.c, celles commençant par "resize"). Votre code doit lire une image depuis une zone 

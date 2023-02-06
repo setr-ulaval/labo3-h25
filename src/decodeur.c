@@ -41,6 +41,8 @@ struct videoInfos{
 
 
 int main(int argc, char* argv[]){
+    // On desactive le buffering pour les printf(), pour qu'il soit possible de les voir depuis votre ordinateur
+	setbuf(stdout, NULL);
     
     // Écrivez le code de décodage et d'envoi sur la zone mémoire partagée ici!
     // N'oubliez pas que vous pouvez utiliser jpgd::decompress_jpeg_image_from_memory()
