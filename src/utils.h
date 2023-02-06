@@ -16,6 +16,12 @@
 #include <string.h>
 #include "allocateurMemoire.h"
 
+// Definition des modes d'ordonnancement possibles
+#define ORDONNANCEMENT_NORT 1
+#define ORDONNANCEMENT_RR 2
+#define ORDONNANCEMENT_FIFO 3
+#define ORDONNANCEMENT_DEADLINE 4
+
 
 /* Data structures */
 typedef struct {
