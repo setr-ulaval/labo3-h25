@@ -9,12 +9,12 @@
             "name": "Decodeur",
             "type": "gdb",
             "request": "attach",
-            "gdbpath": "${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/bin/arm-raspbian-linux-gnueabihf-gdb",
+            "gdbpath": "${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabi/bin/arm-raspbian-linux-gnueabi-gdb",
             "executable": "./build/decodeur",
             "target": "inserer_adresse_de_votre_raspberry_pi_ici:4560",
             "remote": true,
             "autorun": [
-                "set sysroot ${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot/"
+                "set sysroot ${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabi/arm-raspbian-linux-gnueabi/sysroot/"
             ],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "syncAndStartGDBdecodeur"
@@ -24,12 +24,12 @@
             "name": "Compositeur",
             "type": "gdb",
             "request": "attach",
-            "gdbpath": "${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/bin/arm-raspbian-linux-gnueabihf-gdb",
+            "gdbpath": "${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabi/bin/arm-raspbian-linux-gnueabi-gdb",
             "executable": "./build/compositeur",
             "target": "inserer_adresse_de_votre_raspberry_pi_ici:4561",
             "remote": true,
             "autorun": [
-                "set sysroot ${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot/"
+                "set sysroot ${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabi/arm-raspbian-linux-gnueabi/sysroot/"
             ],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "syncAndStartGDBcompositeur"
@@ -39,12 +39,12 @@
             "name": "Filtreur",
             "type": "gdb",
             "request": "attach",
-            "gdbpath": "${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/bin/arm-raspbian-linux-gnueabihf-gdb",
+            "gdbpath": "${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabi/bin/arm-raspbian-linux-gnueabi-gdb",
             "executable": "./build/filtreur",
             "target": "inserer_adresse_de_votre_raspberry_pi_ici:4562",
             "remote": true,
             "autorun": [
-                "set sysroot ${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot/"
+                "set sysroot ${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabi/arm-raspbian-linux-gnueabi/sysroot/"
             ],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "syncAndStartGDBfiltreur"
@@ -54,12 +54,12 @@
             "name": "Redimensionneur",
             "type": "gdb",
             "request": "attach",
-            "gdbpath": "${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/bin/arm-raspbian-linux-gnueabihf-gdb",
+            "gdbpath": "${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabi/bin/arm-raspbian-linux-gnueabi-gdb",
             "executable": "./build/redimensionneur",
             "target": "inserer_adresse_de_votre_raspberry_pi_ici:4563",
             "remote": true,
             "autorun": [
-                "set sysroot ${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot/"
+                "set sysroot ${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabi/arm-raspbian-linux-gnueabi/sysroot/"
             ],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "syncAndStartGDBredimensionneur"
@@ -69,12 +69,12 @@
             "name": "Convertisseur",
             "type": "gdb",
             "request": "attach",
-            "gdbpath": "${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/bin/arm-raspbian-linux-gnueabihf-gdb",
+            "gdbpath": "${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabi/bin/arm-raspbian-linux-gnueabi-gdb",
             "executable": "./build/convertisseur",
             "target": "inserer_adresse_de_votre_raspberry_pi_ici:4564",
             "remote": true,
             "autorun": [
-                "set sysroot ${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot/"
+                "set sysroot ${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabi/arm-raspbian-linux-gnueabi/sysroot/"
             ],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "syncAndStartGDBconvertisseur"
