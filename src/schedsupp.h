@@ -7,8 +7,6 @@
 #include <linux/sched.h>
 #include <sys/types.h>
 
-#define SCHED_DEADLINE  6
-
 
 struct sched_attr {
     __u32 size;
@@ -32,7 +30,7 @@ int sched_setattr(pid_t pid,
               const struct sched_attr *attr,
               unsigned int flags)
 {
-    return syscall(380, pid, attr, flags);
+    return syscall(__NR_sched_setattr, pid, attr, flags);
 }
 
 int sched_getattr(pid_t pid,
@@ -40,5 +38,5 @@ int sched_getattr(pid_t pid,
               unsigned int size,
               unsigned int flags)
 {
-    return syscall(381, pid, attr, size, flags);
+    return syscall(__NR_sched_getattr, pid, attr, size, flags);
 }
