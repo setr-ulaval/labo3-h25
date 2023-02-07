@@ -126,7 +126,7 @@ Vous avez cinq modules (programmes) à implémenter :
 * **Compositeur** (fichier *compositeur.c*) : reçoit de un à quatre espaces mémoire et affiche les vidéos en simultané sur l'écran.
 * **Redimensionneur** (fichier *redimensionneur.c*)  : redimensionne les images qu'il reçoit en entrée, que ce soit vers une taille plus petite ou plus grande que celle courante.
 * **Filtreur** (fichier *filtreur.c*)  : applique un filtre passe-bas ou passe-haut sur l'image.
-* **Convertisseur niveaux de gris** (fichier *convertisseur.c*)  : convertit une image RGB (3 canaux) en niveaux de gris (1 canal).
+* **Convertisseur niveaux de gris** (fichier *convertisseurgris.c*) : convertit une image RGB (3 canaux) en niveaux de gris (1 canal).
 
 Les sous-sections suivantes détaillent chacun de ces programmes.
 
@@ -227,7 +227,7 @@ Le filtreur filtre l'image qu'il reçoit en entrée avec un filtre passe-bas ou 
 Comme son nom l'indique, ce programme convertit son entrée RGB en niveaux de gris. La balance de chaque canal est effectuée selon l'espace de couleur CIE 1931. La fonction opérant cette conversion est déjà codée pour vous et disponible dans le fichier *utils.h*. Ce programme ne possède pas d'arguments supplémentaires sur sa ligne de commande.
 
 ```sh
-./filtreur [options] flux_entree flux_sortie
+./convertisseur [options] flux_entree flux_sortie
 ```
 
 Tel que mentionné plus haut, l'analyse des arguments de ce programme en particulier est déjà codée pour vous, voyez le code pour comprendre comment l'utiliser.
@@ -252,7 +252,7 @@ Attention toutefois, cette performance accrue a un prix : *vous ne serez pas en 
 
 ### 6.2. Exécution de scénarios
 
-Une fois que vos programmes sont prêts à être utilisés, vous pouvez commencer vos expérimentations utilisant différents *scénarios* (c'est-à-dire différentes configurations plus ou moins demandantes pour le Raspberry Pi). Ces scénarios sont des scripts Bash; nous vous en présentons un certain nombre (11, pour être plus précis) dans le répertoire `configs` du dépôt.
+Une fois que vos programmes sont prêts à être utilisés, vous pouvez commencer vos expérimentations utilisant différents *scénarios* (c'est-à-dire différentes configurations plus ou moins demandantes pour le Raspberry Pi). Ces scénarios sont des scripts Bash; nous vous en présentons un certain nombre (11, pour être plus précis) dans le répertoire `configs` du dépôt. Ils sont, de manière générale, de difficulté croissante.
 
 Notons que pour arrêter tous les programmes, vous devez :
 
@@ -262,6 +262,21 @@ Notons que pour arrêter tous les programmes, vous devez :
 Ces scripts **doivent** être exécutés sur le Raspberry Pi, mais n'ont pas forcément à l'être sur un terminal local. En d'autres termes, vous pouvez lancer les programmes à partir d'une session à distance (SSH) et voir le résultat s'afficher à l'écran connecté au Raspberry Pi.
 
 Ces scripts utilisent toujours plus d'un programme à la fois. Afin de vous éviter d'avoir à les synchroniser un par un (en lançant successivement leur débogage), nous vous fournissons une configuration spéciale dans VSCode permettant de synchroniser tous les fichiers d'un seul coup. Pour ce faire, allez dans la palette de commandes et écrivez "Tâches: Exécuter la tâche", puis sélectionnez *toutSynchroniser*. Une fois cette tâche terminée, tous les exécutables seront à jour sur le Raspberry Pi.
+
+### 6.3. Implémentation et débogage
+
+Vous avez au total *deux* librairies partagées (`allocateurMemoire` et `commMemoirePartagee`) et *cinq* programmes (`decodeur`, `compositeur`, `convertisseurgris`, `redimensionneur` et `filtreur`) à implémenter. Notez toutefois qu'une bonne partie de la logique de ces programmes (lecture et écriture dans une zone mémoire partagée, changement de mode d'ordonnancement, etc.) est très similaire voire identique et que les fonctions effectuant les transformations (redimensionnement, conversion en niveaux de gris et filtrage) sont déjà implémentées pour vous dans `utils.c`, vous n'avez qu'à les appeler correctement.
+
+Nous vous conseillons de développer vos programmes dans cet ordre:
+
+1. Implémentez `allocateurMemoire`, mais en utilisant, de manière temporaire, directement `malloc()` et `free()` (c'est-à-dire que `tempsreel_malloc()` ne fait que retourner le résultat de `malloc()` sans rien faire d'autre). Ce n'est **pas** ce qui est demandé, mais ça vous permettra de développer vos programmes sans risquer des problèmes dus à un allocateur mémoire défaillant.
+2. Implémentez le `decodeur`. À ce stage vous ne pourrez pas afficher l'image sur l'écran de votre Raspberry Pi, mais vous pouvez utiliser la fonction `enregistreImage()` dans `utils` pour enregistrer une image au format PPM, que vous pouvez par la suite télécharger sur votre ordinateur et ouvrir avec un lecteur d'image standard. Cela vous permettra de vérifier si votre code de décodage est fonctionnel.
+3. Implémentez le `convertisseurgris`. Son implémentation est très simple (il suffit d'appeler `convertToGray()`), mais pour que cela fonctionne, vous devrez également implémenter `commMemoirePartagee` ainsi que le code permettant à `decodeur` d'écrire en sur l'espace mémoire partagé. Finalement, vous devrez écrire le code permettant à `convertisseurgris` de lire sur ce même espace mémoire partagé. Utilisez encore une fois `enregistreImage()` dans `convertisseurgris` pour valider que votre code fonctionne correctement.
+4. Implémentez le `compositeur`. Son code de lecture sur l'espace mémoire partagé sera très similaire à celui de `convertisseurgris`, à la différence près que `compositeur` ne doit pas bloquer si une source n'est pas disponible, car il doit gérer jusqu'à 4 sources en parallèle! Assurez-vous que vous êtes capables _d'afficher_ une vidéo (vous pouvez utiliser la configuration 01_sourceUnique pour vous tester) à une vitesse correcte (on ne doit pas dépasser le nombre d'images par seconde identifié dans le fichier ULV!). Vérifiez également que vous êtes capables de produire le fichier `stats.txt` tel que demandé à la section 5.2.1.
+5. Implémentez le `redimensionneur` et le `filtreur`. Leur code devrait être très similaire à celui de `convertisseurgris`, à l'exception de l'analyse des arguments sur la ligne de commande et de la fonction de traitement à lancer. À ce stage, vous devriez être capables d'exécuter les configurations 01 à 08 sans erreur.
+6. Remplacez l'implémentation factice d'`allocateurMemoire` par une implémentation valide telle que décrite à la section 4.3. Tous vos programmes devraient également utiliser `tempsreel_malloc()` / `tempsreel_free()`, jamais `malloc()` et `free()`. Revalidez les configurations 01 à 08 pour confirmer que votre allocateur fonctionne correctement.
+7. Implémentez les différents modes d'ordonnancement (RT, FIFO et DEADLINE) et assurez-vous que votre code change _réellement_ l'ordonnancement utilisé (le retour de la fonction `sched_setattr()` devrait être `0`, si c'est une valeur négative, c'est que ça ne marche pas). Testez les configurations 09, 10 et 11 qui utilisent ces modes.
+8. Optimisez vos programmes pour maximiser la performance des programmes (sans en affecter le résultat, bien entendu).
 
 
 ## 7. Temps réel et optimisation
@@ -315,7 +330,7 @@ Le tableau suivant récapitule le nombre d'images par seconde obtenu par notre s
 | 10  | 13.7 / 81.1  |  9.1 / 133.6 | N/A  | N/A  |
 | 11  | 20.6 / 79.4  | 7.1 / 260.1  | 19.4 / 100.2 | N/A  |
 
-Vous ne serez pas évalués sur l'atteinte précise de ces performances. Toutefois, une performance drastiquement inférieure (moins de la moitié de la performance affichée ici, par exemple) pourra être pénalisée car elle implique une implémentation probablement incorrecte au niveau du partage mémoire et/ou de la synchronisation. De manière générale, votre solution devrait afficher de manière fluide (à l'oeil) les configurations `01_sourceUnique` et `02_deuxVideos`. Si votre implémentation est efficace, vous devriez être capable d'avoir aussi une fluidité acceptable pour `03_troisVideos` et, si elle est très efficace, une fluidité correcte (> 15 fps) pour `04_mosaique`.
+Vous ne serez pas évalués sur l'atteinte précise de ces performances. Toutefois, une performance drastiquement inférieure (moins de la moitié de la performance affichée ici, par exemple) pourra être pénalisée car elle implique une implémentation probablement incorrecte au niveau du partage mémoire et/ou de la synchronisation. De manière générale, votre solution devrait afficher de manière fluide (à l'oeil) les configurations `01_sourceUnique` et `02_deuxVideos`. Si votre implémentation est efficace, vous devriez être capable d'avoir aussi une fluidité acceptable pour `03_troisVideos` et, si elle est très efficace, une fluidité minimale (>= 15 fps) pour `04_mosaique`.
 
 ## 9. Modalités d'évaluation
 
@@ -323,8 +338,8 @@ Ce travail doit être réalisé **en équipe de deux**, la charge de travail ét
 
 Notre évaluation comprendra notamment les éléments suivants:
   1. La sortie de compilation d'un `CMake: Clean Rebuild`;
-  2. L'exécution des scripts 01, 02, 04, 08, 09, 10 et 11 (fournis dans le dossier _configs_). Nous observerons également le contenu de _stats.txt_ entre chaque exécution.
-  3. Dans le cas des configurations 09, 10 et 11, nous validerons également que les changements d'ordonnanceur requis ont bien été effectués, par exemple en lançant la commande `htop` dans un autre terminal et en validant que les programmes sont bien en priorité "RT".
+  2. L'exécution des scripts 01, 02, 04, 08, 09 et 11 (fournis dans le dossier _configs_). Nous observerons également le contenu de _stats.txt_ entre chaque exécution.
+  3. Dans le cas des configurations 09 et 11, nous validerons également que les changements d'ordonnanceur requis ont bien été effectués, par exemple en lançant la commande `htop` dans un autre terminal et en validant que les programmes sont bien en priorité "RT".
   4. Notez qu'il est possible que nous vous demandions d'exécuter d'autres configurations : aucune des configurations fournies ne devrait faire planter vos programmes.
   5. Une discussion sur les résultats que vous obtenez pour ces diverses configurations et sur votre implémentation.
  
