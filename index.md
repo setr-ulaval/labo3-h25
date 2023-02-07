@@ -114,9 +114,11 @@ Dans ce mode, vous devez attribuer des valeurs aux différents paramètres. Vous
 
 ### 4.5. Changement de mode du scheduler
 
-Si l'ordonnancement demandé n'est pas *NORT*, vous devez utiliser *sched_setscheduler* ou *sched_setattr*, fournis dans le header `schedsupp.h`, pour choisir le mode d'ordonnancement demandé. Notez que les modes temps réel nécessitent les droits d'administrateur pour pouvoir être utilisés, vous devez donc lancer votre programme avec *sudo* (c'est déjà fait dans les scripts de lancement). Voyez [la page de manuel de sched_setattr](https://man7.org/linux/man-pages/man2/sched_setattr.2.html) et (une description plus complète du mode deadline)[https://man7.org/linux/man-pages/man7/sched.7.html] pour vous aider à comprendre comment faire ce changement d'ordonnanceur. C'est aussi cette dernière page qui décrit ce que signifient _runtime_, _deadline_ et _period_.
+Si l'ordonnancement demandé n'est pas *NORT*, vous devez utiliser *sched_setscheduler* ou *sched_setattr*, fournis dans le header `schedsupp.h`, pour choisir le mode d'ordonnancement demandé. Notez que les modes temps réel nécessitent les droits d'administrateur pour pouvoir être utilisés, vous devez donc lancer votre programme avec *sudo* (c'est déjà fait dans les scripts de lancement). Voyez [la page de manuel de sched_setattr](https://man7.org/linux/man-pages/man2/sched_setattr.2.html) et [une description plus complète du mode deadline](https://man7.org/linux/man-pages/man7/sched.7.html) pour vous aider à comprendre comment faire ce changement d'ordonnanceur. C'est aussi cette dernière page qui décrit ce que signifient _runtime_, _deadline_ et _period_.
 
 > **Attention** : initialisez toutes les valeurs de la structure `sched_attr` à 0, même celles que vous n'utilisez pas! Par ailleurs, portez attention à _l'unité_ des champs deadline, runtime et period.
+
+> **Attention** : validez que le changement d'ordonnanceur s'effectue avec succès en vérifiant que la valeur de retour de `sched_setattr()` est bien 0. Toute autre valeur indique une erreur que vous pouvez déterminer en affichant le retour de la fonction `strerror(errno)`.
 
 ## 5. Modules à implémenter
 
