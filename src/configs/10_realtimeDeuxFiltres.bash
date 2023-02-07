@@ -23,16 +23,16 @@ do
     sleep 0.05
 done
 echo "[Script] /mem2 et /mem6 crees, lancement filtreur"
-sudo ./filtreur -s FIFO -t 0 /mem2 /mem3 &
-sudo ./filtreur -t 1 /mem6 /mem7 &
+sudo ./filtreur -s FIFO -f 0 /mem2 /mem3 &
+sudo ./filtreur -f 1 /mem6 /mem7 &
 echo "[Script] En attente de creation de /mem3 et /mem7"
 while [ ! -f /dev/shm/mem3 ] || [ ! -f /dev/shm/mem7 ]
 do
     sleep 0.05
 done
 echo "[Script] /mem3 et /mem7 crees, lancement redimensionneur"
-sudo ./redimensionneur -s FIFO -w 427 -h 240 -m 0 /mem3 /mem4 &
-sudo ./redimensionneur -w 427 -h 240 -m 0 /mem7 /mem8 &
+sudo ./redimensionneur -s FIFO -w 427 -h 240 -r 0 /mem3 /mem4 &
+sudo ./redimensionneur -w 427 -h 240 -r 0 /mem7 /mem8 &
 echo "[Script] En attente de creation de /mem4 et /mem8"
 while [ ! -f /dev/shm/mem4 ] || [ ! -f /dev/shm/mem8 ]
 do

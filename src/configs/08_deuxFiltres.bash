@@ -23,8 +23,8 @@ do
     sleep 0.05
 done
 echo "[Script] /mem2 et /mem6 crees, lancement filtreur"
-sudo ./filtreur -t 0 /mem2 /mem3 &
-sudo ./filtreur -t 1 /mem6 /mem7 &
+sudo ./filtreur -f 0 /mem2 /mem3 &
+sudo ./filtreur -f 1 /mem6 /mem7 &
 echo "[Script] En attente de creation de /mem3 et /mem7"
 while [ ! -f /dev/shm/mem3 ] || [ ! -f /dev/shm/mem7 ]
 do

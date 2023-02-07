@@ -14,7 +14,7 @@ do
     sleep 0.05
 done
 echo "[Script] /mem1 cree, lancement redimensionneur"
-sudo ./redimensionneur -w 427 -h 240 -m 0 /mem1 /mem2 &
+sudo ./redimensionneur -w 427 -h 240 -r 0 /mem1 /mem2 &
 echo "[Script] En attente de creation de /mem2"
 while [ ! -f /dev/shm/mem2 ]
 do

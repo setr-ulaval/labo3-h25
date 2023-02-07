@@ -17,9 +17,9 @@ do
     sleep 0.05
 done
 echo "[Script] /mem1, /mem3 et /mem5 crees, lancement redimensionneurs"
-sudo ./redimensionneur -w 427 -h 240 -m 1 /mem1 /mem2 &
-sudo ./redimensionneur -w 427 -h 240 -m 1 /mem3 /mem4 &
-sudo ./redimensionneur -w 427 -h 240 -m 1 /mem5 /mem6 &
+sudo ./redimensionneur -w 427 -h 240 -r 1 /mem1 /mem2 &
+sudo ./redimensionneur -w 427 -h 240 -r 1 /mem3 /mem4 &
+sudo ./redimensionneur -w 427 -h 240 -r 1 /mem5 /mem6 &
 echo "[Script] En attente de creation de /mem2, /mem4 et /mem6"
 while [ ! -f /dev/shm/mem2 ] || [ ! -f /dev/shm/mem4 ] || [ ! -f /dev/shm/mem6 ]
 do
