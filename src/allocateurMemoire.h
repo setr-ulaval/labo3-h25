@@ -1,3 +1,13 @@
+/******************************************************************************
+ * Laboratoire 3
+ * GIF-3004 Systèmes embarqués temps réel
+ * Hiver 2024
+ * Marc-André Gardner
+ * 
+ * Fichier de déclaration des fonctions de l'allocateur mémoire temps réel
+ * Ne modifiez pas les prototypes de fonction écrits ici.
+ ******************************************************************************/
+
 #ifndef ALLOC_MEM_H
 #define ALLOC_MEM_H
 

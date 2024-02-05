@@ -1,3 +1,12 @@
+/******************************************************************************
+ * Laboratoire 3
+ * GIF-3004 Systèmes embarqués temps réel
+ * Hiver 2024
+ * Marc-André Gardner
+ * 
+ * Fichier implémentant le programme de conversion en niveaux de gris
+ ******************************************************************************/
+
 // Gestion des ressources et permissions
 #include <sys/resource.h>
 
@@ -20,7 +29,7 @@ int main(int argc, char* argv[]){
     unsigned int runtime, deadline, period;         // Dans le cas de l'ordonnanceur DEADLINE
 
     if(argc < 2){
-        printf("Nombre d'arguments insuffisants\n");
+        printf("Nombre d'arguments insuffisant\n");
         return -1;
     }
 

@@ -1,3 +1,13 @@
+/******************************************************************************
+ * Laboratoire 3
+ * GIF-3004 Systèmes embarqués temps réel
+ * Hiver 2024
+ * Marc-André Gardner
+ * 
+ * Fichier implémentant le programme de décodage des fichiers ULV
+ ******************************************************************************/
+
+
 // Gestion des ressources et permissions
 #include <sys/resource.h>
 

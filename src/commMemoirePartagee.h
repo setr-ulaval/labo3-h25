@@ -1,3 +1,13 @@
+/******************************************************************************
+ * Laboratoire 3
+ * GIF-3004 Systèmes embarqués temps réel
+ * Hiver 2024
+ * Marc-André Gardner
+ * 
+ * Fichier de déclaration des fonctions de communication entre les programmes
+ * Ne modifiez pas les structs et prototypes de fonction écrits ici.
+ ******************************************************************************/
+
 #ifndef COMM_MEM_H
 #define COMM_MEM_H
 
@@ -17,14 +27,14 @@
 /* Architecture du buffer partagé (voir l'énoncé pour plus de détails) :
  *
  * Offset     Taille     Type      Description
- * 0           4         pthread_mutex_t     Mutex
- * 4           4         int32     Index trame writer
- * 8           4         int32     Index trame reader
- * 12          4         uint32    Largeur (en pixels)
- * 16          4         uint32    Hauteur (en pixels)
- * 20          4         uint32    Nombre de canaux (1 ou 3)
- * 24          4         uint32    Nombre d'images par seconde
- * 28          w*h*c     uint8     Données
+ * 0           24        pthread_mutex_t     Mutex
+ * 24          4         int32     Index trame writer
+ * 28          4         int32     Index trame reader
+ * 32          2         uint16    Hauteur (en pixels)
+ * 34          2         uint16    Largeur (en pixels)
+ * 36          2         uint16    Nombre de canaux (1 ou 3)
+ * 38          2         uint16    Nombre d'images par seconde
+ * 40          w*h*c     uint8     Données
  */
 
 // Le reste de ce fichier constitue une suggestion de structures et fonctions
@@ -37,10 +47,10 @@ struct memPartageHeader{
     pthread_mutex_t mutex;
     uint32_t frameWriter;
     uint32_t frameReader;
-    uint32_t largeur;
-    uint32_t hauteur;
-    uint32_t canaux;
-    uint32_t fps;
+    uint16_t hauteur;
+    uint16_t largeur;
+    uint16_t canaux;
+    uint16_t fps;
 };
 
 // Cette structure permet de mémoriser l'information sur une zone mémoire partagée.

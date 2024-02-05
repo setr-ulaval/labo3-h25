@@ -3,8 +3,9 @@
 * Fonctions utilitaires, laboratoire 3, SETR
 *
 * Fonctions accomplissant diverses tâches nécessaires au traitement des images.
+* Toutes ces fonctions sont déjà implémentées pour vous dans utils.c
 *
-* Marc-André Gardner, Février 2016
+* Marc-André Gardner, Hiver 2024
 * Merci à Yannick Hold-Geoffroy pour l'implémentation des fonctions de
 * redimensionnement et de filtrage.
 ******************************************************************************/

@@ -1,3 +1,12 @@
+/******************************************************************************
+ * Laboratoire 3
+ * GIF-3004 Systèmes embarqués temps réel
+ * Hiver 2024
+ * Marc-André Gardner
+ * 
+ * Fichier implémentant les fonctions utilitaires telles que déclarées dans utils.h
+ ******************************************************************************/
+
 #include "utils.h"
 
 #define min(a, b) (((a) < (b)) ? (a) : (b))

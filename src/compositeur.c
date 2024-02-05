@@ -1,12 +1,16 @@
-/*****************************************************************************
-* H2020
-* Compositeur, laboratoire 3, SETR
+/******************************************************************************
+ * Laboratoire 3
+ * GIF-3004 Systèmes embarqués temps réel
+ * Hiver 2024
+ * Marc-André Gardner
+ * 
+* Programme compositeur
 *
 * Récupère plusieurs flux vidéos à partir d'espaces mémoire partagés et les
 * affiche directement dans le framebuffer de la carte graphique.
 * 
 * IMPORTANT : CE CODE ASSUME QUE TOUS LES FLUX QU'IL REÇOIT SONT EN 427x240
-* (427 pixels en largeur, 240 en hauteur). TOUTE AUTRE TAILLE ENTRAÎNERA UN
+* (427 pixels en largeur, 240 en hauteur). TOUTE AUTRE TAILLE ENTRAINERA UN
 * COMPORTEMENT INDÉFINI. Les flux peuvent comporter 1 ou 3 canaux. Dans ce
 * dernier cas, ils doivent être dans l'ordre BGR et NON RGB.
 *
@@ -14,7 +18,6 @@
 * Raspberry Compote (http://raspberrycompote.blogspot.ie/2014/03/low-level-graphics-on-raspberry-pi-part_14.html),
 * par J-P Rosti, publié sous la licence CC-BY 3.0.
 *
-* Marc-André Gardner, Février 2017. Mis à jour en février 2018.
 * Merci à Yannick Hold-Geoffroy pour l'aide apportée pour la gestion
 * du framebuffer.
 ******************************************************************************/
@@ -26,7 +29,7 @@
 #include <stdint.h>
 #include <fcntl.h>
 
-#include <stropts.h>
+#include <sys/ioctl.h>
 
 #include <sys/time.h>
 #include <sys/resource.h>
@@ -85,7 +88,7 @@ double get_time()
 // Le neuvième argument est le buffer contenant l'image à afficher, et les trois derniers arguments ses dimensions.
 void ecrireImage(const int position, const int total,
 					int fbfd, unsigned char* fb, size_t largeurFB, size_t hauteurFB, struct fb_var_screeninfo *vinfoPtr, int fbLineLength,
-					const unsigned char *data, size_t largeurSource, size_t hauteurSource, size_t canauxSource){
+					const unsigned char *data, size_t hauteurSource, size_t largeurSource, size_t canauxSource){
 	static int currentPage = 0;
 	static unsigned char* imageGlobale = NULL;
 	if(imageGlobale == NULL)
@@ -277,8 +280,8 @@ int main(int argc, char* argv[])
                         &vinfo, 
                         finfo.line_length,
                         A_REMPLIR_DONNEES_DE_LA_TRAME,
-                        A_REMPLIR_LARGEUR_DE_LA_TRAME,
                         A_REMPLIR_HAUTEUR_DE_LA_TRAME,
+                        A_REMPLIR_LARGEUR_DE_LA_TRAME,
                         A_REMPLIR_NOMBRECANAUX_DANS_LA_TRAME);
     }
 
