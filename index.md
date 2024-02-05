@@ -23,7 +23,7 @@ Dans ce laboratoire, votre tâche est d'implémenter un système de multiplexage
 
 ## 3. Préparation et outils nécessaires
 
-Ce laboratoire ne nécessite l'installation d'aucune librairie particulière. Comme pour le laboratoire 2, un projet VScode vous est fourni avec des scripts de configuration et une première structure de code. Vous pouvez le récupérer sur le dépôt Git suivant : [https://github.com/setr-ulaval/labo3-h23](https://github.com/setr-ulaval/labo3-h23). Ce dépôt contient aussi des fonctions qui vous sont fournies pour implémenter certaines fonctionnalités du système. De même, plusieurs fichiers d'en-tête (*headers*) vous sont fournis afin de vous guider dans l'implémentation du système. Votre Raspberry Pi Zero devra _être branché sur un écran_ pour pouvoir observer le résultat, puisque nous écrivons directement dans la mémoire du GPU. Utilisez le convertisseur mini-HDMI à HDMI qui vous a été fourni à cet effet.
+Ce laboratoire ne nécessite l'installation d'aucune librairie particulière. Comme pour le laboratoire 2, un projet VScode vous est fourni avec des scripts de configuration et une première structure de code. Vous pouvez le récupérer sur le dépôt Git suivant : [https://github.com/setr-ulaval/labo3-h24](https://github.com/setr-ulaval/labo3-h24). Ce dépôt contient aussi des fonctions qui vous sont fournies pour implémenter certaines fonctionnalités du système. De même, plusieurs fichiers d'en-tête (*headers*) vous sont fournis afin de vous guider dans l'implémentation du système. Votre Raspberry Pi Zero devra _être branché sur un écran_ pour pouvoir observer le résultat, puisque nous écrivons directement dans la mémoire du GPU. Utilisez le convertisseur mini-HDMI à HDMI qui vous a été fourni à cet effet.
 
 > **Note** : comme pour le laboratoire 2, vous **devez** modifier les fichiers `.vscode/launch.json` et `syncAndStartGDB.sh` pour y écrire l'adresse de votre Raspberry Pi. Attention, dans le cas du fichier `launch.json`, vous devez le faire à **5** endroits. Assurez-vous également que le dossier `/home/pi/projects/laboratoire3` existe sur votre Raspberry Pi.
 
@@ -32,7 +32,9 @@ Ce laboratoire ne nécessite l'installation d'aucune librairie particulière. Co
 
 ### 3.1. Fichiers de test
 
-Afin de vous permettre de tester votre approche, nous vous fournissons des [vidéos adaptées au projet](http://wcours.gel.ulaval.ca/2020/h/GIF3004/default/lab3_videos_ULV.zip) (attention : taille de 670 Mo!). Ceux-ci sont issus [des projets de la Fondation Blender](https://www.blender.org/features/projects/) et peuvent être distribués librement (en citant leur source). Vous pouvez tester votre projet avec d'autres vidéos, mais assurez-vous que vous possédez les droits pour le faire. Notez que ces vidéos sont encodées de manière spéciale et que vous ne serez pas capables de les ouvrir avec un lecteur classique. Nous reviendrons plus loin sur les spécificités de ce format.
+Afin de vous permettre de tester votre approche, nous vous fournissons des [vidéos adaptées au projet](http://wcours.gel.ulaval.ca/GIF3004/lab3_videos_ULV.zip) (attention : taille de 670 Mo!). Ceux-ci sont issus [des projets de la Fondation Blender](https://www.blender.org/features/projects/) et peuvent être distribués librement (en citant leur source). Vous pouvez tester votre projet avec d'autres vidéos, mais assurez-vous que vous possédez les droits pour le faire. Notez que ces vidéos sont encodées de manière spéciale et que vous ne serez pas capables de les ouvrir avec un lecteur classique. Nous reviendrons plus loin sur les spécificités de ce format.
+
+> **Note** : ces vidéos doivent être présentes sur votre Raspberry Pi, dans le dossier contenant vos exécutables (normalement `/home/pi/projects/laboratoire3`). Vous pouvez les transférer manuellement, ou les télécharger (`cd /home/pi/projects/laboratoire3 && wget http://wcours.gel.ulaval.ca/GIF3004/lab3_videos_ULV.zip`) puis les décompresser (`unzip lab3_videos_ULV.zip`) via la ligne de commande.
 
 
 ## 4. Architecture générale
@@ -51,7 +53,7 @@ Un espace mémoire partagé peut être créé en utilisant la fonction `shm_open
 
 <img src="img/diag_mem.png" style="width:1000px"/>
 
-Les quatre premiers octets permettent de stocker une primitive de synchronisation. Les huit octets suivants contiennent des compteurs permettant de déterminer la trame sur laquelle travaillent les processus écrivain et lecteur (et ainsi éviter de traiter deux fois la même trame). Les 12 octets suivants rapportent des informations à propos des images qui seront transmises. Ils sont suivis d'un entier indiquant le nombre d'images par seconde fournies par la source vidéo. Finalement, les données sont présentées sous la forme d'un tableau de *char*, dont la longueur dépend des dimensions de l'image.
+Les vint-quatre premiers octets permettent de stocker une primitive de synchronisation. Les huit octets suivants contiennent des compteurs permettant de déterminer la trame sur laquelle travaillent les processus écrivain et lecteur (et ainsi éviter de traiter deux fois la même trame). Les 6 octets suivants rapportent des informations à propos des images qui seront transmises. Ils sont suivis d'un entier indiquant le nombre d'images par seconde fournies par la source vidéo. Finalement, les données sont présentées sous la forme d'un tableau de *char*, dont la longueur dépend des dimensions de l'image.
 
 ### 4.2. Synchronisation
 
@@ -140,7 +142,7 @@ Le décodeur est responsable de la lecture d'un fichier vidéo. Son premier argu
 
 Tout fichier ULV commence donc par 4 octets qui correspondent aux lettres S, E, T et R. Cela permet au programme de s'assurer que le fichier qu'il tente de lire est du bon format. Par la suite, 4 octets sont utilisés pour indiquer la largeur des images du vidéo, puis 4 octets pour leur hauteur et 4 octets pour le nombre de canaux. Finalement, 4 octets permettent d'indiquer le nombre d'images par seconde du vidéo (usuellement 30, mais ce nombre peut varier). Les trames du vidéo sont par la suite enregistrées une par une. Pour chaque trame, un entier non signé de 32 bits indique la taille, suivi d'un tableau d'octets. Ce tableau *ne contient pas directement l'image, mais son encodage JPEG*. Vous devez donc *décompresser* l'image, nous vous fournissons une fonction le faisant pour vous dans le fichier *jpgd.h*. Les images sont ainsi encodées à la suite, jusqu'à la dernière qui est suivie d'un entier de 4 octets contenant 0. Cette valeur n'étant pas une taille valide pour une image, vous savez alors que vous avez atteint la fin du fichier. *Vous devez alors recommencer la lecture au début du fichier, en boucle.*
 
-Afin de vous permettre d'expérimenter avec d'autres vidéos et de voir le résultat attendu, nous vous fournissons deux scripts Python, disponible sur [le dépôt Git](https://github.com/setr-ulaval/labo3-h23), capables de convertir (videoConverter.py) et de lire (videoReader.py) les vidéos au format ULV. Ceux-ci requièrent scipy et OpenCV pour fonctionner. Notez que vous n'êtes pas forcés de les utiliser et qu'aucune fonctionnalité du laboratoire ne dépend du bon fonctionnement de ces scripts, qui vous sont fournis à titre d'exemple uniquement.
+Afin de vous permettre d'expérimenter avec d'autres vidéos et de voir le résultat attendu, nous vous fournissons deux scripts Python, disponible sur [le dépôt Git](https://github.com/setr-ulaval/labo3-h24), capables de convertir (videoConverter.py) et de lire (videoReader.py) les vidéos au format ULV. Ceux-ci requièrent scipy et OpenCV pour fonctionner. Notez que vous n'êtes pas forcés de les utiliser et qu'aucune fonctionnalité du laboratoire ne dépend du bon fonctionnement de ces scripts, qui vous sont fournis à titre d'exemple uniquement.
 
 **Note importante :** l'affichage du Raspberry Pi Zero gère les images en mode BGR et non RGB (les canaux rouge et bleu sont inversés). Par conséquent, le format ULV enregistre ces images en inversant les canaux rouge et bleu. Les scripts fournis tiennent compte de cette inversion et restituent l'image en réinversant les canaux, mais ne soyez pas surpris par cette inversion de canal si vous essayez d'afficher une trame par vous-mêmes.
 
@@ -181,7 +183,11 @@ Considérant l'aspect temps réel de ce laboratoire, l'utilisation d'une interfa
 
 > **Remarque** : lors de l'affichage des vidéos avec le compositeur, il se peut qu'un caractère clignorant apparaisse en bas à gauche de la première source vidéo. Cet artefact est dû au fait que nous ne désactivons pas complètement le terminal, et n'est pas important. Il ne sera pas pris en compte lors de l'évaluation. Toutefois, toute autre dégradation de la qualité de l'image indique souvent un problème.
 
-#### 5.2.1. Écriture des statistiques de fluidité
+#### 5.2.1. Nombre d'images par seconde
+
+Votre programme doit afficher les images aussi vite que possible, mais en respectant la vitesse _maximale_ donnée dans le champ *Nombre d'images par seconde* du fichier ULV. Par exemple, même si vous _pourriez_ afficher 40 images par seconde, vous devez vous limiter à 30 si c'est la limite indiquée dans le fichier, sinon la vidéo passera en accéléré!
+
+#### 5.2.2. Écriture des statistiques de fluidité
 
 En plus d'afficher les vidéos, le compositeur doit également écrire un fichier nommé *stats.txt*. Ce fichier doit être vidé à chaque nouvelle exécution (il suffit de l'ouvrir avec l'option "w" passée à `fopen()` pour l'effacer) et doit avoir le contenu suivant:
 
@@ -189,12 +195,13 @@ En plus d'afficher les vidéos, le compositeur doit également écrire un fichie
 [TEMPS_ECOULE] Entree 1: moy=MOYENNE_FPS fps, max=TEMPS_MAXIMUM ms | Entree 2: moy=MOYENNE_FPS fps, max=TEMPS_MAXIMUM ms | Entree 3: moy=MOYENNE_FPS fps, max=TEMPS_MAXIMUM ms | Entree 4: moy=MOYENNE_FPS fps, max=TEMPS_MAXIMUM ms
 ```
 
-où *TEMPS_ECOULE* est le temps écoulé depuis le lancement du compositeur, *MOYENNE_FPS* est le nombre moyen d'images par seconde durant les **5 dernières secondes** et *TEMPS_MAXIMUM* le délai **maximal** entre 2 trames affichées durant les 5 dernières secondes. *TEMPS_ECOULE*, *MOYENNE_FPS* et *TEMPS_MAXIMUM* doivent être affichés avec *un chiffre après la virgule*. À toutes les 5 secondes (environ), votre compositeur doit ajouter une nouvelle ligne au fichier contenant ces informations. Notez que vous ne devez afficher les entrées que si elles sont activent. Par exemple, voici une sortie typique pour une configuration à 3 entrées:
+où *TEMPS_ECOULE* est le temps écoulé depuis le lancement du compositeur, *MOYENNE_FPS* est le nombre moyen d'images par seconde durant les **5 dernières secondes** et *TEMPS_MAXIMUM* le délai **maximal** entre 2 trames affichées durant les 5 dernières secondes. *TEMPS_ECOULE*, *MOYENNE_FPS* et *TEMPS_MAXIMUM* doivent être affichés avec *un chiffre après la virgule*. À toutes les 5 secondes (environ), votre compositeur doit ajouter une nouvelle ligne au fichier contenant ces informations. Notez que vous ne devez afficher les entrées que si elles sont actives. Par exemple, voici une sortie typique pour une configuration à 3 entrées:
 
 ```
-[5.0] Entree 1: moy=21.7 fps, max=108.9 ms | Entree 2: moy=21.6 fps, max=70.4 ms | Entree 3: moy=21.4 fps, max=80.1 ms | 
-[10.0] Entree 1: moy=21.2 fps, max=109.7 ms | Entree 2: moy=21.1 fps, max=109.2 ms | Entree 3: moy=21.3 fps, max=98.3 ms | 
-[15.0] Entree 1: moy=21.0 fps, max=109.2 ms | Entree 2: moy=19.9 fps, max=100.8 ms | Entree 3: moy=20.4 fps, max=98.3 ms | 
+[5.0] Entree 1: moy=20.1 fps, max=116.5 ms | Entree 2: moy=21.3 fps, max=89.1 ms | Entree 3: moy=21.0 fps, max=89.1 ms | 
+[10.0] Entree 1: moy=20.2 fps, max=156.5 ms | Entree 2: moy=20.6 fps, max=109.7 ms | Entree 3: moy=20.5 fps, max=88.5 ms | 
+[15.1] Entree 1: moy=20.6 fps, max=117.1 ms | Entree 2: moy=20.8 fps, max=108.8 ms | Entree 3: moy=20.8 fps, max=110.0 ms | 
+[20.0] Entree 1: moy=20.2 fps, max=118.1 ms | Entree 2: moy=20.3 fps, max=138.4 ms | Entree 3: moy=19.9 fps, max=131.8 ms |
 ```
 
 > **Conseil** : pour éviter que le _buffering_ ne vous joue des tours si votre programme se termine inopinément, vous pouvez utiliser `setbuf` comme dans le laboratoire 1 pour désactiver tout _buffering_ :
@@ -248,18 +255,18 @@ Le débogage, où un programme externe (le débogueur) peut bloquer à volonté 
 
 ### 6.1. Mode de compilation
 
-Pour la première fois du cours, la performance des programmes joue un rôle très important dans les résultats du laboratoire. En effet, obtenir une bonne fluidité sur un système aussi limité que le Raspberry Pi Zero présuppose une implémentation très efficace. Le compilateur peut vous aider à cet effet. Pour cela, vous devez le configurer en mode **Release**. Dans la palette de commandes de VScode, saisissez *CMake : set build type*, puis *Release*. Recompilez ensuite vos programmes.
+Pour la première fois du cours, la performance des programmes joue un rôle très important dans les résultats du laboratoire. En effet, obtenir une bonne fluidité sur un système aussi limité que le Raspberry Pi Zero présuppose une implémentation très efficace. Le compilateur peut vous aider à cet effet. Pour cela, vous devez le configurer en mode **Release**. Dans la palette de commandes de VScode, saisissez *CMake : select variant*, puis *Release* (vous pouvez également sélectionner la configuration dans la barre de statut, à gauche). Recompilez ensuite vos programmes.
 
 Attention toutefois, cette performance accrue a un prix : *vous ne serez pas en mesure de déboguer dans ce mode*, puisque le compilateur peut modifier votre code de manière importante afin de l'optimiser. Assurez-vous donc que vos programmes fonctionnent sans erreur avant d'utiliser ce mode de compilation. Il est impossible qu'un programme ne fonctionnant pas en mode *Debug* fonctionne bien en mode *Release*, au contraire : les optimisations du compilateur peuvent parfois faire ressortir de nouveaux bogues!
 
 ### 6.2. Exécution de scénarios
 
-Une fois que vos programmes sont prêts à être utilisés, vous pouvez commencer vos expérimentations utilisant différents *scénarios* (c'est-à-dire différentes configurations plus ou moins demandantes pour le Raspberry Pi). Ces scénarios sont des scripts Bash; nous vous en présentons un certain nombre (11, pour être plus précis) dans le répertoire `configs` du dépôt. Ils sont, de manière générale, de difficulté croissante.
+Une fois que vos programmes sont prêts à être utilisés, vous pouvez commencer vos expérimentations utilisant différents *scénarios* (c'est-à-dire différentes configurations plus ou moins demandantes pour le Raspberry Pi). Ces scénarios sont des scripts Bash; nous vous en présentons un certain nombre (11, pour être plus précis) dans le répertoire `configs` du dépôt. Ils sont, de manière générale, de difficulté croissante. Ces scripts doivent être présents *sur le Raspberry Pi*, dans le même répertoire que celui contenant les exécutables de vos programmes (normalement, `/home/pi/projects/laboratoire3`). Vous pouvez lancer une configuration donnée en utilisant la commande `bash nom_du_script.bash`.
 
 Notons que pour arrêter tous les programmes, vous devez :
 
 1. Couper le compositeur (par exemple en utilisant Ctrl+C)
-2. Terminer toutes les tâches d'arrière-plan **dans le même terminal où elles ont été lancées** (utilisez par exemple `kill $(jobs -p)`)
+2. Terminer toutes les tâches d'arrière-plan (utilisez par exemple `sudo killall sudo`, puisque tous les exécutables sont lancés en mode `sudo` pour leur permettre de changer de mode d'ordonnancement)
 
 Ces scripts **doivent** être exécutés sur le Raspberry Pi, mais n'ont pas forcément à l'être sur un terminal local. En d'autres termes, vous pouvez lancer les programmes à partir d'une session à distance (SSH) et voir le résultat s'afficher à l'écran connecté au Raspberry Pi.
 
@@ -272,14 +279,21 @@ Vous avez au total *deux* librairies partagées (`allocateurMemoire` et `commMem
 Nous vous conseillons de développer vos programmes dans cet ordre:
 
 1. Implémentez `allocateurMemoire`, mais en utilisant, de manière temporaire, directement `malloc()` et `free()` (c'est-à-dire que `tempsreel_malloc()` ne fait que retourner le résultat de `malloc()` sans rien faire d'autre). Ce n'est **pas** ce qui est demandé, mais ça vous permettra de développer vos programmes sans risquer des problèmes dus à un allocateur mémoire défaillant.
-2. Implémentez le `decodeur`. À ce stage vous ne pourrez pas afficher l'image sur l'écran de votre Raspberry Pi, mais vous pouvez utiliser la fonction `enregistreImage()` dans `utils` pour enregistrer une image au format PPM, que vous pouvez par la suite télécharger sur votre ordinateur et ouvrir avec un lecteur d'image standard. Cela vous permettra de vérifier si votre code de décodage est fonctionnel.
-3. Implémentez le `convertisseurgris`. Son implémentation est très simple (il suffit d'appeler `convertToGray()`), mais pour que cela fonctionne, vous devrez également implémenter `commMemoirePartagee` ainsi que le code permettant à `decodeur` d'écrire en sur l'espace mémoire partagé. Finalement, vous devrez écrire le code permettant à `convertisseurgris` de lire sur ce même espace mémoire partagé. Utilisez encore une fois `enregistreImage()` dans `convertisseurgris` pour valider que votre code fonctionne correctement.
+2. Implémentez le `decodeur`. À ce stade vous ne pourrez pas afficher l'image sur l'écran de votre Raspberry Pi, mais vous pouvez utiliser la fonction `enregistreImage()` dans `utils` pour enregistrer une image au format PPM, que vous pouvez par la suite télécharger sur votre ordinateur et ouvrir avec un lecteur d'image standard. Cela vous permettra de vérifier si votre code de décodage est fonctionnel. Lorsque vous obtiendrez des premiers résultats convaincants, vous pourrez également utiliser les exécutables fournis pour tester votre décodeur avec la solution du compositeur (voir section 6.3.1).
+3. Implémentez le `convertisseurgris`. Son implémentation est très simple (il suffit d'appeler `convertToGray()`), mais pour que cela fonctionne, vous devrez également implémenter `commMemoirePartagee` ainsi que le code permettant à `decodeur` d'écrire en sur l'espace mémoire partagé. Finalement, vous devrez écrire le code permettant à `convertisseurgris` de lire sur ce même espace mémoire partagé. Utilisez encore une fois `enregistreImage()` et/ou les programmes solution fournis pour valider que le code de `convertisseurgris` fonctionne correctement.
 4. Implémentez le `compositeur`. Son code de lecture sur l'espace mémoire partagé sera très similaire à celui de `convertisseurgris`, à la différence près que `compositeur` ne doit pas bloquer si une source n'est pas disponible, car il doit gérer jusqu'à 4 sources en parallèle! Assurez-vous que vous êtes capables _d'afficher_ une vidéo (vous pouvez utiliser la configuration 01_sourceUnique pour vous tester) à une vitesse correcte (on ne doit pas dépasser le nombre d'images par seconde identifié dans le fichier ULV!). Vérifiez également que vous êtes capables de produire le fichier `stats.txt` tel que demandé à la section 5.2.1.
-5. Implémentez le `redimensionneur` et le `filtreur`. Leur code devrait être très similaire à celui de `convertisseurgris`, à l'exception de l'analyse des arguments sur la ligne de commande et de la fonction de traitement à lancer. À ce stage, vous devriez être capables d'exécuter les configurations 01 à 08 sans erreur.
+5. Implémentez le `redimensionneur` et le `filtreur`. Leur code devrait être très similaire à celui de `convertisseurgris`, à l'exception de l'analyse des arguments sur la ligne de commande et de la fonction de traitement à lancer. À ce stade, vous devriez être capables d'exécuter les configurations 01 à 08 sans erreur.
 6. Remplacez l'implémentation factice d'`allocateurMemoire` par une implémentation valide telle que décrite à la section 4.3. Tous vos programmes devraient également utiliser `tempsreel_malloc()` / `tempsreel_free()`, jamais `malloc()` et `free()`. Revalidez les configurations 01 à 08 pour confirmer que votre allocateur fonctionne correctement.
 7. Implémentez les différents modes d'ordonnancement (RT, FIFO et DEADLINE) et assurez-vous que votre code change _réellement_ l'ordonnancement utilisé (le retour de la fonction `sched_setattr()` devrait être `0`, si c'est une valeur négative, c'est que ça ne marche pas). Testez les configurations 09, 10 et 11 qui utilisent ces modes.
 8. Optimisez vos programmes pour maximiser la performance des programmes (sans en affecter le résultat, bien entendu).
 
+#### 6.3.1. Exécutables fournis
+
+Afin de faciliter votre débogage, nous vous fournissons, comme pour le laboratoire 2, les **exécutables binaires (compilés) pour chaque programme** (donc 5 exécutables au total). Ces exécutables constituent la solution du laboratoire et sont présents dans le dossier *executables* du dépôt Git. Vous pouvez donc, par exemple, tester votre programme decodeur en utilisant la solution du compositeur, et vice-versa. Évidemment, ces binaires ne peuvent être remis pour l'évaluation : vous devez implémenter vos propres programmes! Ces programmes peuvent être vous permettre de tester les différents scénarios afin de voir ce que devrait être le résultat final en terme d'aspect graphique et de fluidité.
+
+Pour les utiliser, copiez les exécutables que vous voulez utiliser comme solutionnaire dans le répertoire `src/build`. Exécutez par la suite la tâche *toutSynchroniser*, tel qu'expliqué à la section 6.2. Par la suite, lancez le programme que vous voulez déboguer en vous assurant qu'il est configuré pour utiliser les bonnes zones mémoire d'entrée/sortie.
+
+> **Attention** : bien que les programmes fournis soient *corrects* (au sens où ils respectent l'énoncé du laboratoire), ils ne sont pas infaillibles et immunisés contre toute requête incorrecte. Envoyer des données erronées à ces programmes _peut_ conduire à un plantage ou un blocage du programme. Par exemple, si vous ne relâchez jamais le mutex de synchronisation, les programmes fournis resteront bloqués. De même, si vous envoyez une taille d'image invalide dans la zone mémoire partagée, il est probable que cela produise une erreur de segmentation.
 
 ## 7. Temps réel et optimisation
 
@@ -308,7 +322,7 @@ Finalement, pour la dernière étape, utilisez l'ordonnanceur SCHED_DEADLINE. Po
 
 Ce laboratoire impose une lourde charge au processeur du Raspberry Pi Zero. Afin de vous assurer de maximiser sa performance, assurez-vous qu'un dissipateur (_heatsink_) est installé sur celui-ci. Ne tentez **pas** de remplacer le dissipateur par d'autres objets métalliques tels que des pièces de monnaie, vous risquez de court-circuiter des composants importants du Raspberry Pi!
 
-Vous pouvez connaître la vitesse d'horloge *courante* du processeur en utilisant la commande `cat /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_cur_freq`. Cette vitesse (en MHz) devrait être de 1000 (1 GHz, la fréquence normale du processeur). Si elle est plus basse, vérifiez la température du processeur avec la commande `/opt/vc/bin/vcgencmd measure_temp`. Celle-ci ne devrait pas être supérieure à 65 degrés Celsius!
+Vous pouvez connaître la vitesse d'horloge *courante* du processeur en utilisant la commande `sudo cat /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_cur_freq`. Cette vitesse (en KHz) devrait être de 1 000 000 (1 GHz, la fréquence normale du processeur). Si elle est plus basse, vérifiez la température du processeur avec la commande `cat /sys/class/thermal/thermal_zone0/temp` (la valeur retournée doit être divisée par 1000 pour connaître la température en Celsius). Celle-ci ne devrait pas être supérieure à 65 degrés Celsius!
 
 ### 8.2. Mise en veille de la sortie HDMI
 
@@ -316,45 +330,60 @@ Par défaut, le Raspberry Pi Zero met en veille son GPU lorsqu'il n'y a pas d'in
 
 ### 8.3. Nombre de FPS typique pour chaque configuration
 
-Le tableau suivant récapitule le nombre d'images par seconde obtenu par notre solution ainsi que le délai maximum entre 2 images pour chaque source de chaque configuration. Pour chaque paire configuration/source, 2 nombres sont données, le premier étant le nombre d'images par seconde et le second le délai maximum en millisecondes. Notez que notre solution limite le délai entre 2 images à 35 ms minimum, soit environ 28.6 images par seconde. Notez finalement que ce tableau ne présente pas une information importante, soit la _variabilité_ de chaque mesure au fil du temps.
+Le tableau suivant récapitule le nombre d'images par seconde obtenu par notre solution ainsi que le délai maximum entre 2 images pour chaque source de chaque configuration. Pour chaque paire configuration/source, 2 nombres sont données, le premier étant le nombre d'images par seconde et le second le délai maximum en millisecondes. Notez que notre solution limite le délai entre 2 images à 34 ms minimum, soit environ 29 images par seconde. Notez finalement que ce tableau ne présente pas une information importante, soit la _variabilité_ de chaque mesure au fil du temps.
 
 | Configuration  | Source 1  | Source 2  | Source 3  | Source 4  |
 |---|---|---|---|---|
-| 01  | 28.6 / 36.1  | N/A  | N/A  | N/A  |
-| 02  | 25.4 / 49.3  |  25.1 / 56.1 | N/A  | N/A  |
-| 03  | 21.4 / 85.6  | 22.2 / 62.4  | 22.2 / 71.1  | N/A  |
-| 04  | 16.0 / 121.2  | 16.8 / 129.6  | 16.2 / 148.4  | 16.4 / 139.4  |
-| 05  | 7.5 / 151.0  | N/A  | N/A  | N/A  |
-| 06  | 2.0 / 533.5  | 2.0 / 537.0  | 2.0 / 534.9 | N/A  |
-| 07  | 17.5 / 70.7  | 17.5 / 71.1 | N/A | N/A  |
-| 08  | 11,4 / 133.2  | 10.7 / 126.5 | N/A | N/A  |
-| 09  | 16.1 / 116.1  | 1.9 / 1878.0  | 1.9 / 1878.0  | 2.2 / 1860.4  |
-| 10  | 13.7 / 81.1  |  9.1 / 133.6 | N/A  | N/A  |
-| 11  | 20.6 / 79.4  | 7.1 / 260.1  | 19.4 / 100.2 | N/A  |
+| 01  | 28.6 / 39.8  | N/A  | N/A  | N/A  |
+| 02  | 24.7 / 60.2  |  24.8 / 61.5 | N/A  | N/A  |
+| 03  | 20.2 / 117.8  | 20.3 / 131.2  | 20.5 / 110.0  | N/A  |
+| 04  | 15.1 / 151.0  | 15.2 / 160.1  | 14.9 / 177.7  | 15.4 / 158.3  |
+| 05  | 6.8 / 203.6  | N/A  | N/A  | N/A  |
+| 06  | 1.5 / 732.8 | 1.5 / 729.0  | 1.5 / 747.6 | N/A  |
+| 07  | 16.4 / 109.9  | 16.5 / 120.8 | N/A | N/A  |
+| 08  | 12.5 / 158.2  | 12.6 / 158.8 | N/A | N/A  |
+| 09  | 16.0 / 116.1  | 0.8 / 2318.9  | 0.7 / 1978.4  | 0.9 / 2124.6  |
+| 10  | 13.4 / 127.2  |  10.7 / 151.1 | N/A  | N/A  |
+| 11  | 19.9 / 79.8  | 6.8 / 256.1  | 16.9 / 166.5 | N/A  |
 
 Vous ne serez pas évalués sur l'atteinte précise de ces performances. Toutefois, une performance drastiquement inférieure (moins de la moitié de la performance affichée ici, par exemple) pourra être pénalisée car elle implique une implémentation probablement incorrecte au niveau du partage mémoire et/ou de la synchronisation. De manière générale, votre solution devrait afficher de manière fluide (à l'oeil) les configurations `01_sourceUnique` et `02_deuxVideos`. Si votre implémentation est efficace, vous devriez être capable d'avoir aussi une fluidité acceptable pour `03_troisVideos` et, si elle est très efficace, une fluidité minimale (>= 15 fps) pour `04_mosaique`.
 
 ## 9. Modalités d'évaluation
 
-Ce travail doit être réalisé **en équipe de deux**, la charge de travail étant à répartir équitablement entre les deux membres de l'équipe. Aucun rapport n'est à remettre, mais vous devez soumettre votre code source dans monPortail avant le **23 février 2023, 17h30**. Ensuite, lors de la séance de laboratoire du **24 février 2023**, les deux équipiers doivent être en mesure individuellement d'expliquer leur approche et de démontrer le bon fonctionnement de l'ensemble de la solution de l'équipe du laboratoire. Si vous ne pouvez pas vous y présenter, contactez l'équipe pédagogique du cours dans les plus brefs délais afin de convenir d'une date d'évaluation alternative. Ce travail compte pour **15%** de la note totale du cours. Comme pour les travaux précédents, votre code doit compiler **sans avertissements** de la part de GCC.
+Ce travail doit être réalisé **en équipe de deux**, la charge de travail étant à répartir équitablement entre les deux membres de l'équipe. Aucun rapport n'est à remettre, mais vous devez soumettre votre code source dans monPortail avant le **29 février 2024, 17h00**. Ensuite, lors de la séance de laboratoire du **1er mars 2024**, les deux équipiers doivent être en mesure individuellement d'expliquer leur approche et de démontrer le bon fonctionnement de l'ensemble de la solution de l'équipe du laboratoire. Si vous ne pouvez pas vous y présenter, contactez l'équipe pédagogique du cours dans les plus brefs délais afin de convenir d'une date d'évaluation alternative. Ce travail compte pour **15%** de la note totale du cours. Comme pour les travaux précédents, votre code doit compiler **sans avertissements** de la part de GCC.
 
-Notre évaluation comprendra notamment les éléments suivants:
+Notre évaluation se fera sur le Raspberry Pi de l'enseignant ou de l'assistant et comprendra notamment les éléments suivants:
   1. La sortie de compilation d'un `CMake: Clean Rebuild`;
   2. L'exécution des scripts 01, 02, 04, 08, 09 et 11 (fournis dans le dossier _configs_). Nous observerons également le contenu de _stats.txt_ entre chaque exécution.
-  3. Dans le cas des configurations 09 et 11, nous validerons également que les changements d'ordonnanceur requis ont bien été effectués, par exemple en lançant la commande `htop` dans un autre terminal et en validant que les programmes sont bien en priorité "RT".
-  4. Notez qu'il est possible que nous vous demandions d'exécuter d'autres configurations : aucune des configurations fournies ne devrait faire planter vos programmes.
+  3. Dans le cas des configurations 09 et 11, nous validerons également que les changements d'ordonnanceur requis ont bien été effectués, par exemple en lançant la commande `htop` dans un autre terminal et en validant que les programmes ont une valeur de priorité conforme.
+  4. Notez qu'il est possible que nous exécutions d'autres configurations : aucune des configurations fournies ne devrait faire planter vos programmes.
   5. Une discussion sur les résultats que vous obtenez pour ces diverses configurations et sur votre implémentation.
  
+ 
+### 9.1. Barème d'évaluation
 
-Le barème d'évaluation détaillé sera le suivant (laboratoire noté sur 20 points) :
+Le barême d'évaluation détaillé sera le suivant (laboratoire noté sur 20 points) :
 
-* (4 pts) Vos programmes sont en mesure d'utiliser des espaces mémoire partagés pour communiquer entre eux.
-* (2 pts) La synchronisation entre vos programmes est adéquate et fonctionnelle (c.-à-d. pas d'images coupées ou d'autres problèmes visuels).
-* (5 pts) Votre système est en mesure d'afficher une ou plusieurs vidéos sur l'écran de manière fluide et de chaîner les traitements effectués sur ces vidéos.
-* (4 pts) Vous utilisez les fonctions de l'ordonnanceur pour sélectionner différents modes d'ordonnancement et êtes en mesure d'expliquer l'impact de chacun de ces modes.
-* (3 pts) Vos programmes respectent les contraintes des programmes temps réel (pas d'allocation mémoire dynamique dans la section critique, pas d'entrée/sortie autrement que pour les fichiers de log, etc.)
-* (1 pts) Tous les programmes compilent sans avertissement
-* (1 pts) Les étudiants sont en mesure d'expliquer l'approche utilisée et de répondre aux questions concernant leur code.
+#### 9.1.1. Qualité du code remis (6 points)
+
+* (3 pts) Le code C est valide, complet et ne contient pas d'erreurs empêchant le bon déroulement des programmes.
+* (1 pts) Tous les programmes compilent sans avertissement (*warning*) de la part du compilateur.
+* (2 pts) Les programmes respectent les contraintes des programmes temps réel (pas d'allocation mémoire dynamique dans la section critique, pas d'entrée/sortie autrement que pour les fichiers de log, etc.)
+
+#### 9.1.2. Validité de la solution (10 points)
+
+> **Attention** : un programme ne compilant pas obtient automatiquement une note de **zéro** pour cette section.
+
+* (2 pts) Les programmes sont en mesure d'utiliser des espaces mémoire partagés pour communiquer entre eux.
+* (2 pts) La synchronisation entre les programmes est adéquate et fonctionnelle (c.-à-d. pas d'images coupées ou d'autres problèmes visuels).
+* (4 pts) Le système complet est en mesure d'afficher une ou plusieurs vidéos sur l'écran de manière fluide et de chaîner les traitements effectués sur ces vidéos. Le nombre d'images par seconde est (le cas échéant) limité pour ne pas dépasser la valeur fournie dans le fichier vidéo.
+* (2 pts) Les fonctions de l'ordonnanceur sont correctement utilisées pour sélectionner différents modes d'ordonnancement.
+
+#### 9.1.3. Justesse des explications et réponses aux questions (4 points)
+
+* (4 pts) Les étudiants sont en mesure d'expliquer l'approche utilisée et de répondre aux questions concernant leur code et la théorie liée au laboratoire. Les étudiants expliquent également correctement l'impact des différents modes d'ordonnancement et des différentes options d'exécution possibles. 
+
+
 
 
 ## 10. Ressources et lectures connexes
