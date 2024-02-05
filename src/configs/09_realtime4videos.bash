@@ -24,7 +24,7 @@ do
     sleep 0.05
 done
 echo "[Script] /mem2 cree, lancement compositeur"
-sudo ./compositeur /mem2 /mem3 /mem4 /mem5 &
+sudo ./compositeur -s RR /mem2 /mem3 /mem4 /mem5 &
 
 wait;
 
