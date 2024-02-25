@@ -332,11 +332,11 @@ void enregistreImage(const unsigned char* input, const unsigned int in_height, c
     fprintf(f, "P3\n%d %d\n%d\n", in_width, in_height, 255);
     if(n_channels == 1){
         for (unsigned int i=0; i<in_width*in_height; i++)
-            fprintf(f,"%d %d %d ", input[i], input[i], input[i]);
+            fprintf(f," %d %d %d \n", input[i], input[i], input[i]);
     }
     else{
     for (unsigned int i=0; i<in_width*in_height*3; i+=3)
-        fprintf(f,"%d %d %d ", input[i], input[i+1], input[i+2]);
+        fprintf(f," %d %d %d \n", input[i], input[i+1], input[i+2]);
     }
     fclose(f);
 }
