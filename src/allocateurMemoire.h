@@ -1,7 +1,7 @@
 /******************************************************************************
  * Laboratoire 3
  * GIF-3004 Systèmes embarqués temps réel
- * Hiver 2024
+ * Hiver 2025
  * Marc-André Gardner
  * 
  * Fichier de déclaration des fonctions de l'allocateur mémoire temps réel

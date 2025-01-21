@@ -34,6 +34,18 @@ namespace jpgd
 	// On return, width/height will be set to the image's dimensions, and actual_comps will be set to the either 1 (grayscale) or 3 (RGB).
 	// Notes: For more control over where and how the source data is read, see the decompress_jpeg_image_from_stream() function below, or call the jpeg_decoder class directly.
 	// Requesting a 8 or 32bpp image is currently a little faster than 24bpp because the jpeg_decoder class itself currently always unpacks to either 8 or 32bpp.
+	
+	// NOTES POUR LE COURS DE SETR 
+	// Vous ne pouvez pas decompresser depuis un fichier (puisque les fichiers ULV ne sont pas des JPEG, ils contiennent seulement des images JPEG), il vous faut
+	// 		donc utiliser decompress_jpeg_image_from_memory
+	// pSrc_data est un pointeur vers le debut des donnees compressees et src_data_size leur taille (en octets)
+	// width et height sont des _pointeurs_ vers des entiers contenant la taille des images. Une fois l'image decodee, la fonction _remplace leurs valeurs_ par les dimensions
+	// 		effectives de l'image decodee (qui devraient etre les memes que celles fournies)
+	// actual_comps est un pointeur vers un entier qui contiendra le nombre de canaux dans l'image decompressee (1 ou 3 dans notre cas)
+	// req_comps est le nombre de canaux que vous _voulez_ que l'image contienne
+	// flags parametrise des caracteristiques optionnelles
+	// La fonction retourne un pointeur vers les donnees decompressees; ce pointeur aura ete alloue via tempsreel_malloc, _vous_ devrez donc le liberer (avec tempsreel_free)
+	//		lorsque vous en avez termine ou vous aurez une fuite de memoire!
 	unsigned char* decompress_jpeg_image_from_memory(const unsigned char* pSrc_data, int src_data_size, int* width, int* height, int* actual_comps, int req_comps, uint32_t flags = 0);
 	unsigned char* decompress_jpeg_image_from_file(const char* pSrc_filename, int* width, int* height, int* actual_comps, int req_comps, uint32_t flags = 0);
 

@@ -5,7 +5,7 @@
 * Fonctions accomplissant diverses tâches nécessaires au traitement des images.
 * Toutes ces fonctions sont déjà implémentées pour vous dans utils.c
 *
-* Marc-André Gardner, Hiver 2024
+* Marc-André Gardner, Hiver 2025
 * Merci à Yannick Hold-Geoffroy pour l'implémentation des fonctions de
 * redimensionnement et de filtrage.
 ******************************************************************************/
