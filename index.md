@@ -53,7 +53,7 @@ Un espace mémoire partagé peut être créé en utilisant la fonction `shm_open
 
 <img src="img/diag_mem.png" style="width:1000px"/>
 
-Les vint-quatre premiers octets permettent de stocker une primitive de synchronisation. Les huit octets suivants contiennent des compteurs permettant de déterminer la trame sur laquelle travaillent les processus écrivain et lecteur (et ainsi éviter de traiter deux fois la même trame). Les 6 octets suivants rapportent des informations à propos des images qui seront transmises. Ils sont suivis d'un entier indiquant le nombre d'images par seconde fournies par la source vidéo. Finalement, les données sont présentées sous la forme d'un tableau de *char*, dont la longueur dépend des dimensions de l'image.
+Les vingt-quatre premiers octets permettent de stocker une primitive de synchronisation. Les huit octets suivants contiennent des compteurs permettant de déterminer la trame sur laquelle travaillent les processus écrivain et lecteur (et ainsi éviter de traiter deux fois la même trame). Les 6 octets suivants rapportent des informations à propos des images qui seront transmises. Ils sont suivis d'un entier indiquant le nombre d'images par seconde fournies par la source vidéo. Finalement, les données sont présentées sous la forme d'un tableau de *char*, dont la longueur dépend des dimensions de l'image.
 
 ### 4.2. Synchronisation
 
@@ -277,8 +277,8 @@ Vous avez au total *deux* librairies partagées (`allocateurMemoire` et `commMem
 Nous vous conseillons de développer vos programmes dans cet ordre:
 
 1. Implémentez `allocateurMemoire`, mais en utilisant, de manière temporaire, directement `malloc()` et `free()` (c'est-à-dire que `tempsreel_malloc()` ne fait que retourner le résultat de `malloc()` sans rien faire d'autre). Ce n'est **pas** ce qui est demandé, mais ça vous permettra de développer vos programmes sans risquer des problèmes dus à un allocateur mémoire défaillant.
-2. Implémentez le `decodeur`. À ce stade vous ne pourrez pas afficher l'image sur l'écran de votre Raspberry Pi, mais vous pouvez utiliser la fonction `enregistreImage()` dans `utils` pour enregistrer une image au format PPM, que vous pouvez par la suite télécharger sur votre ordinateur et ouvrir avec un lecteur d'image standard. Cela vous permettra de vérifier si votre code de décodage est fonctionnel. Lorsque vous obtiendrez des premiers résultats convaincants, vous pourrez également utiliser les exécutables fournis pour tester votre décodeur avec la solution du compositeur (voir section 6.3.1).
-3. Implémentez le `convertisseurgris`. Son implémentation est très simple (il suffit d'appeler `convertToGray()`), mais pour que cela fonctionne, vous devrez également implémenter `commMemoirePartagee` ainsi que le code permettant à `decodeur` d'écrire en sur l'espace mémoire partagé. Finalement, vous devrez écrire le code permettant à `convertisseurgris` de lire sur ce même espace mémoire partagé. Utilisez encore une fois `enregistreImage()` et/ou les programmes solution fournis pour valider que le code de `convertisseurgris` fonctionne correctement.
+2. Implémentez le `decodeur`. Testez-le en utilisant le `compositeur` fourni. Au besoin, vous pouvez utiliser la fonction `enregistreImage()` dans `utils` pour enregistrer une image au format PPM, que vous pouvez par la suite télécharger sur votre ordinateur et ouvrir avec un lecteur d'image standard.
+3. Implémentez le `convertisseurgris`. Son implémentation est très simple (il suffit d'appeler `convertToGray()`), mais pour que cela fonctionne, vous devrez également implémenter `commMemoirePartagee`. Finalement, vous devrez écrire le code permettant à `convertisseurgris` de lire sur ce même espace mémoire partagé. Utilisez encore une fois `enregistreImage()` et/ou les programmes solution fournis pour valider que le code de `convertisseurgris` fonctionne correctement.
 4. Implémentez le `compositeur`. Son code de lecture sur l'espace mémoire partagé sera très similaire à celui de `convertisseurgris`, à la différence près que `compositeur` ne doit pas bloquer si une source n'est pas disponible, car il doit gérer jusqu'à 4 sources en parallèle! Assurez-vous que vous êtes capables _d'afficher_ une vidéo (vous pouvez utiliser la configuration 01_sourceUnique pour vous tester) à une vitesse correcte (on ne doit pas dépasser le nombre d'images par seconde identifié dans le fichier ULV!). Vérifiez également que vous êtes capables de produire le fichier `stats.txt` tel que demandé à la section 5.2.1.
 5. Implémentez le `redimensionneur` et le `filtreur`. Leur code devrait être très similaire à celui de `convertisseurgris`, à l'exception de l'analyse des arguments sur la ligne de commande et de la fonction de traitement à lancer. À ce stade, vous devriez être capables d'exécuter les configurations 01 à 08 sans erreur.
 6. Remplacez l'implémentation factice d'`allocateurMemoire` par une implémentation valide telle que décrite à la section 4.3. Tous vos programmes devraient également utiliser `tempsreel_malloc()` / `tempsreel_free()`, jamais `malloc()` et `free()`. Revalidez les configurations 01 à 08 pour confirmer que votre allocateur fonctionne correctement.
@@ -293,7 +293,7 @@ Pour les utiliser, copiez les exécutables que vous voulez utiliser comme soluti
 
 > **Attention** : bien que les programmes fournis soient *corrects* (au sens où ils respectent l'énoncé du laboratoire), ils ne sont pas infaillibles et immunisés contre toute requête incorrecte. Envoyer des données erronées à ces programmes _peut_ conduire à un plantage ou un blocage du programme. Par exemple, si vous ne relâchez jamais le mutex de synchronisation, les programmes fournis resteront bloqués. De même, si vous envoyez une taille d'image invalide dans la zone mémoire partagée, il est probable que cela produise une erreur de segmentation.
 
-## 7. Temps réel et optimisation
+## 7. Temps réel, profilage et optimisation
 
 ### 7.1. Essais des différents modes de l'ordonnanceur
 
@@ -305,6 +305,42 @@ Finalement, pour la dernière étape, utilisez l'ordonnanceur SCHED_DEADLINE. Po
 
 **Note importante** : certaines combinaisons de vidéos requièrent tout simplement trop de temps pour être traitées en temps réel par le Raspberry Pi (c'est par exemple le cas si vous ouvrez une vidéo en 480p et appliquez un filtre et un redimensionnement avec interpolation). L'ordonnanceur ne peut pas faire de miracle, et si le temps CPU demandé par un groupe de programme excède la capacité totale de l'ordinateur, il n'y a rien à faire. Toutefois, remarquez ce qui se passe lorsque, *en même temps* que ces tâches trop longues, vous lancez une autre tâche qui, elle, pourrait s'exécuter dans les temps. Le choix du mode d'ordonnancement améliore-t-il sa fluidité?
 
+### 7.2. Visualisation des status des programmes en cours d'exécution
+
+Afin de vous permettre de mieux visualiser et comprendre l'état de chaque programme au fil du temps, nous vous fournissons du code permettant une forme de _profilage_ de vos exécutables. Ce code génère des fichiers texte contenant les temps précis correspondant à des **changements d'état** de vos programmes. Ces états sont au nombre de cinq :
+
+1. L'initialisation (tout ce qui se passe avant que vous ne commenciez la boucle critique du programme);
+2. L'attente sur un mutex en tant que lecteur (correspondant à la fonction `attenteLecteur`);
+3. Le traitement à proprement parler (autrement dit, ce que fait réellement le programme, comme redimensionner ou convertir en niveaux de gris);
+4. L'attente sur un mutex en tant qu'écrivain (correspondant à la fonction `attenteEcrivain`);
+5. La mise en sommeil volontaire (lorsqu'un programme appelle `usleep`, par exemple).
+
+Une fois ces fichiers générés, vous pouvez vous servir d'un script Python (dans `src/creerProfilageImages.py`) pour générer des figures semblables à celle-ci (dans ce cas-ci, le scénario 08) :
+
+<img src="img/graph.png" style="width:1000px"/>
+
+Cela vous permet de voir rapidement quel programme passe plus de temps à attendre et pour quelle raison (entrée ou sortie), ou quel programme obtient la part du lion de l'utilisation CPU. Ces figures nous permettront également de mieux valider votre implémentation.
+
+> **Note** : si vous voulez exécuter le script `creerProfilageImages.py` sur la VM fournie, vous devrez d'abord installer numpy et matplotlib en utilisant la commande `pip3.11 install numpy matplotlib` dans un terminal.
+
+#### 7.2.1. Comment activer le profilage
+
+L'initialisation du profileur est déjà faite pour vous dans les fichiers de code fournis. Laissez la au début de la fonction `main()` de chaque programme. **Vous devez toutefois ajouter des appels à `evenementProfilage`**. Son premier argument de `evenementProfilage` sera toujours `&profInfos`. Quant au second, il dépend d'où vous ajoutez l'appel à `evenementProfilage` :
+
+- Juste **avant** l'appel à `attenteLecteur`, appelez `evenementProfilage` avec le 2e argument valant `ETAT_ATTENTE_MUTEXLECTURE` (sauf pour `decodeur` qui n'attend pas sur un mutex pour son entrée)
+- Juste **avant** l'appel à `attenteEcrivain`, appelez `evenementProfilage` avec le 2e argument valant `ETAT_ATTENTE_MUTEXECRITURE` (sauf pour `compositeur` qui n'a pas d'écriture à faire)
+- Juste **après** l'appel à `attenteLecteur`, ou au début du code de décodage pour `decodeur`, appelez `evenementProfilage` avec le 2e argument valant `ETAT_TRAITEMENT`
+- Juste **avant** l'appel à `usleep`, `sched_yield`, ou une autre fonction où votre programme redonne volontairement la main, appelez `evenementProfilage` avec le 2e argument valant `ETAT_PAUSE`
+
+#### 7.2.2. Figures à remettre
+
+Vous devrez remettre, avec votre code, les graphes produits par `creerProfilageImages.py` pour _tous les scénarios_. Vous devez faire fonctionner vos programmes _après initialisation_ pendant au moins 10 secondes, mais ne remettez pas un graphe couvrant plus de 20 secondes (utilisez au besoin l'argument `--duree` du script Python qui vous permet de tronquer les résultats). Nous pourrons vous poser des questions lors de l'évaluation sur les graphes que vous aurez remis.
+
+#### 7.2.3. Désactivation du profilage
+
+Le code servant à récupérer les informations de profilage ne respecte pas parfaitement les contraintes temps réel (accès à un fichier, réallocation mémoire potentielle, etc.). Bien que son impact pratique sur les performances soit très limité, vous pouvez le désactiver si vous voulez tester la performance maximale de votre code en allant dans le fichier `utils.h` pour y assigner la valeur 0 à `PROFILAGE_ACTIF`.
+
+> C'est d'ailleurs ce qui est fait pour les solutions fournies. Les exécutables que nous vous fournissons ne produisent aucune information de profilage, pour éviter la confusion avec vos propres programmes.
 
 <!-- #### ~~Optimisation par profilage~~
 
@@ -348,7 +384,7 @@ Vous ne serez pas évalués sur l'atteinte précise de ces performances. Toutefo
 
 ## 9. Modalités d'évaluation
 
-Ce travail doit être réalisé **en équipe de deux**, la charge de travail étant à répartir équitablement entre les deux membres de l'équipe. Aucun rapport n'est à remettre, mais vous devez soumettre votre code source dans monPortail avant le **27 février 2025, 17h00**. Ensuite, lors de la séance de laboratoire du **28 février 2025**, les deux équipiers doivent être en mesure individuellement d'expliquer leur approche et de démontrer le bon fonctionnement de l'ensemble de la solution de l'équipe du laboratoire. Si vous ne pouvez pas vous y présenter, contactez l'équipe pédagogique du cours dans les plus brefs délais afin de convenir d'une date d'évaluation alternative. Ce travail compte pour **15%** de la note totale du cours. Comme pour les travaux précédents, votre code doit compiler **sans avertissements** de la part de GCC.
+Ce travail doit être réalisé **en équipe de deux**, la charge de travail étant à répartir équitablement entre les deux membres de l'équipe. Aucun rapport n'est à remettre, mais vous devez soumettre votre code source **et les graphes de profilage correspondant à tous les scénarios** dans monPortail avant le **27 février 2025, 17h00**. Ensuite, lors de la séance de laboratoire du **28 février 2025**, les deux équipiers doivent être en mesure individuellement d'expliquer leur approche et de démontrer le bon fonctionnement de l'ensemble de la solution de l'équipe du laboratoire. Si vous ne pouvez pas vous y présenter, contactez l'équipe pédagogique du cours dans les plus brefs délais afin de convenir d'une date d'évaluation alternative. Ce travail compte pour **15%** de la note totale du cours. Comme pour les travaux précédents, votre code doit compiler **sans avertissements** de la part de GCC.
 
 Notre évaluation se fera sur le Raspberry Pi de l'enseignant ou de l'assistant et comprendra notamment les éléments suivants:
   1. La sortie de compilation d'un `CMake: Clean Rebuild`;
