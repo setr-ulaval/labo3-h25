@@ -23,7 +23,9 @@ NS_TO_MS = 1e6
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(prog="Afficheur des etats des programmes, Labo 3 SETR")
+    parser = argparse.ArgumentParser(
+        prog="Afficheur des etats des programmes, Labo 3 SETR"
+    )
     parser.add_argument(
         "dossier_input",
         help="Chemin vers le dossier contenant les fichiers profilage-*",
@@ -42,7 +44,11 @@ if __name__ == "__main__":
         help="Afficher uniquement les N premieres secondes (par defaut, tout afficher)",
     )
     args = parser.parse_args()
-    files = list(args.dossier_input.glob("profilage-*"))
+    files = sorted(
+        args.dossier_input.glob("profilage-*"),
+        key=lambda f: int(f.stem.rpartition("-")[2]),
+        reverse=True,
+    )
     data = {}
 
     for fpath in files:
@@ -72,7 +78,8 @@ if __name__ == "__main__":
             ax.add_patch(r)
 
     ax.set_yticks(
-        [(i + 0.5) for i in range(len(files))], labels=[f.stem.partition("-")[2] for f in files]
+        [(i + 0.5) for i in range(len(files))],
+        labels=[f.stem.partition("-")[2] for f in files],
     )
     graphpos = ax.get_position()
     ax.set_position(
