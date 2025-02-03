@@ -5,6 +5,9 @@ import argparse
 from pathlib import Path
 
 import numpy as np
+import matplotlib
+
+matplotlib.use("Agg")
 from matplotlib import pyplot as plt
 from matplotlib.patches import Rectangle, Patch
 
@@ -51,8 +54,14 @@ if __name__ == "__main__":
     )
     data = {}
 
+    print(
+        "Liste des derniers evenements par processus (voir le header utils.h pour la definition de chaque valeur numerique)"
+    )
     for fpath in files:
         data[fpath.stem] = np.loadtxt(fpath, delimiter=",")
+        print(
+            f"Dernier evenement pour {fpath.stem.partition('-')[2]} : {int(data[fpath.stem][-1,0])} au temps t={data[fpath.stem][-1,1]/1e9:.6f}"
+        )
         data[fpath.stem] = np.concatenate(
             (data[fpath.stem][:-1, :], data[fpath.stem][1:, 1:]), axis=1
         )
@@ -108,4 +117,4 @@ if __name__ == "__main__":
     plt.ylim(0, len(data))
     plt.xlabel("Temps (ms)")
     plt.ylabel("Processus")
-    plt.savefig(args.sortie)
+    plt.savefig(args.sortie, bbox_inches="tight", pad_inches=0.1)

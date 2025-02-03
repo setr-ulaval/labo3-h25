@@ -307,7 +307,7 @@ Finalement, pour la dernière étape, utilisez l'ordonnanceur SCHED_DEADLINE. Po
 
 ### 7.2. Visualisation des status des programmes en cours d'exécution
 
-Afin de vous permettre de mieux visualiser et comprendre l'état de chaque programme au fil du temps, nous vous fournissons du code permettant une forme de _profilage_ de vos exécutables. Ce code génère des fichiers texte contenant les temps précis correspondant à des **changements d'état** de vos programmes. Ces états sont au nombre de cinq :
+Afin de vous permettre de mieux visualiser et comprendre l'état de chaque programme au fil du temps, nous vous fournissons du code permettant une forme de _profilage_ de vos exécutables. Ce code génère des fichiers texte (tous nommés `profilage-NomDuProgramme-PID`) contenant les temps précis correspondant à des **changements d'état** de vos programmes. Ces états sont au nombre de cinq :
 
 1. L'initialisation (tout ce qui se passe avant que vous ne commenciez la boucle critique du programme);
 2. L'attente sur un mutex en tant que lecteur (correspondant à la fonction `attenteLecteur`);
@@ -319,13 +319,15 @@ Une fois ces fichiers générés, vous pouvez vous servir d'un script Python (da
 
 <img src="img/graph.png" style="width:1000px"/>
 
-Cela vous permet de voir rapidement quel programme passe plus de temps à attendre et pour quelle raison (entrée ou sortie), ou quel programme obtient la part du lion de l'utilisation CPU. Ces figures nous permettront également de mieux valider votre implémentation.
+Cela vous permet de voir rapidement quel programme passe plus de temps à attendre et pour quelle raison (entrée ou sortie), ou quel programme obtient la part du lion de l'utilisation CPU. Ces figures nous permettront également de plus facilement valider votre implémentation.
 
 > **Note** : si vous voulez exécuter le script `creerProfilageImages.py` sur la VM fournie, vous devrez d'abord installer numpy et matplotlib en utilisant la commande `pip3.11 install numpy matplotlib` dans un terminal.
 
+> **Note** : l'apparence de la figure de profilage peut différer de celle montrée plus haut. Tout dépend de votre implémentation, il y a plusieurs façons valides de réaliser le laboratoire. Ne cherchez pas à répliquer _exactement_ la figure montrée plus haut pour le scénario 08. Vous devez toutefois comprendre la relation entre ce que vous faites dans votre code et ce qui se retrouve dans la figure.
+
 #### 7.2.1. Comment activer le profilage
 
-L'initialisation du profileur est déjà faite pour vous dans les fichiers de code fournis. Laissez la au début de la fonction `main()` de chaque programme. **Vous devez toutefois ajouter des appels à `evenementProfilage`**. Son premier argument de `evenementProfilage` sera toujours `&profInfos`. Quant au second, il dépend d'où vous ajoutez l'appel à `evenementProfilage` :
+L'initialisation du profileur est déjà faite pour vous dans les fichiers de code fournis. Laissez la au début de la fonction `main()` de chaque programme (écrivez votre code _après_). **Vous devez vous-même ajouter des appels à `evenementProfilage`**. Le premier argument de `evenementProfilage` sera toujours `&profInfos`. Quant au second, il dépend d'où vous ajoutez l'appel :
 
 - Juste **avant** l'appel à `attenteLecteur`, appelez `evenementProfilage` avec le 2e argument valant `ETAT_ATTENTE_MUTEXLECTURE` (sauf pour `decodeur` qui n'attend pas sur un mutex pour son entrée)
 - Juste **avant** l'appel à `attenteEcrivain`, appelez `evenementProfilage` avec le 2e argument valant `ETAT_ATTENTE_MUTEXECRITURE` (sauf pour `compositeur` qui n'a pas d'écriture à faire)
@@ -334,17 +336,19 @@ L'initialisation du profileur est déjà faite pour vous dans les fichiers de co
 
 #### 7.2.2. Utilisation du profilage
 
-La figure obtenue peut être utilisée pour mieux analyser et déboguer votre code. Par exemple, vous devriez vous une nette différence lors des changements d'ordonnanceur (si ceux-ci sont fait correctement, du moins). Si un programme bloque après plusieurs secondes, vous pourrez également utiliser cet outil pour mieux comprendre ce qui semble causer le blocage.
+La figure obtenue peut être utilisée pour mieux analyser et déboguer votre code. Par exemple, vous devriez vous une nette différence lors des changements d'ordonnanceur (si ceux-ci sont fait correctement, du moins). Si un programme bloque, vous pouvez également utiliser cet outil pour mieux comprendre ce qui semble causer le blocage. Le script Python affiche sur la ligne de commande le dernier événement envoyé (autrement dit, la dernière chose que le programme a tenté de faire). Cela peut vous indiquer de quel côté est le problème.
+
+> **Attention** : par défaut, les fonctions fournies n'enregistrent les données de profilage que toutes les 4 secondes (constante `PROFILAGE_INTERVALLE_SAUVEGARDE_SEC` dans `utils.h`) afin de limiter l'impact de l'écriture du fichier sur vos programmes; si votre programme bloque immédiatement au lancement, vous pouvez utiliser une valeur de `0` pour `PROFILAGE_INTERVALLE_SAUVEGARDE_SEC` afin de forcer l'enregistrement du fichier à _chaque nouvel événement_. Cela aura un impact significatif sur la performance des programmes, mais vous assurera que vous voyez bel et bien la dernière chose faite par chacun de vos programmes.
 
 #### 7.2.3. Figures à remettre
 
-Vous devrez remettre, avec votre code, les graphes produits par `creerProfilageImages.py` pour _tous les scénarios_. Vous devez faire fonctionner vos programmes _après initialisation_ pendant au moins 10 secondes, mais ne remettez pas un graphe couvrant plus de 20 secondes (utilisez au besoin l'argument `--duree` du script Python qui vous permet de tronquer les résultats). Nous pourrons vous poser des questions lors de l'évaluation sur les graphes que vous aurez remis.
+Vous devrez remettre, avec votre code, les graphes produits par `creerProfilageImages.py` pour _tous les scénarios_ contenus dans le dossier `configs`. Vous devez faire fonctionner vos programmes _après initialisation_ pendant au moins 10 secondes, mais ne remettez pas un graphe couvrant plus de 20 secondes (utilisez au besoin l'argument `--duree` du script Python qui vous permet de tronquer les résultats). Nous pourrons vous poser des questions lors de l'évaluation sur les graphes que vous aurez remis.
 
 #### 7.2.4. Désactivation du profilage
 
 Le code servant à récupérer les informations de profilage ne respecte pas parfaitement les contraintes temps réel (accès à un fichier, réallocation mémoire potentielle, etc.). Bien que son impact pratique sur les performances soit très limité, vous pouvez le désactiver si vous voulez tester la performance maximale de votre code en allant dans le fichier `utils.h` pour y assigner la valeur 0 à `PROFILAGE_ACTIF`.
 
-> C'est d'ailleurs ce qui est fait pour les solutions fournies. Les exécutables que nous vous fournissons ne produisent aucune information de profilage, pour éviter la confusion avec vos propres programmes.
+> C'est d'ailleurs ce qui est fait pour les solutions fournies. Les exécutables que nous vous fournissons ne produisent aucune information de profilage, pour éviter la confusion avec les informations produites par vos propres programmes.
 
 <!-- #### ~~Optimisation par profilage~~
 
@@ -388,14 +392,14 @@ Vous ne serez pas évalués sur l'atteinte précise de ces performances. Toutefo
 
 ## 9. Modalités d'évaluation
 
-Ce travail doit être réalisé **en équipe de deux**, la charge de travail étant à répartir équitablement entre les deux membres de l'équipe. Aucun rapport n'est à remettre, mais vous devez soumettre votre code source **et les graphes de profilage correspondant à tous les scénarios** dans monPortail avant le **27 février 2025, 17h00**. Ensuite, lors de la séance de laboratoire du **28 février 2025**, les deux équipiers doivent être en mesure individuellement d'expliquer leur approche et de démontrer le bon fonctionnement de l'ensemble de la solution de l'équipe du laboratoire. Si vous ne pouvez pas vous y présenter, contactez l'équipe pédagogique du cours dans les plus brefs délais afin de convenir d'une date d'évaluation alternative. Ce travail compte pour **15%** de la note totale du cours. Comme pour les travaux précédents, votre code doit compiler **sans avertissements** de la part de GCC.
+Ce travail doit être réalisé **en équipe de deux**, la charge de travail étant à répartir équitablement entre les deux membres de l'équipe. Aucun rapport n'est à remettre, mais vous devez soumettre votre code source **et les graphes de profilage correspondant à tous les scénarios** dans monPortail avant le **27 février 2025, 17h00**. Ensuite, lors de la séance de laboratoire du **28 février 2025**, les deux équipiers doivent être en mesure individuellement d'expliquer leur approche, de comprendre les graphes de profilage qu'ils ont produits et de démontrer le bon fonctionnement de l'ensemble de la solution de l'équipe du laboratoire. Si vous ne pouvez pas vous y présenter, contactez l'équipe pédagogique du cours dans les plus brefs délais afin de convenir d'une date d'évaluation alternative. Ce travail compte pour **15%** de la note totale du cours. Comme pour les travaux précédents, votre code doit compiler **sans avertissements** de la part de GCC.
 
 Notre évaluation se fera sur le Raspberry Pi de l'enseignant ou de l'assistant et comprendra notamment les éléments suivants:
   1. La sortie de compilation d'un `CMake: Clean Rebuild`;
   2. L'exécution des scripts 01, 02, 04, 08, 09 et 11 (fournis dans le dossier _configs_). Nous observerons également le contenu de _stats.txt_ entre chaque exécution.
   3. Dans le cas des configurations 09 et 11, nous validerons également que les changements d'ordonnanceur requis ont bien été effectués, par exemple en lançant la commande `htop` dans un autre terminal et en validant que les programmes ont une valeur de priorité conforme.
   4. Notez qu'il est possible que nous exécutions d'autres configurations : aucune des configurations fournies ne devrait faire planter vos programmes.
-  5. Une discussion sur les résultats que vous obtenez pour ces diverses configurations et sur votre implémentation.
+  5. Une discussion sur les résultats que vous obtenez pour ces diverses configurations, sur les graphes que vous avez remis et sur votre implémentation.
  
  
 ### 9.1. Barème d'évaluation
@@ -408,18 +412,18 @@ Le barême d'évaluation détaillé sera le suivant (laboratoire noté sur 20 po
 * (1 pts) Tous les programmes compilent sans avertissement (*warning*) de la part du compilateur.
 * (2 pts) Les programmes respectent les contraintes des programmes temps réel (pas d'allocation mémoire dynamique dans la section critique, pas d'entrée/sortie autrement que pour les fichiers de log, etc.)
 
-#### 9.1.2. Validité de la solution (10 points)
+#### 9.1.2. Validité de la solution (9 points)
 
 > **Attention** : un programme ne compilant pas obtient automatiquement une note de **zéro** pour cette section.
 
 * (2 pts) Les programmes sont en mesure d'utiliser des espaces mémoire partagés pour communiquer entre eux.
 * (2 pts) La synchronisation entre les programmes est adéquate et fonctionnelle (c.-à-d. pas d'images coupées ou d'autres problèmes visuels).
-* (4 pts) Le système complet est en mesure d'afficher une ou plusieurs vidéos sur l'écran de manière fluide et de chaîner les traitements effectués sur ces vidéos. Le nombre d'images par seconde est (le cas échéant) limité pour ne pas dépasser la valeur fournie dans le fichier vidéo.
+* (3 pts) Le système complet est en mesure d'afficher une ou plusieurs vidéos sur l'écran de manière fluide et de chaîner les traitements effectués sur ces vidéos. Le nombre d'images par seconde est (le cas échéant) limité pour ne pas dépasser la valeur fournie dans le fichier vidéo.
 * (2 pts) Les fonctions de l'ordonnanceur sont correctement utilisées pour sélectionner différents modes d'ordonnancement.
 
-#### 9.1.3. Justesse des explications et réponses aux questions (4 points)
+#### 9.1.3. Justesse des explications et réponses aux questions (5 points)
 
-* (4 pts) Les étudiants sont en mesure d'expliquer l'approche utilisée et de répondre aux questions concernant leur code et la théorie liée au laboratoire. Les étudiants expliquent également correctement l'impact des différents modes d'ordonnancement et des différentes options d'exécution possibles. 
+* (5 pts) Les étudiants sont en mesure d'expliquer l'approche utilisée et de répondre aux questions concernant leur code et la théorie liée au laboratoire. Les étudiants expliquent également correctement l'impact des différents modes d'ordonnancement et des différentes options d'exécution possibles. Les étudiants sont capables d'analyser le comportement de leurs programmes grâce aux figures de profilage et à expliquer leur contenu.
 
 
 
