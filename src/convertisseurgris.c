@@ -23,6 +23,16 @@ int main(int argc, char* argv[]){
     // On desactive le buffering pour les printf(), pour qu'il soit possible de les voir depuis votre ordinateur
 	setbuf(stdout, NULL);
     
+    // Initialise le profilage
+    char signatureProfilage[128] = {0};
+    char* nomProgramme = (argv[0][0] == '.') ? argv[0]+2 : argv[0];
+    snprintf(signatureProfilage, 128, "profilage-%s-%u.txt", nomProgramme, (unsigned int)getpid());
+    InfosProfilage profInfos;
+    initProfilage(&profInfos, signatureProfilage);
+    
+    // Premier evenement de profilage : l'initialisation du programme
+    evenementProfilage(&profInfos, ETAT_INITIALISATION);
+    
     // Code lisant les options sur la ligne de commande
     char *entree, *sortie;                          // Zones memoires d'entree et de sortie
     int modeOrdonnanceur = ORDONNANCEMENT_NORT;     // NORT est la valeur par defaut

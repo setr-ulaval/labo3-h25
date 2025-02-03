@@ -192,6 +192,16 @@ int main(int argc, char* argv[])
     
     // On desactive le buffering pour les printf(), pour qu'il soit possible de les voir depuis votre ordinateur
 	setbuf(stdout, NULL);
+	
+	// Initialise le profilage
+    char signatureProfilage[128] = {0};
+    char* nomProgramme = (argv[0][0] == '.') ? argv[0]+2 : argv[0];
+    snprintf(signatureProfilage, 128, "profilage-%s-%u.txt", nomProgramme, (unsigned int)getpid());
+    InfosProfilage profInfos;
+    initProfilage(&profInfos, signatureProfilage);
+    
+    // Premier evenement de profilage : l'initialisation du programme
+    evenementProfilage(&profInfos, ETAT_INITIALISATION);
 
     // Initialisation des structures nécessaires à l'affichage
     long int screensize = 0;

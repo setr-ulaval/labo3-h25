@@ -340,3 +340,61 @@ void enregistreImage(const unsigned char* input, const unsigned int in_height, c
     }
     fclose(f);
 }
+
+
+
+void initProfilage(InfosProfilage *dataprof, const char *chemin_enregistrement){
+    if(PROFILAGE_ACTIF == 0){
+        return;
+    }
+    // Ouverture du fichier
+    dataprof->fd = fopen(chemin_enregistrement, "w+");
+    dataprof->derniere_sauvegarde = 0;
+    dataprof->dernier_etat = ETAT_INDEFINI;
+
+    // Allocation du buffer pour eviter de devoir ecrire systematiquement a chaque appel
+    dataprof->data = (char*)calloc(PROFILAGE_TAILLE_INIT, sizeof(char));
+    // Force le noyau a allouer reellement la memoire
+    memset(dataprof->data, 0, PROFILAGE_TAILLE_INIT * sizeof(char));
+    
+    dataprof->length = PROFILAGE_TAILLE_INIT;
+    dataprof->pos = 0;
+}
+
+void evenementProfilage(InfosProfilage *dataprof, unsigned int type){
+    if(PROFILAGE_ACTIF == 0){
+        return;
+    }
+
+    // Obtention du temps courant
+	struct timespec temps_courant;
+    clock_gettime(CLOCK_MONOTONIC, &temps_courant);
+    double multiplier = 1000000000.;
+    int c;
+
+    // Si l'etat du programme n'a pas change, on a rien a faire
+    if(type == dataprof->dernier_etat){
+        return;
+    }
+
+    dataprof->dernier_etat = type;
+
+    // Si le buffer n'est pas assez grand (peu probable, mais on ne veut pas causer
+    // une erreur de segmentation si ca arrive)
+    if(dataprof->pos + 100 > dataprof->length){
+        dataprof->data = (char*)realloc(dataprof->data, dataprof->length*2 * sizeof(char));
+        dataprof->length *= 2;
+    }
+
+    // On cree la ligne indiquant l'evenement et le temps associe
+    c = sprintf(dataprof->data + dataprof->pos, "%u,%f\n", type, multiplier * temps_courant.tv_sec + temps_courant.tv_nsec);
+    dataprof->pos += c;
+
+    // On ecrit dans le fichier a intervalles reguliers
+    if(dataprof->derniere_sauvegarde == 0 || temps_courant.tv_sec - dataprof->derniere_sauvegarde > PROFILAGE_INTERVALLE_SAUVEGARDE_SEC){
+        dataprof->derniere_sauvegarde = temps_courant.tv_sec;
+        fwrite(dataprof->data, dataprof->pos, 1, dataprof->fd);
+        fflush(dataprof->fd);
+        dataprof->pos = 0;
+    }
+}

@@ -15,6 +15,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <stdint.h>	
+#include <time.h>
 #include "allocateurMemoire.h"
 
 // Definition des modes d'ordonnancement possibles
@@ -23,6 +25,18 @@
 #define ORDONNANCEMENT_FIFO 3
 #define ORDONNANCEMENT_DEADLINE 4
 
+#define ETAT_INDEFINI 0
+#define ETAT_INITIALISATION 10
+#define ETAT_ATTENTE_MUTEXLECTURE 20
+#define ETAT_TRAITEMENT 30
+#define ETAT_ATTENTE_MUTEXECRITURE 40
+#define ETAT_ENPAUSE 50
+
+// Mettre a zero pour desactiver le profilage
+#define PROFILAGE_ACTIF 0
+// Assez d'espace pour 30 caracteres par evenement * 5 evenements par boucle * 30 images par seconde
+#define PROFILAGE_INTERVALLE_SAUVEGARDE_SEC 4
+#define PROFILAGE_TAILLE_INIT 30 * 5 * 30 * PROFILAGE_INTERVALLE_SAUVEGARDE_SEC * 4
 
 /* Data structures */
 typedef struct {
@@ -34,6 +48,15 @@ typedef struct {
     unsigned int *i, *j;
     float *i_f, *j_f;
 } ResizeGrid;
+
+typedef struct{
+    char *data;
+    size_t length;
+    unsigned int pos;
+    uint64_t derniere_sauvegarde;
+    unsigned int dernier_etat;
+    FILE* fd;
+} InfosProfilage;
 
 // Les fonctions de redimensionnement requièrent une *ResizeGrid* en entrée. Celle-ci est commune à toutes les
 // images et peut être précalculée, ce qui accélère le traitement.
@@ -81,5 +104,11 @@ void convertToGray(const unsigned char* input, const unsigned int in_height, con
 
 // Enregistre l'image dans un fichier PPM dont le nom est passé en paramètre
 void enregistreImage(const unsigned char* input, const unsigned int in_height, const unsigned int in_width, const unsigned int n_channels, const char* nomfichier);
+
+// Initialise l'enregistrement des informations de profilage
+void initProfilage(InfosProfilage *dataprof, const char *chemin_enregistrement);
+
+// Signale un nouvel evenement au profileur
+void evenementProfilage(InfosProfilage *dataprof, unsigned int type);
 
 #endif

@@ -54,6 +54,16 @@ int main(int argc, char* argv[]){
     // On desactive le buffering pour les printf(), pour qu'il soit possible de les voir depuis votre ordinateur
 	setbuf(stdout, NULL);
     
+    // Initialise le profilage
+    char signatureProfilage[128] = {0};
+    char* nomProgramme = (argv[0][0] == '.') ? argv[0]+2 : argv[0];
+    snprintf(signatureProfilage, 128, "profilage-%s-%u.txt", nomProgramme, (unsigned int)getpid());
+    InfosProfilage profInfos;
+    initProfilage(&profInfos, signatureProfilage);
+    
+    // Premier evenement de profilage : l'initialisation du programme
+    evenementProfilage(&profInfos, ETAT_INITIALISATION);
+    
     // Écrivez le code de décodage et d'envoi sur la zone mémoire partagée ici!
     // N'oubliez pas que vous pouvez utiliser jpgd::decompress_jpeg_image_from_memory()
     // pour décoder une image JPEG contenue dans un buffer!
