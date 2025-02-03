@@ -332,11 +332,15 @@ L'initialisation du profileur est déjà faite pour vous dans les fichiers de co
 - Juste **après** l'appel à `attenteLecteur`, ou au début du code de décodage pour `decodeur`, appelez `evenementProfilage` avec le 2e argument valant `ETAT_TRAITEMENT`
 - Juste **avant** l'appel à `usleep`, `sched_yield`, ou une autre fonction où votre programme redonne volontairement la main, appelez `evenementProfilage` avec le 2e argument valant `ETAT_PAUSE`
 
-#### 7.2.2. Figures à remettre
+#### 7.2.2. Utilisation du profilage
+
+La figure obtenue peut être utilisée pour mieux analyser et déboguer votre code. Par exemple, vous devriez vous une nette différence lors des changements d'ordonnanceur (si ceux-ci sont fait correctement, du moins). Si un programme bloque après plusieurs secondes, vous pourrez également utiliser cet outil pour mieux comprendre ce qui semble causer le blocage.
+
+#### 7.2.3. Figures à remettre
 
 Vous devrez remettre, avec votre code, les graphes produits par `creerProfilageImages.py` pour _tous les scénarios_. Vous devez faire fonctionner vos programmes _après initialisation_ pendant au moins 10 secondes, mais ne remettez pas un graphe couvrant plus de 20 secondes (utilisez au besoin l'argument `--duree` du script Python qui vous permet de tronquer les résultats). Nous pourrons vous poser des questions lors de l'évaluation sur les graphes que vous aurez remis.
 
-#### 7.2.3. Désactivation du profilage
+#### 7.2.4. Désactivation du profilage
 
 Le code servant à récupérer les informations de profilage ne respecte pas parfaitement les contraintes temps réel (accès à un fichier, réallocation mémoire potentielle, etc.). Bien que son impact pratique sur les performances soit très limité, vous pouvez le désactiver si vous voulez tester la performance maximale de votre code en allant dans le fichier `utils.h` pour y assigner la valeur 0 à `PROFILAGE_ACTIF`.
 
