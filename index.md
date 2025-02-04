@@ -307,14 +307,14 @@ Finalement, pour la dernière étape, utilisez l'ordonnanceur SCHED_DEADLINE. Po
 
 **Note importante** : certaines combinaisons de vidéos requièrent tout simplement trop de temps pour être traitées en temps réel par le Raspberry Pi (c'est par exemple le cas si vous ouvrez une vidéo en 480p et appliquez un filtre et un redimensionnement avec interpolation). L'ordonnanceur ne peut pas faire de miracle, et si le temps CPU demandé par un groupe de programme excède la capacité totale de l'ordinateur, il n'y a rien à faire. Toutefois, remarquez ce qui se passe lorsque, *en même temps* que ces tâches trop longues, vous lancez une autre tâche qui, elle, pourrait s'exécuter dans les temps. Le choix du mode d'ordonnancement améliore-t-il sa fluidité?
 
-### 7.2. Visualisation des status des programmes en cours d'exécution
+### 7.2. Visualisation de l'état des programmes au fil du temps
 
 Afin de vous permettre de mieux visualiser et comprendre l'état de chaque programme au fil du temps, nous vous fournissons du code permettant une forme de _profilage_ de vos exécutables. Ce code génère des fichiers texte (tous nommés `profilage-NomDuProgramme-PID`) contenant les temps précis correspondant à des **changements d'état** de vos programmes. Ces états sont au nombre de cinq :
 
 1. L'initialisation (tout ce qui se passe avant que vous ne commenciez la boucle critique du programme);
-2. L'attente sur un mutex en tant que lecteur (correspondant à la fonction `attenteLecteur`);
+2. L'attente en tant que lecteur (correspondant à la fonction `attenteLecteur`, donc peut être une attente sur le mutex ou une attente de l'incrémentation du compteurEcrivain);
 3. Le traitement à proprement parler (autrement dit, ce que fait réellement le programme, comme redimensionner ou convertir en niveaux de gris);
-4. L'attente sur un mutex en tant qu'écrivain (correspondant à la fonction `attenteEcrivain`);
+4. L'attente en tant qu'écrivain (correspondant à la fonction `attenteEcrivain`, donc peut être une attente sur le mutex ou une attente de l'incrémentation du compteurLecteur);
 5. La mise en sommeil volontaire (lorsqu'un programme appelle `usleep`, par exemple).
 
 Une fois ces fichiers générés, vous pouvez vous servir d'un script Python (dans `src/creerProfilageImages.py`) pour générer des figures semblables à celle-ci (dans ce cas-ci, le scénario 08) :
