@@ -72,7 +72,6 @@ int main(int argc, char* argv[]){
     printf("%s", argv[2]);
 
     int fd;
-    char buffer[128] = {0};
 
     // Open file
     fd = open(argv[2], O_RDONLY);
@@ -81,58 +80,73 @@ int main(int argc, char* argv[]){
         return EXIT_FAILURE;
     }
 
+    struct stat sb;
+    if (fstat(fd, &sb) == -1) {
+        perror("Erreur lors de la récupération de la taille du fichier");
+        close(fd);
+        return 1;
+    }
+    size_t file_size = sb.st_size;
 
-    if (read(fd, buffer, HEADER_SIZE) != HEADER_SIZE) {
-        perror("Error reading header");
+    // 3. Mapper le fichier en mémoire avec MAP_POPULATE
+    void* file_data = mmap(NULL, file_size, PROT_READ, MAP_PRIVATE | MAP_POPULATE, fd, 0);
+    if (file_data == MAP_FAILED) {
+        perror("Erreur lors du mapping du fichier en mémoire");
+        close(fd);
+        return 1;
+    }
+
+    unsigned char* video_buffer = (unsigned char*)file_data;
+    
+    if (memcmp(video_buffer, header, HEADER_SIZE) != 0) {
+        printf("Invalid file format: expected %.4s, got '%.4s'\n", header, video_buffer);
         close(fd);
         return EXIT_FAILURE;
+    }
+
+    video_buffer += HEADER_SIZE;
+
+    struct videoInfos video_info;
+
+    memcpy(&video_info, video_buffer, sizeof(video_info));
+
+    video_buffer += sizeof(video_info);
+    unsigned char* iterator = video_buffer;
+
+    unsigned char* image_data = (unsigned char*)tempsreel_malloc((size_t)(video_info.largeur * video_info.hauteur * video_info.canaux));
+
+    uint32_t image_size = UINT32_MAX; 
+    size_t image_count = 0;
+    char save_ppm_file_path[50]; // Make sure the array is large enough
+
+    while(1)
+    { 
+        memcpy(&image_size, iterator, sizeof(image_size));
+        iterator += sizeof(image_size);
+        while (image_size > 0)
+        { 
+            unsigned char* compress_image_data = (unsigned char*)tempsreel_malloc((size_t)image_size);
+
+            memcpy(compress_image_data, iterator, image_size);
+            iterator += image_size;
+            
+            image_data = jpgd::decompress_jpeg_image_from_memory(compress_image_data, image_size, (int*)&video_info.largeur, (int*)&video_info.hauteur, (int*)&video_info.canaux, video_info.canaux, 0);
+            tempsreel_free(compress_image_data);
+            
+            // sprintf(save_ppm_file_path, "/home/pi/projects/laboratoire3/image%d.ppm", image_count);
+            // enregistreImage(image_data, video_info.hauteur, video_info.largeur, video_info.canaux, save_ppm_file_path);
+
+            image_count++;
+            memcpy(&image_size, iterator, sizeof(image_size));
+            iterator += sizeof(image_size);
+
+        }
+        iterator = video_buffer;
+
+        image_count = 0;
     }
     
-    // Check if header matches "SETR"
-    if (strncmp(buffer, "SETR", HEADER_SIZE) != 0) {
-        printf("Invalid file format: expected 'SETR', got '%.4s'\n", header);
-        close(fd);
-        return EXIT_FAILURE;
-    }
-
-    struct videoInfos video;
-
-    if (read(fd, &video, sizeof(video)) != sizeof(video)) {
-        perror("Error reading metadata");
-        close(fd);
-        return EXIT_FAILURE;
-    }
-
-    uint32_t image_size = 0; 
-
-    if (read(fd, &image_size, sizeof(image_size)) != sizeof(image_size)) {
-        perror("Error reading image_size");
-        close(fd);
-        return EXIT_FAILURE;
-    }
-
-    unsigned char* compress_image_data = (unsigned char*)tempsreel_malloc((size_t)image_size);
-
-    uint32_t totalRecu = 0; 
-    uint32_t octetsTraites = 0; 
-    while(totalRecu < image_size){
-        octetsTraites = read(fd, compress_image_data + totalRecu, image_size - totalRecu);
-        totalRecu += octetsTraites;
-    }
-
-    printf("%d", compress_image_data[0]);
-
-    unsigned char* image_data = (unsigned char*)tempsreel_malloc((size_t)(video.largeur * video.hauteur * video.canaux));
-
-    image_data = jpgd::decompress_jpeg_image_from_memory(compress_image_data, image_size, (int*)&video.largeur, (int*)&video.hauteur, (int*)&video.canaux, video.canaux, 0);
-
-    printf("%d", image_data[0]);
-
-    enregistreImage(image_data, video.hauteur, video.largeur, video.canaux, "/home/pi/projects/laboratoire3/image1.ppm");
-
-    tempsreel_free(compress_image_data);
-    tempsreel_free(image_data);
-
+    tempsreel_free(image_data); 
     close(fd);
 
     return 0;
