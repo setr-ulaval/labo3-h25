@@ -69,5 +69,71 @@ int main(int argc, char* argv[]){
     // pour décoder une image JPEG contenue dans un buffer!
     // N'oubliez pas également que ce décodeur doit lire les fichiers ULV EN BOUCLE
 
+    printf("%s", argv[2]);
+
+    int fd;
+    char buffer[128] = {0};
+
+    // Open file
+    fd = open(argv[2], O_RDONLY);
+    if (fd == -1) {
+        printf("Error opening file %s", strerror(errno));
+        return EXIT_FAILURE;
+    }
+
+
+    if (read(fd, buffer, HEADER_SIZE) != HEADER_SIZE) {
+        perror("Error reading header");
+        close(fd);
+        return EXIT_FAILURE;
+    }
+    
+    // Check if header matches "SETR"
+    if (strncmp(buffer, "SETR", HEADER_SIZE) != 0) {
+        printf("Invalid file format: expected 'SETR', got '%.4s'\n", header);
+        close(fd);
+        return EXIT_FAILURE;
+    }
+
+    struct videoInfos video;
+
+    if (read(fd, &video, sizeof(video)) != sizeof(video)) {
+        perror("Error reading metadata");
+        close(fd);
+        return EXIT_FAILURE;
+    }
+
+    uint32_t image_size = 0; 
+
+    if (read(fd, &image_size, sizeof(image_size)) != sizeof(image_size)) {
+        perror("Error reading image_size");
+        close(fd);
+        return EXIT_FAILURE;
+    }
+
+    unsigned char* compress_image_data = (unsigned char*)tempsreel_malloc((size_t)image_size);
+
+    uint32_t totalRecu = 0; 
+    uint32_t octetsTraites = 0; 
+    while(totalRecu < image_size){
+        octetsTraites = read(fd, compress_image_data + totalRecu, image_size - totalRecu);
+        totalRecu += octetsTraites;
+    }
+
+    printf("%d", compress_image_data[0]);
+
+    unsigned char* image_data = (unsigned char*)tempsreel_malloc((size_t)(video.largeur * video.hauteur * video.canaux));
+
+    image_data = jpgd::decompress_jpeg_image_from_memory(compress_image_data, image_size, (int*)&video.largeur, (int*)&video.hauteur, (int*)&video.canaux, video.canaux, 0);
+
+    printf("%d", image_data[0]);
+
+    enregistreImage(image_data, video.hauteur, video.largeur, video.canaux, "/home/pi/projects/laboratoire3/image1.ppm");
+
+    tempsreel_free(compress_image_data);
+    tempsreel_free(image_data);
+
+    close(fd);
+
     return 0;
 }
