@@ -10,3 +10,12 @@
 #include "allocateurMemoire.h"
 
 // TODO: Implementez ici votre allocateur memoire utilisant l'interface decrite dans allocateurMemoire.h
+void* tempsreel_malloc(size_t taille)
+{
+    return malloc(taille);
+}   
+
+void tempsreel_free(void* ptr)
+{
+    free(ptr);
+}

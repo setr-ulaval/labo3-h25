@@ -69,5 +69,85 @@ int main(int argc, char* argv[]){
     // pour décoder une image JPEG contenue dans un buffer!
     // N'oubliez pas également que ce décodeur doit lire les fichiers ULV EN BOUCLE
 
+    printf("%s", argv[2]);
+
+    int fd;
+
+    // Open file
+    fd = open(argv[2], O_RDONLY);
+    if (fd == -1) {
+        printf("Error opening file %s", strerror(errno));
+        return EXIT_FAILURE;
+    }
+
+    struct stat sb;
+    if (fstat(fd, &sb) == -1) {
+        perror("Erreur lors de la récupération de la taille du fichier");
+        close(fd);
+        return 1;
+    }
+    size_t file_size = sb.st_size;
+
+    // 3. Mapper le fichier en mémoire avec MAP_POPULATE
+    void* file_data = mmap(NULL, file_size, PROT_READ, MAP_PRIVATE | MAP_POPULATE, fd, 0);
+    if (file_data == MAP_FAILED) {
+        perror("Erreur lors du mapping du fichier en mémoire");
+        close(fd);
+        return 1;
+    }
+
+    unsigned char* video_buffer = (unsigned char*)file_data;
+    
+    if (memcmp(video_buffer, header, HEADER_SIZE) != 0) {
+        printf("Invalid file format: expected %.4s, got '%.4s'\n", header, video_buffer);
+        close(fd);
+        return EXIT_FAILURE;
+    }
+
+    video_buffer += HEADER_SIZE;
+
+    struct videoInfos video_info;
+
+    memcpy(&video_info, video_buffer, sizeof(video_info));
+
+    video_buffer += sizeof(video_info);
+    unsigned char* iterator = video_buffer;
+
+    unsigned char* image_data = (unsigned char*)tempsreel_malloc((size_t)(video_info.largeur * video_info.hauteur * video_info.canaux));
+
+    uint32_t image_size = UINT32_MAX; 
+    size_t image_count = 0;
+    char save_ppm_file_path[50]; // Make sure the array is large enough
+
+    while(1)
+    { 
+        memcpy(&image_size, iterator, sizeof(image_size));
+        iterator += sizeof(image_size);
+        while (image_size > 0)
+        { 
+            unsigned char* compress_image_data = (unsigned char*)tempsreel_malloc((size_t)image_size);
+
+            memcpy(compress_image_data, iterator, image_size);
+            iterator += image_size;
+            
+            image_data = jpgd::decompress_jpeg_image_from_memory(compress_image_data, image_size, (int*)&video_info.largeur, (int*)&video_info.hauteur, (int*)&video_info.canaux, video_info.canaux, 0);
+            tempsreel_free(compress_image_data);
+            
+            // sprintf(save_ppm_file_path, "/home/pi/projects/laboratoire3/image%d.ppm", image_count);
+            // enregistreImage(image_data, video_info.hauteur, video_info.largeur, video_info.canaux, save_ppm_file_path);
+
+            image_count++;
+            memcpy(&image_size, iterator, sizeof(image_size));
+            iterator += sizeof(image_size);
+
+        }
+        iterator = video_buffer;
+
+        image_count = 0;
+    }
+    
+    tempsreel_free(image_data); 
+    close(fd);
+
     return 0;
 }
