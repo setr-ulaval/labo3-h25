@@ -10,6 +10,6 @@ if [ "$2" == "all" ]; then
 else
     rsync -az $1/build/$2 "pi@$rpiaddr:/home/pi/projects/laboratoire3/"
     # Execute GDB
-    ssh "pi@$rpiaddr" "nohup gdbserver :$3 /home/pi/projects/laboratoire3/$2 --debug /home/pi/projects/laboratoire3/160p/02_Sintel.ulv /mem1 > /home/pi/capture-stdout-$2 2> /home/pi/capture-stderr-$2 < /dev/null &"
+    ssh "pi@$rpiaddr" "nohup gdbserver :$3 /home/pi/projects/laboratoire3/$2 --debug > /home/pi/capture-stdout-$2 2> /home/pi/capture-stderr-$2 < /dev/null &"
     sleep 1
 fi

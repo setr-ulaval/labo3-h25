@@ -1,0 +1,1 @@
+Il faut préalouer l'image lors de l'initialisation pas à la lecture, faire le correctif

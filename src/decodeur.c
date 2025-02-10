@@ -69,12 +69,91 @@ int main(int argc, char* argv[]){
     // pour décoder une image JPEG contenue dans un buffer!
     // N'oubliez pas également que ce décodeur doit lire les fichiers ULV EN BOUCLE
 
-    printf("%s", argv[2]);
+    // Code lisant les options sur la ligne de commande
+    char *entree, *sortie;                          // Zones memoires d'entree et de sortie
+    int modeOrdonnanceur = ORDONNANCEMENT_NORT;     // NORT est la valeur par defaut
+    unsigned int runtime, deadline, period;         // Dans le cas de l'ordonnanceur DEADLINE
 
+    if(argc < 2){
+        printf("Nombre d'arguments insuffisant\n");
+        return -1;
+    }
+
+    if(strcmp(argv[1], "--debug") == 0){
+        // Mode debug, vous pouvez changer ces valeurs pour ce qui convient dans vos tests
+        printf("Mode debug selectionne pour le convertisseur niveau de gris\n");
+        entree = (char*)"/home/pi/projects/laboratoire3/160p/02_Sintel.ulv";
+        sortie = (char*)"/mem1";
+    }
+    else{
+        int c;
+        int deadlineParamIndex = 0;
+        char* splitString;
+
+        opterr = 0;
+
+        while ((c = getopt (argc, argv, "s:d:")) != -1){
+            switch (c)
+                {
+                case 's':
+                    // On selectionne le mode d'ordonnancement
+                    if(strcmp(optarg, "NORT") == 0){
+                        modeOrdonnanceur = ORDONNANCEMENT_NORT;
+                    }
+                    else if(strcmp(optarg, "RR") == 0){
+                        modeOrdonnanceur = ORDONNANCEMENT_RR;
+                    }
+                    else if(strcmp(optarg, "FIFO") == 0){
+                        modeOrdonnanceur = ORDONNANCEMENT_FIFO;
+                    }
+                    else if(strcmp(optarg, "DEADLINE") == 0){
+                        modeOrdonnanceur = ORDONNANCEMENT_DEADLINE;
+                    }
+                    else{
+                        modeOrdonnanceur = ORDONNANCEMENT_NORT;
+                        printf("Mode d'ordonnancement %s non valide, defaut sur NORT\n", optarg);
+                    }
+                    break;
+                case 'd':
+                    // Dans le cas DEADLINE, on peut recevoir des parametres
+                    // Si un autre mode d'ordonnacement est selectionne, ces
+                    // parametres peuvent simplement etre ignores
+                    splitString = strtok(optarg, ",");
+                    while (splitString != NULL)
+                    {
+                        if(deadlineParamIndex == 0){
+                            // Runtime
+                            runtime = atoi(splitString);
+                        }
+                        else if(deadlineParamIndex == 1){
+                            deadline = atoi(splitString);
+                        }
+                        else{
+                            period = atoi(splitString);
+                            break;
+                        }
+                        deadlineParamIndex++;
+                        splitString = strtok(NULL, ",");
+                    }
+                    break;
+                default:
+                    continue;
+                }
+        }
+
+        // Ce qui suit est la description des zones memoires d'entree et de sortie
+        if(argc - optind < 2){
+            printf("Arguments manquants (fichier_entree flux_sortie)\n");
+            return -1;
+        }
+        entree = argv[optind];
+        sortie = argv[optind+1];
+    }
+    
     int fd;
 
     // Open file
-    fd = open(argv[2], O_RDONLY);
+    fd = open(entree, O_RDONLY);
     if (fd == -1) {
         printf("Error opening file %s", strerror(errno));
         return EXIT_FAILURE;
@@ -88,7 +167,6 @@ int main(int argc, char* argv[]){
     }
     size_t file_size = sb.st_size;
 
-    // 3. Mapper le fichier en mémoire avec MAP_POPULATE
     void* file_data = mmap(NULL, file_size, PROT_READ, MAP_PRIVATE | MAP_POPULATE, fd, 0);
     if (file_data == MAP_FAILED) {
         perror("Erreur lors du mapping du fichier en mémoire");
@@ -113,7 +191,26 @@ int main(int argc, char* argv[]){
     video_buffer += sizeof(video_info);
     unsigned char* iterator = video_buffer;
 
-    unsigned char* image_data = (unsigned char*)tempsreel_malloc((size_t)(video_info.largeur * video_info.hauteur * video_info.canaux));
+    size_t frame_size = video_info.largeur * video_info.hauteur * video_info.canaux;
+
+    struct memPartage zone = {0};
+    struct memPartageHeader headerInfos = {0};
+
+    headerInfos.canaux = video_info.canaux;
+    headerInfos.fps = video_info.fps;
+    headerInfos.hauteur = video_info.hauteur;
+    headerInfos.largeur = video_info.largeur;
+
+    zone.header = &headerInfos;
+    zone.tailleDonnees = frame_size;
+    
+    initMemoirePartageeEcrivain(sortie,
+                            &zone,
+                            sizeof(headerInfos)+frame_size,
+                            &headerInfos);
+
+    unsigned char* image_data = (unsigned char*)tempsreel_malloc(frame_size);
+    unsigned char* compress_image_data = (unsigned char*)tempsreel_malloc(frame_size);
 
     uint32_t image_size = UINT32_MAX; 
     size_t image_count = 0;
@@ -125,14 +222,19 @@ int main(int argc, char* argv[]){
         iterator += sizeof(image_size);
         while (image_size > 0)
         { 
-            unsigned char* compress_image_data = (unsigned char*)tempsreel_malloc((size_t)image_size);
-
             memcpy(compress_image_data, iterator, image_size);
             iterator += image_size;
             
             image_data = jpgd::decompress_jpeg_image_from_memory(compress_image_data, image_size, (int*)&video_info.largeur, (int*)&video_info.hauteur, (int*)&video_info.canaux, video_info.canaux, 0);
-            tempsreel_free(compress_image_data);
             
+            memcpy(zone.data, image_data, zone.tailleDonnees);
+            zone.copieCompteur = zone.header->frameReader;
+            pthread_mutex_unlock(&(zone.header->mutex));
+
+            attenteEcrivain(&zone);
+
+            pthread_mutex_lock(&(zone.header->mutex));
+            zone.header->frameWriter++;
             // sprintf(save_ppm_file_path, "/home/pi/projects/laboratoire3/image%d.ppm", image_count);
             // enregistreImage(image_data, video_info.hauteur, video_info.largeur, video_info.canaux, save_ppm_file_path);
 
@@ -146,7 +248,9 @@ int main(int argc, char* argv[]){
         image_count = 0;
     }
     
+    tempsreel_free(compress_image_data); 
     tempsreel_free(image_data); 
+
     close(fd);
 
     return 0;
