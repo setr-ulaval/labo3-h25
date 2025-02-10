@@ -107,7 +107,37 @@
             ],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "syncAndStartGDBconvertisseur"
-        }
+        },
+        {
+            "name": "Convertisseur FDM",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "./build/convertisseur",
+            "miDebuggerServerAddress": "192.168.43.240:4564",
+            "miDebuggerPath": "${env:HOME}/arm-cross-comp-env/arm-raspbian-linux-gnueabi/bin/arm-raspbian-linux-gnueabi-gdb",
+            "targetArchitecture": "arm64",
+            "cwd": "${workspaceRoot}",
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+              {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+              },
+              {
+                "description": "Set follow-fork-mode to child",
+                "text": "set follow-fork-mode child"
+              },
+              {
+                "description": "Set detach-on-fork off",
+                "text": "set detach-on-fork off"
+              }
+            ],
+            "preLaunchTask": "syncAndStartGDBconvertisseur" 
+        },
+
+
 
     ]
 }

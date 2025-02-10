@@ -121,5 +121,57 @@ int main(int argc, char* argv[]){
     // partagée et envoyer le résultat sur une autre zone mémoire partagée.
     // N'oubliez pas de respecter la syntaxe de la ligne de commande présentée dans l'énoncé.
 
+
+    struct memPartage zone = {0};
+    
+    initMemoirePartageeLecteur(entree,&zone);
+
+    unsigned char* image_data = (unsigned char*)tempsreel_malloc(zone.tailleDonnees);
+    unsigned char* image_data_gray = (unsigned char*)tempsreel_malloc(zone.tailleDonnees);
+
+    uint32_t image_size = UINT32_MAX; 
+    size_t image_count = 0;
+    char save_ppm_file_path[50]; // Make sure the array is large enough
+
+    pthread_mutex_lock(&(zone.header->mutex));
+    int frameWriter = zone.header->frameWriter;
+    pthread_mutex_unlock(&(zone.header->mutex));
+    while(frameWriter == 0)
+    {
+        pthread_mutex_lock(&(zone.header->mutex));
+        frameWriter = zone.header->frameWriter;
+        pthread_mutex_unlock(&(zone.header->mutex));
+        sleep(DELAI_INIT_READER_USEC/1000);
+    }
+
+    while(1)
+    {        
+        pthread_mutex_lock(&(zone.header->mutex));
+        zone.header->frameReader++;
+
+        memcpy(image_data, zone.data, zone.tailleDonnees);
+        zone.copieCompteur = zone.header->frameWriter;
+        convertToGray(image_data, zone.header->hauteur, zone.header->largeur, zone.header->canaux, image_data_gray);
+        pthread_mutex_unlock(&(zone.header->mutex));
+        enregistreImage(image_data_gray, zone.header->hauteur, zone.header->largeur, 1, "/home/pi/projects/laboratoire3/image_gray.ppm");
+
+        attenteLecteur(&zone);
+    }
+    
+    tempsreel_free(image_data); 
+
+    return 0;
+
+
+
+
+
+
+
+
+
+
+
+
     return 0;
 }
