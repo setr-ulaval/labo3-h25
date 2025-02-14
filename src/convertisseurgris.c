@@ -122,40 +122,69 @@ int main(int argc, char* argv[]){
     // N'oubliez pas de respecter la syntaxe de la ligne de commande présentée dans l'énoncé.
 
 
-    struct memPartage zone = {0};
+    struct memPartage zone_lecteur = {0};
     
-    initMemoirePartageeLecteur(entree,&zone);
+    initMemoirePartageeLecteur(entree,&zone_lecteur);
 
-    unsigned char* image_data = (unsigned char*)tempsreel_malloc(zone.tailleDonnees);
-    unsigned char* image_data_gray = (unsigned char*)tempsreel_malloc(zone.tailleDonnees);
+
+
+    struct memPartage zone_ecrivain = {0};
+    struct memPartageHeader headerInfos = {0};
+    pthread_mutex_lock(&(zone_lecteur.header->mutex));
+
+    headerInfos.canaux = zone_lecteur.header->canaux;
+    headerInfos.fps = zone_lecteur.header->fps;
+    headerInfos.hauteur = zone_lecteur.header->hauteur;
+    headerInfos.largeur = zone_lecteur.header->largeur;
+    zone_ecrivain.tailleDonnees = zone_lecteur.tailleDonnees;
+    pthread_mutex_unlock(&(zone_lecteur.header->mutex));
+
+    zone_ecrivain.header = &headerInfos;
+    
+    initMemoirePartageeEcrivain(sortie,
+                            &zone_ecrivain,
+                            sizeof(headerInfos)+zone_ecrivain.tailleDonnees,
+                            &headerInfos);
+
+    unsigned char* image_data = (unsigned char*)tempsreel_malloc(zone_lecteur.tailleDonnees);
+    unsigned char* image_data_gray = (unsigned char*)tempsreel_malloc(zone_lecteur.tailleDonnees);
 
     uint32_t image_size = UINT32_MAX; 
     size_t image_count = 0;
     char save_ppm_file_path[50]; // Make sure the array is large enough
 
-    pthread_mutex_lock(&(zone.header->mutex));
-    int frameWriter = zone.header->frameWriter;
-    pthread_mutex_unlock(&(zone.header->mutex));
+    pthread_mutex_lock(&(zone_lecteur.header->mutex));
+    int frameWriter = zone_lecteur.header->frameWriter;
+    pthread_mutex_unlock(&(zone_lecteur.header->mutex));
     while(frameWriter == 0)
     {
-        pthread_mutex_lock(&(zone.header->mutex));
-        frameWriter = zone.header->frameWriter;
-        pthread_mutex_unlock(&(zone.header->mutex));
-        sleep(DELAI_INIT_READER_USEC/1000);
+        pthread_mutex_lock(&(zone_lecteur.header->mutex));
+        frameWriter = zone_lecteur.header->frameWriter;
+        pthread_mutex_unlock(&(zone_lecteur.header->mutex));
+        usleep(DELAI_INIT_READER_USEC);
     }
 
     while(1)
     {        
-        pthread_mutex_lock(&(zone.header->mutex));
-        zone.header->frameReader++;
+        pthread_mutex_lock(&(zone_lecteur.header->mutex));
+        zone_lecteur.header->frameReader++;
 
-        memcpy(image_data, zone.data, zone.tailleDonnees);
-        zone.copieCompteur = zone.header->frameWriter;
-        convertToGray(image_data, zone.header->hauteur, zone.header->largeur, zone.header->canaux, image_data_gray);
-        pthread_mutex_unlock(&(zone.header->mutex));
-        enregistreImage(image_data_gray, zone.header->hauteur, zone.header->largeur, 1, "/home/pi/projects/laboratoire3/image_gray.ppm");
+        memcpy(image_data, zone_lecteur.data, zone_lecteur.tailleDonnees);
+        zone_lecteur.copieCompteur = zone_lecteur.header->frameWriter;
+        convertToGray(image_data, zone_lecteur.header->hauteur, zone_lecteur.header->largeur, zone_lecteur.header->canaux, image_data_gray);
+        pthread_mutex_unlock(&(zone_lecteur.header->mutex));
+        enregistreImage(image_data_gray, zone_lecteur.header->hauteur, zone_lecteur.header->largeur, 1, "/home/pi/projects/laboratoire3/image_gray.ppm");
 
-        attenteLecteur(&zone);
+        attenteLecteur(&zone_lecteur);
+
+        memcpy(zone_ecrivain.data, image_data_gray, zone_ecrivain.tailleDonnees);
+        zone_ecrivain.copieCompteur = zone_ecrivain.header->frameReader;
+        pthread_mutex_unlock(&(zone_ecrivain.header->mutex));
+
+        attenteEcrivain(&zone_ecrivain);
+
+        pthread_mutex_lock(&(zone_ecrivain.header->mutex));
+        zone_ecrivain.header->frameWriter++;
     }
     
     tempsreel_free(image_data); 

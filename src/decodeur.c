@@ -167,6 +167,14 @@ int main(int argc, char* argv[]){
     }
     size_t file_size = sb.st_size;
 
+    // MAP_PRIVATE: 
+    //  Create a private copy-on-write mapping.  Updates to the mapping are not visible to other processes mapping the  same  file,
+    //   and  are  not  carried through to the underlying file.  It is unspecified whether changes made to the file after the mmap()
+    //   call are visible in the mapped region.
+    // MAP_POPULATE
+    //   Populate (prefault) page tables for a mapping.  For a file mapping, this causes read-ahead on the file.  This will help  to
+    //   reduce blocking on page faults later.  MAP_POPULATE is supported for private mappings only since Linux 2.6.23.
+
     void* file_data = mmap(NULL, file_size, PROT_READ, MAP_PRIVATE | MAP_POPULATE, fd, 0);
     if (file_data == MAP_FAILED) {
         perror("Erreur lors du mapping du fichier en mémoire");

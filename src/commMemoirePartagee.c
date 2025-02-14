@@ -64,7 +64,7 @@ int attenteEcrivain(struct memPartage *zone)
         pthread_mutex_lock(&(zone->header->mutex));
         frameReader = zone->header->frameReader;
         pthread_mutex_unlock(&(zone->header->mutex));
-        sleep(DELAI_INIT_READER_USEC/1000);
+        usleep(DELAI_INIT_READER_USEC);
     }
     return 0;
 }
@@ -79,7 +79,7 @@ int attenteLecteur(struct memPartage *zone)
         pthread_mutex_lock(&(zone->header->mutex));
         frameWriter = zone->header->frameWriter;
         pthread_mutex_unlock(&(zone->header->mutex));
-        sleep(DELAI_INIT_READER_USEC/1000);
+        usleep(DELAI_INIT_READER_USEC);
     }
     return 0;
 }
