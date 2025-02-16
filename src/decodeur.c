@@ -81,8 +81,8 @@ int main(int argc, char* argv[]){
 
     if(strcmp(argv[1], "--debug") == 0){
         // Mode debug, vous pouvez changer ces valeurs pour ce qui convient dans vos tests
-        printf("Mode debug selectionne pour le convertisseur niveau de gris\n");
-        entree = (char*)"/home/pi/projects/laboratoire3/160p/02_Sintel.ulv";
+        printf("Mode debug selectionne pour le decodeur\n");
+        entree = (char*)"/home/pi/projects/laboratoire3/240p/02_Sintel.ulv";
         sortie = (char*)"/mem1";
     }
     else{
@@ -223,6 +223,9 @@ int main(int argc, char* argv[]){
     uint32_t image_size = UINT32_MAX; 
     size_t image_count = 0;
     char save_ppm_file_path[50]; // Make sure the array is large enough
+
+    pthread_mutex_lock(&(zone.header->mutex));
+    zone.header->frameWriter ++;
 
     while(1)
     { 

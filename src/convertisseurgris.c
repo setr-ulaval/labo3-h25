@@ -154,15 +154,16 @@ int main(int argc, char* argv[]){
     char save_ppm_file_path[50]; // Make sure the array is large enough
 
     pthread_mutex_lock(&(zone_lecteur.header->mutex));
-    int frameWriter = zone_lecteur.header->frameWriter;
-    pthread_mutex_unlock(&(zone_lecteur.header->mutex));
-    while(frameWriter == 0)
+    while(zone_lecteur.header->frameWriter == 0)
     {
-        pthread_mutex_lock(&(zone_lecteur.header->mutex));
-        frameWriter = zone_lecteur.header->frameWriter;
         pthread_mutex_unlock(&(zone_lecteur.header->mutex));
         usleep(DELAI_INIT_READER_USEC);
+        pthread_mutex_lock(&(zone_lecteur.header->mutex));
     }
+    pthread_mutex_unlock(&(zone_lecteur.header->mutex));
+
+    pthread_mutex_lock(&(zone_ecrivain.header->mutex));
+    zone_ecrivain.header->frameWriter ++;
 
     while(1)
     {        

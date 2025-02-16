@@ -18,23 +18,46 @@ int initMemoirePartageeEcrivain(const char* identifiant,
 {
    zone->fd = shm_open(identifiant, O_RDWR | O_CREAT, 0666); 
    if (zone->fd == -1) return -1;
-   if (ftruncate(zone->fd, taille) == -1) return -1;
+
+   if (ftruncate(zone->fd, taille) == -1) {
+      close(zone->fd);
+      shm_unlink(identifiant);
+      return -1;
+   }
+
    void * addr = mmap(NULL, taille, PROT_READ | PROT_WRITE, MAP_SHARED, zone->fd, 0);
-   if (addr == MAP_FAILED) return -1;
+   if (addr == MAP_FAILED) {
+      close(zone->fd);
+      shm_unlink(identifiant);
+      return -1;
+   }
+
    memset(addr, 0, taille); 
    memcpy(addr, headerInfos, sizeof(struct memPartageHeader));
    zone->header = (struct memPartageHeader *)addr;
-   zone->data = (unsigned char *)(addr + sizeof(struct memPartageHeader));   
-   pthread_mutex_init(&(zone->header->mutex), NULL);  
-   pthread_mutex_lock(&(zone->header->mutex));
-   zone->header->frameWriter = 1;
+   zone->data = (unsigned char *)((unsigned char *)addr + sizeof(struct memPartageHeader));   
+
+   // Configuration du mutex pour le partage entre processus
+   pthread_mutexattr_t attr;
+   pthread_mutexattr_init(&attr);
+   pthread_mutexattr_setpshared(&attr, PTHREAD_PROCESS_SHARED);
+   int res = pthread_mutex_init(&(zone->header->mutex), &attr);
+   pthread_mutexattr_destroy(&attr);
+   if (res != 0) {
+      munmap(addr, taille);
+      close(zone->fd);
+      shm_unlink(identifiant);
+      return -1;
+   }
 
    return 0;
 }
+
 int initMemoirePartageeLecteur(const char* identifiant,
                                 struct memPartage *zone)
 {
-   struct stat sb = {0};
+   struct stat sb;
+   memset(&sb, 0, sizeof(struct stat));
    while (zone->fd == -1 || sb.st_size == 0)
    {
       zone->fd = shm_open(identifiant, O_RDWR | O_CREAT, 0666); 
@@ -45,7 +68,7 @@ int initMemoirePartageeLecteur(const char* identifiant,
    if (addr == MAP_FAILED) return -1;
 
    zone->header = (struct memPartageHeader *)addr;
-   zone->data = (unsigned char *)(addr + sizeof(struct memPartageHeader));  
+   zone->data = (unsigned char *)((unsigned char *)addr + sizeof(struct memPartageHeader));  
 
    pthread_mutex_lock(&(zone->header->mutex));
    zone->tailleDonnees = zone->header->hauteur * zone->header->largeur * zone->header->canaux;
@@ -57,29 +80,41 @@ int initMemoirePartageeLecteur(const char* identifiant,
 int attenteEcrivain(struct memPartage *zone)
 {
     pthread_mutex_lock(&(zone->header->mutex));
-    int frameReader = zone->header->frameReader;
-    pthread_mutex_unlock(&(zone->header->mutex));
-    while(frameReader == zone->copieCompteur)
+    while(zone->header->frameReader == zone->copieCompteur)
     {
-        pthread_mutex_lock(&(zone->header->mutex));
-        frameReader = zone->header->frameReader;
         pthread_mutex_unlock(&(zone->header->mutex));
         usleep(DELAI_INIT_READER_USEC);
+        pthread_mutex_lock(&(zone->header->mutex));
     }
+    pthread_mutex_unlock(&(zone->header->mutex));
     return 0;
 }
 
 int attenteLecteur(struct memPartage *zone)
 {
     pthread_mutex_lock(&(zone->header->mutex));
-    int frameWriter = zone->header->frameWriter;
-    pthread_mutex_unlock(&(zone->header->mutex));
-    while(frameWriter == zone->copieCompteur)
+    while(zone->header->frameWriter == zone->copieCompteur)
     {
-        pthread_mutex_lock(&(zone->header->mutex));
-        frameWriter = zone->header->frameWriter;
         pthread_mutex_unlock(&(zone->header->mutex));
         usleep(DELAI_INIT_READER_USEC);
+        pthread_mutex_lock(&(zone->header->mutex));
     }
+    pthread_mutex_unlock(&(zone->header->mutex));
     return 0;
+}
+
+int attenteLecteurAsync(struct memPartage *zone)
+{
+    int result = 0;
+    pthread_mutex_lock(&(zone->header->mutex));
+    if(zone->header->frameWriter == zone->copieCompteur)
+    {
+        result = -1; // Indicate that no new frame is available
+    }
+    else
+    {
+        result = 0; // New frame available
+    }
+    pthread_mutex_unlock(&(zone->header->mutex));
+    return result;
 }
