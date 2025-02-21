@@ -212,7 +212,7 @@ int main(int argc, char* argv[])
     if(strcmp(argv[1], "--debug") == 0){
         // Mode debug, vous pouvez changer ces valeurs pour ce qui convient dans vos tests
         printf("Mode debug selectionne pour le compositeur\n");
-        entree[0] = (char*)"/mem1";
+        entree[0] = (char*)"/mem3";
 		nbrActifs = 1;
     }
     else{
@@ -392,6 +392,7 @@ int main(int argc, char* argv[])
 		// Initialize shared memory
 		initMemoirePartageeLecteur(entree[i], tableau_zone_lecteur[i]);
 
+        pthread_mutex_lock(&(tableau_zone_lecteur[i]->header->mutex));
 		sprintf(error_message, "Expected video height=240, got %d", tableau_zone_lecteur[i]->header->hauteur);
 		ASSERT_MSG(tableau_zone_lecteur[i]->header->hauteur == 240, error_message);
 		sprintf(error_message, "Expected video width=427, got %d", tableau_zone_lecteur[i]->header->largeur);
@@ -399,6 +400,7 @@ int main(int argc, char* argv[])
 
 		// Allocate memory for image_data
 		unsigned char* image_data = (unsigned char*)tempsreel_malloc(tableau_zone_lecteur[i]->tailleDonnees);
+        pthread_mutex_unlock(&(tableau_zone_lecteur[i]->header->mutex));
 		if (!image_data)
 		{
 			perror("Allocation failed for image_data");
@@ -408,27 +410,13 @@ int main(int argc, char* argv[])
 		tableau_image_data[i] = image_data;
 	}
 
-	for (int i = 0; i < nbrActifs; ++i)
-	{
-		// Use the pointers stored in tableau_zone_lecteur
-		pthread_mutex_lock(&(tableau_zone_lecteur[i]->header->mutex));
-		while(tableau_zone_lecteur[i]->header->frameWriter == 0)
-		{
-			pthread_mutex_unlock(&(tableau_zone_lecteur[i]->header->mutex));
-			usleep(DELAI_INIT_READER_USEC);
-			pthread_mutex_lock(&(tableau_zone_lecteur[i]->header->mutex));
-		}
-		pthread_mutex_unlock(&(tableau_zone_lecteur[i]->header->mutex));
-	}
-
-
 	int results_wait;
 	struct timeval current_time, start_time, fps_time;
     size_t elapsed_time;
 
 	struct timeval *last_frame_time = (struct timeval *)tempsreel_malloc(nbrActifs * sizeof(struct timeval));
  	int *frame_count = (int*)tempsreel_malloc(nbrActifs * sizeof(int));
-    long double *max_frame_time = (double*)tempsreel_malloc(nbrActifs * sizeof(double));
+    long double *max_frame_time = (long double*)tempsreel_malloc(nbrActifs * sizeof(double));
 
     if (!last_frame_time || !frame_count || !max_frame_time) {
         perror("Memory allocation failed");
@@ -473,6 +461,8 @@ int main(int argc, char* argv[])
         
         for (int i = 0; i < nbrActifs; ++i) {
             gettimeofday(&current_time, NULL);
+            
+            pthread_mutex_lock(&(tableau_zone_lecteur[i]->header->mutex));
             max_fps = tableau_zone_lecteur[i]->header->fps;
             min_frame_time = 1000000 / max_fps;
             elapsed_time = (current_time.tv_sec - last_frame_time[i].tv_sec) * 1000000 + (current_time.tv_usec - last_frame_time[i].tv_usec);
@@ -481,7 +471,6 @@ int main(int argc, char* argv[])
                 continue; // Ignore ce flux s'il va trop vite
             }
             
-            pthread_mutex_lock(&(tableau_zone_lecteur[i]->header->mutex));
             tableau_zone_lecteur[i]->header->frameReader++;
 
             if (tableau_zone_lecteur[i]->data != NULL && tableau_image_data[i] != NULL) {
@@ -524,7 +513,7 @@ int main(int argc, char* argv[])
 			fprintf(fstats, "[%.1f] ", (current_time.tv_sec - start_time.tv_sec) + (current_time.tv_usec - start_time.tv_usec) / 1000000.0);
 			for (int i = 0; i < nbrActifs; ++i) {
 				double avg_fps = frame_count[i] / elapsed_fps_time;
-				fprintf(fstats, "Entree %d: moy=%.1f fps, max=%.1f ms | ", i + 1, avg_fps, max_frame_time[i]);
+				fprintf(fstats, "Entree %d: moy=%.1f fps, max=%.1Lf ms | ", i + 1, avg_fps, max_frame_time[i]);
 				frame_count[i] = 0;
 				max_frame_time[i] = 0;
 			}

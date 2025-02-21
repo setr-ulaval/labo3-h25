@@ -46,8 +46,8 @@ int main(int argc, char* argv[]){
     if(strcmp(argv[1], "--debug") == 0){
         // Mode debug, vous pouvez changer ces valeurs pour ce qui convient dans vos tests
         printf("Mode debug selectionne pour le convertisseur niveau de gris\n");
-        entree = (char*)"/mem1";
-        sortie = (char*)"/mem2";
+        entree = (char*)"/mem2";
+        sortie = (char*)"/mem4";
     }
     else{
         int c;
@@ -126,8 +126,6 @@ int main(int argc, char* argv[]){
     
     initMemoirePartageeLecteur(entree,&zone_lecteur);
 
-
-
     struct memPartage zone_ecrivain = {0};
     struct memPartageHeader headerInfos = {0};
     pthread_mutex_lock(&(zone_lecteur.header->mutex));
@@ -136,10 +134,11 @@ int main(int argc, char* argv[]){
     headerInfos.fps = zone_lecteur.header->fps;
     headerInfos.hauteur = zone_lecteur.header->hauteur;
     headerInfos.largeur = zone_lecteur.header->largeur;
-    zone_ecrivain.tailleDonnees = zone_lecteur.tailleDonnees;
+    zone_ecrivain.tailleDonnees = headerInfos.hauteur * headerInfos.largeur;
     pthread_mutex_unlock(&(zone_lecteur.header->mutex));
 
     zone_ecrivain.header = &headerInfos;
+    zone_ecrivain.header->canaux = 1;
     
     initMemoirePartageeEcrivain(sortie,
                             &zone_ecrivain,
@@ -148,14 +147,6 @@ int main(int argc, char* argv[]){
 
     unsigned char* image_data = (unsigned char*)tempsreel_malloc(zone_lecteur.tailleDonnees);
     unsigned char* image_data_gray = (unsigned char*)tempsreel_malloc(zone_lecteur.tailleDonnees);
-
-    pthread_mutex_lock(&(zone_lecteur.header->mutex));
-    while(zone_lecteur.header->frameWriter == 0)
-    {
-        pthread_mutex_unlock(&(zone_lecteur.header->mutex));
-        usleep(DELAI_INIT_READER_USEC);
-        pthread_mutex_lock(&(zone_lecteur.header->mutex));
-    }
 
     zone_ecrivain.header->frameWriter ++;
 
@@ -186,15 +177,4 @@ int main(int argc, char* argv[]){
     return 0;
 
 
-
-
-
-
-
-
-
-
-
-
-    return 0;
 }
