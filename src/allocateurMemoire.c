@@ -13,7 +13,7 @@
 
 #define internal static
 #define MAX_ALLOC (1024*1024)
-#define MEM_SLOTS 5
+#define MEM_SLOTS 10
 internal char* BUFFER = NULL;
 
 internal bool FREE_LIST[MEM_SLOTS];
@@ -30,47 +30,46 @@ void init_free_list()
 void* tempsreel_malloc(size_t taille)
 {
 
-    // assert (taille <= MAX_ALLOC);
-    // if (!BUFFER)
-    // {
-    //     BUFFER = (char*)malloc(MAX_ALLOC * 5);
-    //     init_free_list();
-    // }
+    assert (taille <= MAX_ALLOC);
+    if (!BUFFER)
+    {
+        BUFFER = (char*)malloc(MAX_ALLOC * 5);
+        init_free_list();
+    }
 
-    // if (!BUFFER)
-    // {
-    //     errno = ENOMEM;
-    //     exit(1);
-    // }
+    if (!BUFFER)
+    {
+        errno = ENOMEM;
+        exit(1);
+    }
 
-    // for (int i = 0; i < MEM_SLOTS; ++i)
-    // {
-    //     if (FREE_LIST[i])
-    //     {
-    //         FREE_LIST[i] = false;
-    //         return (void*)(BUFFER + i * MAX_ALLOC);
-    //     }
-    // }
+    for (int i = 0; i < MEM_SLOTS; ++i)
+    {
+        if (FREE_LIST[i])
+        {
+            FREE_LIST[i] = false;
+            return (void*)(BUFFER + i * MAX_ALLOC);
+        }
+    }
 
-    // errno = ENOMEM;
-    // exit(1);
+    errno = ENOMEM;
+    exit(1);
 
-    return malloc(taille);
+    // return malloc(taille);
 }   
 
 void tempsreel_free(void* ptr)
 {
-    // char* char_ptr = (char*)ptr;
-    // assert (char_ptr);
-    // assert (char_ptr >= BUFFER);
-    // assert (((char_ptr - BUFFER) % MAX_ALLOC) == 0); // PND: Make sure ptr is align on MEM_SLOTS
+    char* char_ptr = (char*)ptr;
+    assert (char_ptr);
+    assert (char_ptr >= BUFFER);
+    assert (((char_ptr - BUFFER) % MAX_ALLOC) == 0); // PND: Make sure ptr is align on MEM_SLOTS
     
-    // printf("Value: %d, Address: %p\n", *char_ptr, (void*)char_ptr);
-    // int free_idx = (char_ptr - BUFFER) / MAX_ALLOC;
-    // assert (free_idx < MEM_SLOTS);
-    // assert(!FREE_LIST[free_idx]);
+    int free_idx = (char_ptr - BUFFER) / MAX_ALLOC;
+    assert (free_idx < MEM_SLOTS);
+    assert(!FREE_LIST[free_idx]);
 
-    // FREE_LIST[free_idx] = true;
+    FREE_LIST[free_idx] = true;
 
-    free(ptr);
+    // free(ptr);
 }

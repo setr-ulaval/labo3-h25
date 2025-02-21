@@ -16,8 +16,12 @@ int initMemoirePartageeEcrivain(const char* identifiant,
                                 size_t taille,
                                 struct memPartageHeader* headerInfos)
 {
-   zone->fd = shm_open(identifiant, O_RDWR | O_CREAT, 0666); 
-   if (zone->fd == -1) return -1;
+   shm_unlink(identifiant);
+   zone->fd = shm_open(identifiant, O_RDWR | O_CREAT, 0777); 
+   if (zone->fd == -1) {
+        printf("shm_open failed: %s\n", strerror(errno));
+        return -1;
+    }
 
    if (ftruncate(zone->fd, taille) == -1) {
       close(zone->fd);
@@ -107,14 +111,11 @@ int attenteLecteurAsync(struct memPartage *zone)
 {
     int result = 0;
     pthread_mutex_lock(&(zone->header->mutex));
-    if(zone->header->frameWriter == zone->copieCompteur)
-    {
-        result = -1; // Indicate that no new frame is available
+    
+    if (zone->header->frameWriter == zone->copieCompteur) {
+        result = -1; // Toujours pas de nouveau frame
     }
-    else
-    {
-        result = 0; // New frame available
-    }
+    
     pthread_mutex_unlock(&(zone->header->mutex));
     return result;
 }

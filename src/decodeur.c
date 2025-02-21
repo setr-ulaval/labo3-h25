@@ -83,7 +83,7 @@ int main(int argc, char* argv[]){
         // Mode debug, vous pouvez changer ces valeurs pour ce qui convient dans vos tests
         printf("Mode debug selectionne pour le decodeur\n");
         entree = (char*)"/home/pi/projects/laboratoire3/240p/02_Sintel.ulv";
-        sortie = (char*)"/mem1";
+        sortie = (char*)"/mem2";
     }
     else{
         int c;
@@ -217,7 +217,6 @@ int main(int argc, char* argv[]){
                             sizeof(headerInfos)+frame_size,
                             &headerInfos);
 
-    unsigned char* image_data = (unsigned char*)tempsreel_malloc(frame_size);
     unsigned char* compress_image_data = (unsigned char*)tempsreel_malloc(frame_size);
 
     uint32_t image_size = UINT32_MAX; 
@@ -236,9 +235,11 @@ int main(int argc, char* argv[]){
             memcpy(compress_image_data, iterator, image_size);
             iterator += image_size;
             
-            image_data = jpgd::decompress_jpeg_image_from_memory(compress_image_data, image_size, (int*)&video_info.largeur, (int*)&video_info.hauteur, (int*)&video_info.canaux, video_info.canaux, 0);
+            unsigned char* image_data = jpgd::decompress_jpeg_image_from_memory(compress_image_data, image_size, (int*)&video_info.largeur, (int*)&video_info.hauteur, (int*)&video_info.canaux, video_info.canaux, 0);
             
             memcpy(zone.data, image_data, zone.tailleDonnees);
+
+            tempsreel_free(image_data); 
             zone.copieCompteur = zone.header->frameReader;
             pthread_mutex_unlock(&(zone.header->mutex));
 
@@ -260,7 +261,7 @@ int main(int argc, char* argv[]){
     }
     
     tempsreel_free(compress_image_data); 
-    tempsreel_free(image_data); 
+    
 
     close(fd);
 

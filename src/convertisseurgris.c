@@ -149,10 +149,6 @@ int main(int argc, char* argv[]){
     unsigned char* image_data = (unsigned char*)tempsreel_malloc(zone_lecteur.tailleDonnees);
     unsigned char* image_data_gray = (unsigned char*)tempsreel_malloc(zone_lecteur.tailleDonnees);
 
-    uint32_t image_size = UINT32_MAX; 
-    size_t image_count = 0;
-    char save_ppm_file_path[50]; // Make sure the array is large enough
-
     pthread_mutex_lock(&(zone_lecteur.header->mutex));
     while(zone_lecteur.header->frameWriter == 0)
     {
@@ -160,9 +156,7 @@ int main(int argc, char* argv[]){
         usleep(DELAI_INIT_READER_USEC);
         pthread_mutex_lock(&(zone_lecteur.header->mutex));
     }
-    pthread_mutex_unlock(&(zone_lecteur.header->mutex));
 
-    pthread_mutex_lock(&(zone_ecrivain.header->mutex));
     zone_ecrivain.header->frameWriter ++;
 
     while(1)
@@ -174,7 +168,6 @@ int main(int argc, char* argv[]){
         zone_lecteur.copieCompteur = zone_lecteur.header->frameWriter;
         convertToGray(image_data, zone_lecteur.header->hauteur, zone_lecteur.header->largeur, zone_lecteur.header->canaux, image_data_gray);
         pthread_mutex_unlock(&(zone_lecteur.header->mutex));
-        enregistreImage(image_data_gray, zone_lecteur.header->hauteur, zone_lecteur.header->largeur, 1, "/home/pi/projects/laboratoire3/image_gray.ppm");
 
         attenteLecteur(&zone_lecteur);
 
