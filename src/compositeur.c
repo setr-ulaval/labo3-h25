@@ -215,7 +215,8 @@ int main(int argc, char* argv[])
         // Mode debug, vous pouvez changer ces valeurs pour ce qui convient dans vos tests
         printf("Mode debug selectionne pour le compositeur\n");
         entree[0] = (char*)"/mem1";
-		nbrActifs = 1;
+        entree[1] = (char*)"/mem2";
+		nbrActifs = 2;
     }
     else{
         int c;
@@ -376,9 +377,8 @@ int main(int argc, char* argv[])
     }
 
 	struct memPartage* tableau_zone_lecteur[4];
-    struct memHeader tableau_header[4] = {{0}, {0}, {0}, {0}};
+    struct memHeader tableau_header[4] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
 	unsigned char* tableau_image_data[4];
-    bool is_image_copied[4] = {false,false,false,false};
 	char error_message[100];
 
 	for (int i = 0; i < nbrActifs; ++i)
@@ -439,28 +439,20 @@ int main(int argc, char* argv[])
         
         for (int i = 0; i < nbrActifs; ++i) {            
 
+            evenementProfilage(&profInfos, ETAT_ATTENTE_MUTEXLECTURE);
+            if(attenteLecteurAsync(tableau_zone_lecteur[i])) continue;
+                            
             evenementProfilage(&profInfos, ETAT_TRAITEMENT);
-
-            if (!pthread_mutex_trylock(&(tableau_zone_lecteur[i]->header->mutex)))
-                continue;
-            
             tableau_zone_lecteur[i]->header->frameReader++;
 
             memcpy(tableau_image_data[i], tableau_zone_lecteur[i]->data, tableau_zone_lecteur[i]->tailleDonnees);
             tableau_header[i].hauteur = tableau_zone_lecteur[i]->header->hauteur;
             tableau_header[i].largeur = tableau_zone_lecteur[i]->header->largeur;
             tableau_header[i].canaux = tableau_zone_lecteur[i]->header->canaux;
-            is_image_copied[i] = true;
 
             tableau_zone_lecteur[i]->copieCompteur = tableau_zone_lecteur[i]->header->frameWriter;
             pthread_mutex_unlock(&(tableau_zone_lecteur[i]->header->mutex));
 
-            
-            evenementProfilage(&profInfos, ETAT_ATTENTE_MUTEXLECTURE);
-            results_wait = attenteLecteurAsync(tableau_zone_lecteur[i]);
-            if (results_wait == -1) continue;
-            
-            evenementProfilage(&profInfos, ETAT_TRAITEMENT);
             ecrireImage(i, 
                         nbrActifs, 
                         fbfd, 
