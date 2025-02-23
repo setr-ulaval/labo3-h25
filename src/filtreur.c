@@ -52,6 +52,7 @@ int main(int argc, char* argv[]){
     if(strcmp(argv[1], "--debug") == 0){
         // Mode debug, vous pouvez changer ces valeurs pour ce qui convient dans vos tests
         printf("Mode debug selectionne pour le convertisseur niveau de gris\n");
+        filter_type = 1;
         entree = (char*)"/mem1";
         sortie = (char*)"/mem2";
     }
@@ -153,9 +154,12 @@ int main(int argc, char* argv[]){
                             sizeof(headerInfos)+zone_ecrivain.tailleDonnees,
                             &headerInfos);
 
+    
+
     unsigned char* image_data = (unsigned char*)tempsreel_malloc(zone_lecteur.tailleDonnees);
     unsigned char* image_data_filtered = (unsigned char*)tempsreel_malloc(zone_lecteur.tailleDonnees);
 
+    pthread_mutex_lock(&(zone_ecrivain.header->mutex));
     zone_ecrivain.header->frameWriter ++;
 
     while(1)

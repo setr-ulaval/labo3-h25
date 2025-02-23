@@ -163,6 +163,7 @@ int main(int argc, char* argv[]){
     unsigned char* image_data = (unsigned char*)tempsreel_malloc(zone_lecteur.tailleDonnees);
     unsigned char* image_data_resized = (unsigned char*)tempsreel_malloc(zone_ecrivain.tailleDonnees);
 
+    pthread_mutex_lock(&(zone_ecrivain.header->mutex));
     zone_ecrivain.header->frameWriter ++;
 
     ResizeGrid resized_grid;

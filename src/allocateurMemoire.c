@@ -12,7 +12,7 @@
 #include <assert.h>
 
 #define internal static
-#define MAX_ALLOC (1024*1024)
+#define MAX_ALLOC (1280*720 *3 *sizeof(float))
 #define MEM_SLOTS 10
 internal char* BUFFER = NULL;
 
@@ -26,6 +26,20 @@ void init_free_list()
     }
 }
 
+int prepareMemoire(size_t tailleImageEntree, size_t tailleImageSortie)
+{
+    assert (tailleImageEntree <= MAX_ALLOC);
+    assert (tailleImageSortie <= MAX_ALLOC);
+    if (!BUFFER)
+    {
+        BUFFER = (char*)malloc(MAX_ALLOC * MEM_SLOTS);
+        init_free_list();
+        return 0;
+    }
+
+    return 1;
+}
+
 // TODO: Implementez ici votre allocateur memoire utilisant l'interface decrite dans allocateurMemoire.h
 void* tempsreel_malloc(size_t taille)
 {
@@ -33,7 +47,7 @@ void* tempsreel_malloc(size_t taille)
     assert (taille <= MAX_ALLOC);
     if (!BUFFER)
     {
-        BUFFER = (char*)malloc(MAX_ALLOC * 5);
+        BUFFER = (char*)malloc(MAX_ALLOC * MEM_SLOTS);
         init_free_list();
     }
 

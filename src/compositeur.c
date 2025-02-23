@@ -73,6 +73,8 @@
     } while (0)
 
 
+#define FILE_SIZE 1024
+
 // Fonction permettant de récupérer le temps courant sous forme double
 double get_time()
 {
@@ -411,36 +413,7 @@ int main(int argc, char* argv[])
 	}
 
 	int results_wait;
-	struct timeval current_time, start_time, fps_time;
-    size_t elapsed_time;
 
-	struct timeval *last_frame_time = (struct timeval *)tempsreel_malloc(nbrActifs * sizeof(struct timeval));
- 	int *frame_count = (int*)tempsreel_malloc(nbrActifs * sizeof(int));
-    long double *max_frame_time = (long double*)tempsreel_malloc(nbrActifs * sizeof(double));
-
-    if (!last_frame_time || !frame_count || !max_frame_time) {
-        perror("Memory allocation failed");
-        exit(EXIT_FAILURE);
-    }
-    FILE *fstats = fopen("stats.txt", "w");
-	if (!fstats) {
-		perror("Erreur lors de l'ouverture de stats.txt");
-		exit(EXIT_FAILURE);
-	}
-    setbuf(fstats, NULL);
-
-    for (int i = 0; i < nbrActifs; ++i) {
-        gettimeofday(&last_frame_time[i], NULL);
-        frame_count[i] = 0;
-        max_frame_time[i] = 0;
-    }
-
-    gettimeofday(&start_time, NULL);
-    fps_time = start_time;
-	int max_fps;
-	size_t min_frame_time;
-	long double frame_time_ms;
-	long double elapsed_fps_time;
     while(1){
             // Boucle principale du programme
             // TODO
@@ -457,19 +430,10 @@ int main(int argc, char* argv[])
         
             // Exemple d'appel à ecrireImage (n'oubliez pas de remplacer les arguments commençant par A_REMPLIR!)
 
-        elapsed_fps_time = (current_time.tv_sec - fps_time.tv_sec) + (current_time.tv_usec - fps_time.tv_usec) / 1000000.0;
         
         for (int i = 0; i < nbrActifs; ++i) {
-            gettimeofday(&current_time, NULL);
             
             pthread_mutex_lock(&(tableau_zone_lecteur[i]->header->mutex));
-            max_fps = tableau_zone_lecteur[i]->header->fps;
-            min_frame_time = 1000000 / max_fps;
-            elapsed_time = (current_time.tv_sec - last_frame_time[i].tv_sec) * 1000000 + (current_time.tv_usec - last_frame_time[i].tv_usec);
-            
-            if (elapsed_time < min_frame_time) {
-                continue; // Ignore ce flux s'il va trop vite
-            }
             
             tableau_zone_lecteur[i]->header->frameReader++;
 
@@ -499,37 +463,15 @@ int main(int argc, char* argv[])
                         tableau_zone_lecteur[i]->header->hauteur,
                         tableau_zone_lecteur[i]->header->largeur,
                         tableau_zone_lecteur[i]->header->canaux);
-            
-            frame_count[i]++;
-            frame_time_ms = elapsed_time / 1000.0;
-            if (frame_time_ms > max_frame_time[i]) {
-                max_frame_time[i] = frame_time_ms;
-            }
 
-            gettimeofday(&last_frame_time[i], NULL);
         }
-				
-		if (elapsed_fps_time >= 5.0) {
-			fprintf(fstats, "[%.1f] ", (current_time.tv_sec - start_time.tv_sec) + (current_time.tv_usec - start_time.tv_usec) / 1000000.0);
-			for (int i = 0; i < nbrActifs; ++i) {
-				double avg_fps = frame_count[i] / elapsed_fps_time;
-				fprintf(fstats, "Entree %d: moy=%.1f fps, max=%.1Lf ms | ", i + 1, avg_fps, max_frame_time[i]);
-				frame_count[i] = 0;
-				max_frame_time[i] = 0;
-			}
-			fprintf(fstats, "\n");
-			fflush(fstats);  // <-- Ensures data is written to disk immediately
-			fps_time = current_time;
-		}
+			
     }
 
 
     // cleanup
     // Retirer le mmap
     munmap(fbp, screensize);
-
-	tempsreel_free(last_frame_time);
-	fclose(fstats);
 
 
     // reset the display mode

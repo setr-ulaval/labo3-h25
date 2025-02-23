@@ -1,1 +1,10 @@
 Il faut préalouer l'image lors de l'initialisation pas à la lecture, faire le correctif
+
+Allocateur mémoire:
+- On peut faire des mallocs dans la section qui n'est pas critique
+- Dans la section critique, il ne faut pas faire d'allocation dynamique ni d'accès critique
+- Il faut enelver le malloc de l'allocateur mémoire et le mettre dans une fonction init
+
+- Le filtreur travaille sur des float:
+
+w * h * c * n (sizeof(float))
