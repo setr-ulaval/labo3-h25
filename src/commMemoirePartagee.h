@@ -53,6 +53,13 @@ struct memPartageHeader{
     uint16_t fps;
 };
 
+struct memHeader{
+    uint16_t hauteur;
+    uint16_t largeur;
+    uint16_t canaux;
+    uint16_t fps;
+};
+
 // Cette structure permet de mémoriser l'information sur une zone mémoire partagée.
 // C'est un pointeur vers une instance de cette structure qui sera passée aux
 // différentes fonctions

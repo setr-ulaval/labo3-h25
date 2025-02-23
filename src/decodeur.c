@@ -83,7 +83,7 @@ int main(int argc, char* argv[]){
         // Mode debug, vous pouvez changer ces valeurs pour ce qui convient dans vos tests
         printf("Mode debug selectionne pour le decodeur\n");
         entree = (char*)"/home/pi/projects/laboratoire3/240p/02_Sintel.ulv";
-        sortie = (char*)"/mem2";
+        sortie = (char*)"/mem1";
     }
     else{
         int c;
@@ -232,6 +232,7 @@ int main(int argc, char* argv[]){
         iterator += sizeof(image_size);
         while (image_size > 0)
         { 
+            evenementProfilage(&profInfos, ETAT_TRAITEMENT);
             memcpy(compress_image_data, iterator, image_size);
             iterator += image_size;
             
@@ -243,7 +244,9 @@ int main(int argc, char* argv[]){
             zone.copieCompteur = zone.header->frameReader;
             pthread_mutex_unlock(&(zone.header->mutex));
 
+            evenementProfilage(&profInfos, ETAT_ATTENTE_MUTEXECRITURE);
             attenteEcrivain(&zone);
+            evenementProfilage(&profInfos, ETAT_TRAITEMENT);
 
             pthread_mutex_lock(&(zone.header->mutex));
             zone.header->frameWriter++;

@@ -1,0 +1,690 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/fdumais/Documents/formation_continue/gif_3004/labo3-h25/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	//
+$(VERBOSE).SILENT	src/build/Makefile	/^$(VERBOSE).SILENT:$/;"	t
+$(VERBOSE)MAKESILENT	src/build/Makefile	/^$(VERBOSE)MAKESILENT = -s$/;"	m
+%	src/build/Makefile	/^% : %,v$/;"	t
+%	src/build/Makefile	/^% : RCS\/%$/;"	t
+%	src/build/Makefile	/^% : RCS\/%,v$/;"	t
+%	src/build/Makefile	/^% : SCCS\/s.%$/;"	t
+%	src/build/Makefile	/^% : s.%$/;"	t
+ACCESS_COL	src/jpgd.cpp	/^#define ACCESS_COL(/;"	d	file:
+ACCESS_ROW	src/jpgd.cpp	/^#define ACCESS_ROW(/;"	d	file:
+ALLOC_MEM_H	src/allocateurMemoire.h	/^#define ALLOC_MEM_H$/;"	d
+ALLOC_N_BIG	src/allocateurMemoire.h	/^#define ALLOC_N_BIG /;"	d
+ALLOC_N_SMALL	src/allocateurMemoire.h	/^#define ALLOC_N_SMALL /;"	d
+ALLOC_SMALL_SIZE	src/allocateurMemoire.h	/^#define ALLOC_SMALL_SIZE /;"	d
+ARCHITECTURE_ID	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#   define ARCHITECTURE_ID /;"	d	file:
+ARCHITECTURE_ID	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define ARCHITECTURE_ID /;"	d	file:
+ARCHITECTURE_ID	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define ARCHITECTURE_ID$/;"	d	file:
+ARCHITECTURE_ID	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#   define ARCHITECTURE_ID /;"	d	file:
+ARCHITECTURE_ID	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define ARCHITECTURE_ID /;"	d	file:
+ARCHITECTURE_ID	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define ARCHITECTURE_ID$/;"	d	file:
+ASSERT_MSG	src/compositeur.c	/^#define ASSERT_MSG(/;"	d	file:
+BUFFER	src/allocateurMemoire.c	/^internal char* BUFFER = NULL;$/;"	v	typeref:typename:internal char *
+CLAMP	src/jpgd.cpp	/^#define CLAMP(/;"	d	file:
+CMAKE_BINARY_DIR	src/build/Makefile	/^CMAKE_BINARY_DIR = \/home\/fdumais\/Documents\/formation_continue\/gif_3004\/labo3-h25\/src\/bui/;"	m
+CMAKE_COMMAND	src/build/Makefile	/^CMAKE_COMMAND = \/usr\/bin\/cmake$/;"	m
+CMAKE_SOURCE_DIR	src/build/Makefile	/^CMAKE_SOURCE_DIR = \/home\/fdumais\/Documents\/formation_continue\/gif_3004\/labo3-h25\/src$/;"	m
+COMM_MEM_H	src/commMemoirePartagee.h	/^#define COMM_MEM_H$/;"	d
+COMPILER_ID	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define COMPILER_ID /;"	d	file:
+COMPILER_ID	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define COMPILER_ID /;"	d	file:
+COMPILER_VERSION	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#   define COMPILER_VERSION /;"	d	file:
+COMPILER_VERSION	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#   define COMPILER_VERSION /;"	d	file:
+COMPILER_VERSION_INTERNAL	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#   define COMPILER_VERSION_INTERNAL /;"	d	file:
+COMPILER_VERSION_INTERNAL	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define COMPILER_VERSION_INTERNAL /;"	d	file:
+COMPILER_VERSION_INTERNAL	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define COMPILER_VERSION_INTERNAL /;"	d	file:
+COMPILER_VERSION_INTERNAL	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#   define COMPILER_VERSION_INTERNAL /;"	d	file:
+COMPILER_VERSION_INTERNAL	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define COMPILER_VERSION_INTERNAL /;"	d	file:
+COMPILER_VERSION_INTERNAL	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define COMPILER_VERSION_INTERNAL /;"	d	file:
+COMPILER_VERSION_INTERNAL_STR	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define COMPILER_VERSION_INTERNAL_STR /;"	d	file:
+COMPILER_VERSION_INTERNAL_STR	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define COMPILER_VERSION_INTERNAL_STR /;"	d	file:
+COMPILER_VERSION_MAJOR	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^  # define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MAJOR	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#   define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MAJOR	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MAJOR	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MAJOR	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^  # define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MAJOR	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#   define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MAJOR	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MAJOR	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MINOR	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^  # define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_MINOR	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#   define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_MINOR	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_MINOR	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_MINOR	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^  # define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_MINOR	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#   define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_MINOR	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_MINOR	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_PATCH	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^  # define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_PATCH	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#   define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_PATCH	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_PATCH	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_PATCH	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^  # define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_PATCH	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#   define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_PATCH	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_PATCH	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_TWEAK	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define COMPILER_VERSION_TWEAK /;"	d	file:
+COMPILER_VERSION_TWEAK	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define COMPILER_VERSION_TWEAK /;"	d	file:
+COMPILER_VERSION_TWEAK	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define COMPILER_VERSION_TWEAK /;"	d	file:
+COMPILER_VERSION_TWEAK	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define COMPILER_VERSION_TWEAK /;"	d	file:
+CONST_BITS	src/jpgd.cpp	/^#define CONST_BITS /;"	d	file:
+CXX_STD	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#      define CXX_STD /;"	d	file:
+CXX_STD	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#    define CXX_STD /;"	d	file:
+CXX_STD	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define CXX_STD /;"	d	file:
+C_VERSION	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define C_VERSION /;"	d	file:
+C_VERSION	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define C_VERSION$/;"	d	file:
+C_VERSION	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define C_VERSION /;"	d	file:
+Col	src/jpgd.cpp	/^	struct Col$/;"	s	namespace:jpgd	file:
+Col	src/jpgd.cpp	/^	struct Col<1>$/;"	s	namespace:jpgd	file:
+DEC	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#define DEC(/;"	d	file:
+DEC	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#define DEC(/;"	d	file:
+DELAI_INIT_READER_USEC	src/commMemoirePartagee.h	/^#define DELAI_INIT_READER_USEC /;"	d
+DESCALE	src/jpgd.cpp	/^#define DESCALE(/;"	d	file:
+DESCALE_ZEROSHIFT	src/jpgd.cpp	/^#define DESCALE_ZEROSHIFT(/;"	d	file:
+EQUALS	src/build/Makefile	/^EQUALS = =$/;"	m
+ETAT_ATTENTE_MUTEXECRITURE	src/utils.h	/^#define ETAT_ATTENTE_MUTEXECRITURE /;"	d
+ETAT_ATTENTE_MUTEXLECTURE	src/utils.h	/^#define ETAT_ATTENTE_MUTEXLECTURE /;"	d
+ETAT_ENPAUSE	src/utils.h	/^#define ETAT_ENPAUSE /;"	d
+ETAT_INDEFINI	src/utils.h	/^#define ETAT_INDEFINI /;"	d
+ETAT_INITIALISATION	src/utils.h	/^#define ETAT_INITIALISATION /;"	d
+ETAT_TRAITEMENT	src/utils.h	/^#define ETAT_TRAITEMENT /;"	d
+FILE_SIZE	src/compositeur.c	/^#define FILE_SIZE /;"	d	file:
+FIX	src/jpgd.cpp	/^#define FIX(/;"	d	file:
+FIX_0_298631336	src/jpgd.cpp	/^#define FIX_0_298631336 /;"	d	file:
+FIX_0_390180644	src/jpgd.cpp	/^#define FIX_0_390180644 /;"	d	file:
+FIX_0_541196100	src/jpgd.cpp	/^#define FIX_0_541196100 /;"	d	file:
+FIX_0_765366865	src/jpgd.cpp	/^#define FIX_0_765366865 /;"	d	file:
+FIX_0_899976223	src/jpgd.cpp	/^#define FIX_0_899976223 /;"	d	file:
+FIX_1_175875602	src/jpgd.cpp	/^#define FIX_1_175875602 /;"	d	file:
+FIX_1_501321110	src/jpgd.cpp	/^#define FIX_1_501321110 /;"	d	file:
+FIX_1_847759065	src/jpgd.cpp	/^#define FIX_1_847759065 /;"	d	file:
+FIX_1_961570560	src/jpgd.cpp	/^#define FIX_1_961570560 /;"	d	file:
+FIX_2_053119869	src/jpgd.cpp	/^#define FIX_2_053119869 /;"	d	file:
+FIX_2_562915447	src/jpgd.cpp	/^#define FIX_2_562915447 /;"	d	file:
+FIX_3_072711026	src/jpgd.cpp	/^#define FIX_3_072711026 /;"	d	file:
+FREE_LIST	src/allocateurMemoire.c	/^internal bool FREE_LIST[MEM_SLOTS];$/;"	v	typeref:typename:internal bool[]
+H1V1Convert	src/jpgd.cpp	/^	void jpeg_decoder::H1V1Convert()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+H1V2Convert	src/jpgd.cpp	/^	void jpeg_decoder::H1V2Convert()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+H1V2ConvertFiltered	src/jpgd.cpp	/^	void jpeg_decoder::H1V2ConvertFiltered()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+H2V1Convert	src/jpgd.cpp	/^	void jpeg_decoder::H2V1Convert()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+H2V1ConvertFiltered	src/jpgd.cpp	/^	void jpeg_decoder::H2V1ConvertFiltered()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+H2V2Convert	src/jpgd.cpp	/^	void jpeg_decoder::H2V2Convert()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+H2V2ConvertFiltered	src/jpgd.cpp	/^	uint32_t jpeg_decoder::H2V2ConvertFiltered()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:uint32_t
+HEADER_SIZE	src/decodeur.c	/^#define HEADER_SIZE /;"	d	file:
+HEX	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#define HEX(/;"	d	file:
+HEX	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#define HEX(/;"	d	file:
+ID_VOID_MAIN	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define ID_VOID_MAIN$/;"	d	file:
+InfosProfilage	src/utils.h	/^} InfosProfilage;$/;"	t	typeref:struct:__anon519700030308
+JPEG_DECODER_H	src/jpgd.h	/^#define JPEG_DECODER_H$/;"	d
+JPEG_MARKER	src/jpgd.cpp	/^	enum JPEG_MARKER$/;"	g	namespace:jpgd	file:
+JPEG_SUBSAMPLING	src/jpgd.cpp	/^	enum JPEG_SUBSAMPLING { JPGD_GRAYSCALE = 0, JPGD_YH1V1, JPGD_YH2V1, JPGD_YH1V2, JPGD_YH2V2 };$/;"	g	namespace:jpgd	file:
+JPGD_BAD_DHT_COUNTS	src/jpgd.h	/^		JPGD_BAD_DHT_COUNTS = -256, JPGD_BAD_DHT_INDEX, JPGD_BAD_DHT_MARKER, JPGD_BAD_DQT_MARKER, JPGD/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_DHT_INDEX	src/jpgd.h	/^		JPGD_BAD_DHT_COUNTS = -256, JPGD_BAD_DHT_INDEX, JPGD_BAD_DHT_MARKER, JPGD_BAD_DQT_MARKER, JPGD/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_DHT_MARKER	src/jpgd.h	/^		JPGD_BAD_DHT_COUNTS = -256, JPGD_BAD_DHT_INDEX, JPGD_BAD_DHT_MARKER, JPGD_BAD_DQT_MARKER, JPGD/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_DQT_LENGTH	src/jpgd.h	/^		JPGD_NOT_JPEG, JPGD_UNSUPPORTED_MARKER, JPGD_BAD_DQT_LENGTH, JPGD_TOO_MANY_BLOCKS,$/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_DQT_MARKER	src/jpgd.h	/^		JPGD_BAD_DHT_COUNTS = -256, JPGD_BAD_DHT_INDEX, JPGD_BAD_DHT_MARKER, JPGD_BAD_DQT_MARKER, JPGD/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_DQT_TABLE	src/jpgd.h	/^		JPGD_BAD_DHT_COUNTS = -256, JPGD_BAD_DHT_INDEX, JPGD_BAD_DHT_MARKER, JPGD_BAD_DQT_MARKER, JPGD/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_DRI_LENGTH	src/jpgd.h	/^		JPGD_BAD_SOF_LENGTH, JPGD_BAD_VARIABLE_MARKER, JPGD_BAD_DRI_LENGTH, JPGD_BAD_SOS_LENGTH,$/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_HEIGHT	src/jpgd.h	/^		JPGD_BAD_PRECISION, JPGD_BAD_HEIGHT, JPGD_BAD_WIDTH, JPGD_TOO_MANY_COMPONENTS,$/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_PRECISION	src/jpgd.h	/^		JPGD_BAD_PRECISION, JPGD_BAD_HEIGHT, JPGD_BAD_WIDTH, JPGD_TOO_MANY_COMPONENTS,$/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_RESTART_MARKER	src/jpgd.h	/^		JPGD_UNSUPPORTED_SAMP_FACTORS, JPGD_DECODE_ERROR, JPGD_BAD_RESTART_MARKER,$/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_SOF_LENGTH	src/jpgd.h	/^		JPGD_BAD_SOF_LENGTH, JPGD_BAD_VARIABLE_MARKER, JPGD_BAD_DRI_LENGTH, JPGD_BAD_SOS_LENGTH,$/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_SOS_COMP_ID	src/jpgd.h	/^		JPGD_BAD_SOS_COMP_ID, JPGD_W_EXTRA_BYTES_BEFORE_MARKER, JPGD_NO_ARITHMITIC_SUPPORT, JPGD_UNEXP/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_SOS_LENGTH	src/jpgd.h	/^		JPGD_BAD_SOF_LENGTH, JPGD_BAD_VARIABLE_MARKER, JPGD_BAD_DRI_LENGTH, JPGD_BAD_SOS_LENGTH,$/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_SOS_SPECTRAL	src/jpgd.h	/^		JPGD_BAD_SOS_SPECTRAL, JPGD_BAD_SOS_SUCCESSIVE, JPGD_STREAM_READ, JPGD_NOTENOUGHMEM, JPGD_TOO_/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_SOS_SUCCESSIVE	src/jpgd.h	/^		JPGD_BAD_SOS_SPECTRAL, JPGD_BAD_SOS_SUCCESSIVE, JPGD_STREAM_READ, JPGD_NOTENOUGHMEM, JPGD_TOO_/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_VARIABLE_MARKER	src/jpgd.h	/^		JPGD_BAD_SOF_LENGTH, JPGD_BAD_VARIABLE_MARKER, JPGD_BAD_DRI_LENGTH, JPGD_BAD_SOS_LENGTH,$/;"	e	enum:jpgd::jpgd_status
+JPGD_BAD_WIDTH	src/jpgd.h	/^		JPGD_BAD_PRECISION, JPGD_BAD_HEIGHT, JPGD_BAD_WIDTH, JPGD_TOO_MANY_COMPONENTS,$/;"	e	enum:jpgd::jpgd_status
+JPGD_DECODE_ERROR	src/jpgd.h	/^		JPGD_UNSUPPORTED_SAMP_FACTORS, JPGD_DECODE_ERROR, JPGD_BAD_RESTART_MARKER,$/;"	e	enum:jpgd::jpgd_status
+JPGD_DONE	src/jpgd.h	/^		JPGD_SUCCESS = 0, JPGD_FAILED = -1, JPGD_DONE = 1,$/;"	e	enum:jpgd::jpgd_status
+JPGD_FAILED	src/jpgd.h	/^		JPGD_SUCCESS = 0, JPGD_FAILED = -1, JPGD_DONE = 1,$/;"	e	enum:jpgd::jpgd_status
+JPGD_FALSE	src/jpgd.cpp	/^#define JPGD_FALSE /;"	d	file:
+JPGD_GRAYSCALE	src/jpgd.cpp	/^	enum JPEG_SUBSAMPLING { JPGD_GRAYSCALE = 0, JPGD_YH1V1, JPGD_YH2V1, JPGD_YH1V2, JPGD_YH2V2 };$/;"	e	enum:jpgd::JPEG_SUBSAMPLING	file:
+JPGD_HUFF_CODE_SIZE_MAX_LENGTH	src/jpgd.h	/^#define JPGD_HUFF_CODE_SIZE_MAX_LENGTH /;"	d
+JPGD_HUFF_EXTEND	src/jpgd.cpp	/^#define JPGD_HUFF_EXTEND(/;"	d	file:
+JPGD_HUFF_TREE_MAX_LENGTH	src/jpgd.h	/^#define JPGD_HUFF_TREE_MAX_LENGTH /;"	d
+JPGD_IN_BUF_SIZE	src/jpgd.h	/^		JPGD_IN_BUF_SIZE = 8192, JPGD_MAX_BLOCKS_PER_MCU = 10, JPGD_MAX_HUFF_TABLES = 8, JPGD_MAX_QUAN/;"	e	enum:jpgd::__anon64a593d70103
+JPGD_MAX	src/jpgd.cpp	/^#define JPGD_MAX(/;"	d	file:
+JPGD_MAX_BLOCKS_PER_MCU	src/jpgd.h	/^		JPGD_IN_BUF_SIZE = 8192, JPGD_MAX_BLOCKS_PER_MCU = 10, JPGD_MAX_HUFF_TABLES = 8, JPGD_MAX_QUAN/;"	e	enum:jpgd::__anon64a593d70103
+JPGD_MAX_BLOCKS_PER_ROW	src/jpgd.h	/^		JPGD_MAX_COMPONENTS = 4, JPGD_MAX_COMPS_IN_SCAN = 4, JPGD_MAX_BLOCKS_PER_ROW = 16384, JPGD_MAX/;"	e	enum:jpgd::__anon64a593d70103
+JPGD_MAX_COMPONENTS	src/jpgd.h	/^		JPGD_MAX_COMPONENTS = 4, JPGD_MAX_COMPS_IN_SCAN = 4, JPGD_MAX_BLOCKS_PER_ROW = 16384, JPGD_MAX/;"	e	enum:jpgd::__anon64a593d70103
+JPGD_MAX_COMPS_IN_SCAN	src/jpgd.h	/^		JPGD_MAX_COMPONENTS = 4, JPGD_MAX_COMPS_IN_SCAN = 4, JPGD_MAX_BLOCKS_PER_ROW = 16384, JPGD_MAX/;"	e	enum:jpgd::__anon64a593d70103
+JPGD_MAX_HEIGHT	src/jpgd.h	/^		JPGD_MAX_COMPONENTS = 4, JPGD_MAX_COMPS_IN_SCAN = 4, JPGD_MAX_BLOCKS_PER_ROW = 16384, JPGD_MAX/;"	e	enum:jpgd::__anon64a593d70103
+JPGD_MAX_HUFF_TABLES	src/jpgd.h	/^		JPGD_IN_BUF_SIZE = 8192, JPGD_MAX_BLOCKS_PER_MCU = 10, JPGD_MAX_HUFF_TABLES = 8, JPGD_MAX_QUAN/;"	e	enum:jpgd::__anon64a593d70103
+JPGD_MAX_QUANT_TABLES	src/jpgd.h	/^		JPGD_IN_BUF_SIZE = 8192, JPGD_MAX_BLOCKS_PER_MCU = 10, JPGD_MAX_HUFF_TABLES = 8, JPGD_MAX_QUAN/;"	e	enum:jpgd::__anon64a593d70103
+JPGD_MAX_WIDTH	src/jpgd.h	/^		JPGD_MAX_COMPONENTS = 4, JPGD_MAX_COMPS_IN_SCAN = 4, JPGD_MAX_BLOCKS_PER_ROW = 16384, JPGD_MAX/;"	e	enum:jpgd::__anon64a593d70103
+JPGD_MIN	src/jpgd.cpp	/^#define JPGD_MIN(/;"	d	file:
+JPGD_NORETURN	src/jpgd.h	/^#define JPGD_NORETURN /;"	d
+JPGD_NORETURN	src/jpgd.h	/^#define JPGD_NORETURN$/;"	d
+JPGD_NOTENOUGHMEM	src/jpgd.h	/^		JPGD_BAD_SOS_SPECTRAL, JPGD_BAD_SOS_SUCCESSIVE, JPGD_STREAM_READ, JPGD_NOTENOUGHMEM, JPGD_TOO_/;"	e	enum:jpgd::jpgd_status
+JPGD_NOT_JPEG	src/jpgd.h	/^		JPGD_NOT_JPEG, JPGD_UNSUPPORTED_MARKER, JPGD_BAD_DQT_LENGTH, JPGD_TOO_MANY_BLOCKS,$/;"	e	enum:jpgd::jpgd_status
+JPGD_NOT_SINGLE_SCAN	src/jpgd.h	/^		JPGD_UNDEFINED_QUANT_TABLE, JPGD_UNDEFINED_HUFF_TABLE, JPGD_NOT_SINGLE_SCAN, JPGD_UNSUPPORTED_/;"	e	enum:jpgd::jpgd_status
+JPGD_NO_ARITHMITIC_SUPPORT	src/jpgd.h	/^		JPGD_BAD_SOS_COMP_ID, JPGD_W_EXTRA_BYTES_BEFORE_MARKER, JPGD_NO_ARITHMITIC_SUPPORT, JPGD_UNEXP/;"	e	enum:jpgd::jpgd_status
+JPGD_STREAM_READ	src/jpgd.h	/^		JPGD_BAD_SOS_SPECTRAL, JPGD_BAD_SOS_SUCCESSIVE, JPGD_STREAM_READ, JPGD_NOTENOUGHMEM, JPGD_TOO_/;"	e	enum:jpgd::jpgd_status
+JPGD_SUCCESS	src/jpgd.h	/^		JPGD_SUCCESS = 0, JPGD_FAILED = -1, JPGD_DONE = 1,$/;"	e	enum:jpgd::jpgd_status
+JPGD_TOO_MANY_BLOCKS	src/jpgd.h	/^		JPGD_NOT_JPEG, JPGD_UNSUPPORTED_MARKER, JPGD_BAD_DQT_LENGTH, JPGD_TOO_MANY_BLOCKS,$/;"	e	enum:jpgd::jpgd_status
+JPGD_TOO_MANY_COMPONENTS	src/jpgd.h	/^		JPGD_BAD_PRECISION, JPGD_BAD_HEIGHT, JPGD_BAD_WIDTH, JPGD_TOO_MANY_COMPONENTS,$/;"	e	enum:jpgd::jpgd_status
+JPGD_TOO_MANY_SCANS	src/jpgd.h	/^		JPGD_BAD_SOS_SPECTRAL, JPGD_BAD_SOS_SUCCESSIVE, JPGD_STREAM_READ, JPGD_NOTENOUGHMEM, JPGD_TOO_/;"	e	enum:jpgd::jpgd_status
+JPGD_TRUE	src/jpgd.cpp	/^#define JPGD_TRUE /;"	d	file:
+JPGD_UNDEFINED_HUFF_TABLE	src/jpgd.h	/^		JPGD_UNDEFINED_QUANT_TABLE, JPGD_UNDEFINED_HUFF_TABLE, JPGD_NOT_SINGLE_SCAN, JPGD_UNSUPPORTED_/;"	e	enum:jpgd::jpgd_status
+JPGD_UNDEFINED_QUANT_TABLE	src/jpgd.h	/^		JPGD_UNDEFINED_QUANT_TABLE, JPGD_UNDEFINED_HUFF_TABLE, JPGD_NOT_SINGLE_SCAN, JPGD_UNSUPPORTED_/;"	e	enum:jpgd::jpgd_status
+JPGD_UNEXPECTED_MARKER	src/jpgd.h	/^		JPGD_BAD_SOS_COMP_ID, JPGD_W_EXTRA_BYTES_BEFORE_MARKER, JPGD_NO_ARITHMITIC_SUPPORT, JPGD_UNEXP/;"	e	enum:jpgd::jpgd_status
+JPGD_UNSUPPORTED_COLORSPACE	src/jpgd.h	/^		JPGD_UNDEFINED_QUANT_TABLE, JPGD_UNDEFINED_HUFF_TABLE, JPGD_NOT_SINGLE_SCAN, JPGD_UNSUPPORTED_/;"	e	enum:jpgd::jpgd_status
+JPGD_UNSUPPORTED_MARKER	src/jpgd.h	/^		JPGD_NOT_JPEG, JPGD_UNSUPPORTED_MARKER, JPGD_BAD_DQT_LENGTH, JPGD_TOO_MANY_BLOCKS,$/;"	e	enum:jpgd::jpgd_status
+JPGD_UNSUPPORTED_SAMP_FACTORS	src/jpgd.h	/^		JPGD_UNSUPPORTED_SAMP_FACTORS, JPGD_DECODE_ERROR, JPGD_BAD_RESTART_MARKER,$/;"	e	enum:jpgd::jpgd_status
+JPGD_USE_SSE2	src/jpgd.cpp	/^			#define JPGD_USE_SSE2 /;"	d	file:
+JPGD_W_EXTRA_BYTES_BEFORE_MARKER	src/jpgd.h	/^		JPGD_BAD_SOS_COMP_ID, JPGD_W_EXTRA_BYTES_BEFORE_MARKER, JPGD_NO_ARITHMITIC_SUPPORT, JPGD_UNEXP/;"	e	enum:jpgd::jpgd_status
+JPGD_YH1V1	src/jpgd.cpp	/^	enum JPEG_SUBSAMPLING { JPGD_GRAYSCALE = 0, JPGD_YH1V1, JPGD_YH2V1, JPGD_YH1V2, JPGD_YH2V2 };$/;"	e	enum:jpgd::JPEG_SUBSAMPLING	file:
+JPGD_YH1V2	src/jpgd.cpp	/^	enum JPEG_SUBSAMPLING { JPGD_GRAYSCALE = 0, JPGD_YH1V1, JPGD_YH2V1, JPGD_YH1V2, JPGD_YH2V2 };$/;"	e	enum:jpgd::JPEG_SUBSAMPLING	file:
+JPGD_YH2V1	src/jpgd.cpp	/^	enum JPEG_SUBSAMPLING { JPGD_GRAYSCALE = 0, JPGD_YH1V1, JPGD_YH2V1, JPGD_YH1V2, JPGD_YH2V2 };$/;"	e	enum:jpgd::JPEG_SUBSAMPLING	file:
+JPGD_YH2V2	src/jpgd.cpp	/^	enum JPEG_SUBSAMPLING { JPGD_GRAYSCALE = 0, JPGD_YH1V1, JPGD_YH2V1, JPGD_YH1V2, JPGD_YH2V2 };$/;"	e	enum:jpgd::JPEG_SUBSAMPLING	file:
+Kernel	src/utils.h	/^} Kernel;$/;"	t	typeref:struct:__anon519700030108
+MAX_ALLOC	src/allocateurMemoire.c	/^#define MAX_ALLOC /;"	d	file:
+MEM_SLOTS	src/allocateurMemoire.c	/^#define MEM_SLOTS /;"	d	file:
+MULTIPLY	src/jpgd.cpp	/^#define MULTIPLY(/;"	d	file:
+M_APP0	src/jpgd.cpp	/^		M_APP0 = 0xE0, M_APP15 = 0xEF, M_JPG0 = 0xF0, M_JPG13 = 0xFD, M_COM = 0xFE, M_TEM = 0x01, M_ER/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_APP15	src/jpgd.cpp	/^		M_APP0 = 0xE0, M_APP15 = 0xEF, M_JPG0 = 0xF0, M_JPG13 = 0xFD, M_COM = 0xFE, M_TEM = 0x01, M_ER/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_COM	src/jpgd.cpp	/^		M_APP0 = 0xE0, M_APP15 = 0xEF, M_JPG0 = 0xF0, M_JPG13 = 0xFD, M_COM = 0xFE, M_TEM = 0x01, M_ER/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_DAC	src/jpgd.cpp	/^		M_SOF9 = 0xC9, M_SOF10 = 0xCA, M_SOF11 = 0xCB, M_SOF13 = 0xCD, M_SOF14 = 0xCE, M_SOF15 = 0xCF,/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_DHP	src/jpgd.cpp	/^		M_SOI = 0xD8, M_EOI = 0xD9, M_SOS = 0xDA, M_DQT = 0xDB, M_DNL = 0xDC, M_DRI = 0xDD, M_DHP = 0x/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_DHT	src/jpgd.cpp	/^		M_SOF9 = 0xC9, M_SOF10 = 0xCA, M_SOF11 = 0xCB, M_SOF13 = 0xCD, M_SOF14 = 0xCE, M_SOF15 = 0xCF,/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_DNL	src/jpgd.cpp	/^		M_SOI = 0xD8, M_EOI = 0xD9, M_SOS = 0xDA, M_DQT = 0xDB, M_DNL = 0xDC, M_DRI = 0xDD, M_DHP = 0x/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_DQT	src/jpgd.cpp	/^		M_SOI = 0xD8, M_EOI = 0xD9, M_SOS = 0xDA, M_DQT = 0xDB, M_DNL = 0xDC, M_DRI = 0xDD, M_DHP = 0x/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_DRI	src/jpgd.cpp	/^		M_SOI = 0xD8, M_EOI = 0xD9, M_SOS = 0xDA, M_DQT = 0xDB, M_DNL = 0xDC, M_DRI = 0xDD, M_DHP = 0x/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_EOI	src/jpgd.cpp	/^		M_SOI = 0xD8, M_EOI = 0xD9, M_SOS = 0xDA, M_DQT = 0xDB, M_DNL = 0xDC, M_DRI = 0xDD, M_DHP = 0x/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_ERROR	src/jpgd.cpp	/^		M_APP0 = 0xE0, M_APP15 = 0xEF, M_JPG0 = 0xF0, M_JPG13 = 0xFD, M_COM = 0xFE, M_TEM = 0x01, M_ER/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_EXP	src/jpgd.cpp	/^		M_SOI = 0xD8, M_EOI = 0xD9, M_SOS = 0xDA, M_DQT = 0xDB, M_DNL = 0xDC, M_DRI = 0xDD, M_DHP = 0x/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_JPG	src/jpgd.cpp	/^		M_SOF0 = 0xC0, M_SOF1 = 0xC1, M_SOF2 = 0xC2, M_SOF3 = 0xC3, M_SOF5 = 0xC5, M_SOF6 = 0xC6, M_SO/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_JPG0	src/jpgd.cpp	/^		M_APP0 = 0xE0, M_APP15 = 0xEF, M_JPG0 = 0xF0, M_JPG13 = 0xFD, M_COM = 0xFE, M_TEM = 0x01, M_ER/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_JPG13	src/jpgd.cpp	/^		M_APP0 = 0xE0, M_APP15 = 0xEF, M_JPG0 = 0xF0, M_JPG13 = 0xFD, M_COM = 0xFE, M_TEM = 0x01, M_ER/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_RST0	src/jpgd.cpp	/^		M_RST0 = 0xD0, M_RST1 = 0xD1, M_RST2 = 0xD2, M_RST3 = 0xD3, M_RST4 = 0xD4, M_RST5 = 0xD5, M_RS/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_RST1	src/jpgd.cpp	/^		M_RST0 = 0xD0, M_RST1 = 0xD1, M_RST2 = 0xD2, M_RST3 = 0xD3, M_RST4 = 0xD4, M_RST5 = 0xD5, M_RS/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_RST2	src/jpgd.cpp	/^		M_RST0 = 0xD0, M_RST1 = 0xD1, M_RST2 = 0xD2, M_RST3 = 0xD3, M_RST4 = 0xD4, M_RST5 = 0xD5, M_RS/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_RST3	src/jpgd.cpp	/^		M_RST0 = 0xD0, M_RST1 = 0xD1, M_RST2 = 0xD2, M_RST3 = 0xD3, M_RST4 = 0xD4, M_RST5 = 0xD5, M_RS/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_RST4	src/jpgd.cpp	/^		M_RST0 = 0xD0, M_RST1 = 0xD1, M_RST2 = 0xD2, M_RST3 = 0xD3, M_RST4 = 0xD4, M_RST5 = 0xD5, M_RS/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_RST5	src/jpgd.cpp	/^		M_RST0 = 0xD0, M_RST1 = 0xD1, M_RST2 = 0xD2, M_RST3 = 0xD3, M_RST4 = 0xD4, M_RST5 = 0xD5, M_RS/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_RST6	src/jpgd.cpp	/^		M_RST0 = 0xD0, M_RST1 = 0xD1, M_RST2 = 0xD2, M_RST3 = 0xD3, M_RST4 = 0xD4, M_RST5 = 0xD5, M_RS/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_RST7	src/jpgd.cpp	/^		M_RST0 = 0xD0, M_RST1 = 0xD1, M_RST2 = 0xD2, M_RST3 = 0xD3, M_RST4 = 0xD4, M_RST5 = 0xD5, M_RS/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_SOF0	src/jpgd.cpp	/^		M_SOF0 = 0xC0, M_SOF1 = 0xC1, M_SOF2 = 0xC2, M_SOF3 = 0xC3, M_SOF5 = 0xC5, M_SOF6 = 0xC6, M_SO/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_SOF1	src/jpgd.cpp	/^		M_SOF0 = 0xC0, M_SOF1 = 0xC1, M_SOF2 = 0xC2, M_SOF3 = 0xC3, M_SOF5 = 0xC5, M_SOF6 = 0xC6, M_SO/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_SOF10	src/jpgd.cpp	/^		M_SOF9 = 0xC9, M_SOF10 = 0xCA, M_SOF11 = 0xCB, M_SOF13 = 0xCD, M_SOF14 = 0xCE, M_SOF15 = 0xCF,/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_SOF11	src/jpgd.cpp	/^		M_SOF9 = 0xC9, M_SOF10 = 0xCA, M_SOF11 = 0xCB, M_SOF13 = 0xCD, M_SOF14 = 0xCE, M_SOF15 = 0xCF,/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_SOF13	src/jpgd.cpp	/^		M_SOF9 = 0xC9, M_SOF10 = 0xCA, M_SOF11 = 0xCB, M_SOF13 = 0xCD, M_SOF14 = 0xCE, M_SOF15 = 0xCF,/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_SOF14	src/jpgd.cpp	/^		M_SOF9 = 0xC9, M_SOF10 = 0xCA, M_SOF11 = 0xCB, M_SOF13 = 0xCD, M_SOF14 = 0xCE, M_SOF15 = 0xCF,/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_SOF15	src/jpgd.cpp	/^		M_SOF9 = 0xC9, M_SOF10 = 0xCA, M_SOF11 = 0xCB, M_SOF13 = 0xCD, M_SOF14 = 0xCE, M_SOF15 = 0xCF,/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_SOF2	src/jpgd.cpp	/^		M_SOF0 = 0xC0, M_SOF1 = 0xC1, M_SOF2 = 0xC2, M_SOF3 = 0xC3, M_SOF5 = 0xC5, M_SOF6 = 0xC6, M_SO/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_SOF3	src/jpgd.cpp	/^		M_SOF0 = 0xC0, M_SOF1 = 0xC1, M_SOF2 = 0xC2, M_SOF3 = 0xC3, M_SOF5 = 0xC5, M_SOF6 = 0xC6, M_SO/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_SOF5	src/jpgd.cpp	/^		M_SOF0 = 0xC0, M_SOF1 = 0xC1, M_SOF2 = 0xC2, M_SOF3 = 0xC3, M_SOF5 = 0xC5, M_SOF6 = 0xC6, M_SO/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_SOF6	src/jpgd.cpp	/^		M_SOF0 = 0xC0, M_SOF1 = 0xC1, M_SOF2 = 0xC2, M_SOF3 = 0xC3, M_SOF5 = 0xC5, M_SOF6 = 0xC6, M_SO/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_SOF7	src/jpgd.cpp	/^		M_SOF0 = 0xC0, M_SOF1 = 0xC1, M_SOF2 = 0xC2, M_SOF3 = 0xC3, M_SOF5 = 0xC5, M_SOF6 = 0xC6, M_SO/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_SOF9	src/jpgd.cpp	/^		M_SOF9 = 0xC9, M_SOF10 = 0xCA, M_SOF11 = 0xCB, M_SOF13 = 0xCD, M_SOF14 = 0xCE, M_SOF15 = 0xCF,/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_SOI	src/jpgd.cpp	/^		M_SOI = 0xD8, M_EOI = 0xD9, M_SOS = 0xDA, M_DQT = 0xDB, M_DNL = 0xDC, M_DRI = 0xDD, M_DHP = 0x/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_SOS	src/jpgd.cpp	/^		M_SOI = 0xD8, M_EOI = 0xD9, M_SOS = 0xDA, M_DQT = 0xDB, M_DNL = 0xDC, M_DRI = 0xDD, M_DHP = 0x/;"	e	enum:jpgd::JPEG_MARKER	file:
+M_TEM	src/jpgd.cpp	/^		M_APP0 = 0xE0, M_APP15 = 0xEF, M_JPG0 = 0xF0, M_JPG13 = 0xFD, M_COM = 0xFE, M_TEM = 0x01, M_ER/;"	e	enum:jpgd::JPEG_MARKER	file:
+ONE_HALF	src/jpgd.cpp	/^#define ONE_HALF /;"	d	file:
+ORDONNANCEMENT_DEADLINE	src/utils.h	/^#define ORDONNANCEMENT_DEADLINE /;"	d
+ORDONNANCEMENT_FIFO	src/utils.h	/^#define ORDONNANCEMENT_FIFO /;"	d
+ORDONNANCEMENT_NORT	src/utils.h	/^#define ORDONNANCEMENT_NORT /;"	d
+ORDONNANCEMENT_RR	src/utils.h	/^#define ORDONNANCEMENT_RR /;"	d
+PASS1_BITS	src/jpgd.cpp	/^#define PASS1_BITS /;"	d	file:
+PLATFORM_ID	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define PLATFORM_ID /;"	d	file:
+PLATFORM_ID	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define PLATFORM_ID$/;"	d	file:
+PLATFORM_ID	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define PLATFORM_ID /;"	d	file:
+PLATFORM_ID	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define PLATFORM_ID$/;"	d	file:
+PLATFORM_ID	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define PLATFORM_ID /;"	d	file:
+PLATFORM_ID	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define PLATFORM_ID$/;"	d	file:
+PLATFORM_ID	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define PLATFORM_ID /;"	d	file:
+PLATFORM_ID	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define PLATFORM_ID$/;"	d	file:
+PROFILAGE_ACTIF	src/utils.h	/^#define PROFILAGE_ACTIF /;"	d
+PROFILAGE_INTERVALLE_SAUVEGARDE_SEC	src/utils.h	/^#define PROFILAGE_INTERVALLE_SAUVEGARDE_SEC /;"	d
+PROFILAGE_TAILLE_INIT	src/utils.h	/^#define PROFILAGE_TAILLE_INIT /;"	d
+RM	src/build/Makefile	/^RM = \/usr\/bin\/cmake -E rm -f$/;"	m
+RST0	src/jpgd.cpp	/^		M_APP0 = 0xE0, M_APP15 = 0xEF, M_JPG0 = 0xF0, M_JPG13 = 0xFD, M_COM = 0xFE, M_TEM = 0x01, M_ER/;"	e	enum:jpgd::JPEG_MARKER	file:
+ResizeGrid	src/utils.h	/^} ResizeGrid;$/;"	t	typeref:struct:__anon519700030208
+Row	src/jpgd.cpp	/^	struct Row$/;"	s	namespace:jpgd	file:
+Row	src/jpgd.cpp	/^	struct Row<0>$/;"	s	namespace:jpgd	file:
+Row	src/jpgd.cpp	/^	struct Row<1>$/;"	s	namespace:jpgd	file:
+SCALEBITS	src/jpgd.cpp	/^#define SCALEBITS /;"	d	file:
+SCALEDONE	src/jpgd.cpp	/^#define SCALEDONE /;"	d	file:
+SHELL	src/build/Makefile	/^SHELL = \/bin\/sh$/;"	m
+SIMULATE_ID	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define SIMULATE_ID /;"	d	file:
+SIMULATE_ID	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define SIMULATE_ID /;"	d	file:
+SIMULATE_ID	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define SIMULATE_ID /;"	d	file:
+SIMULATE_ID	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define SIMULATE_ID /;"	d	file:
+SIMULATE_VERSION_MAJOR	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define SIMULATE_VERSION_MAJOR /;"	d	file:
+SIMULATE_VERSION_MAJOR	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define SIMULATE_VERSION_MAJOR /;"	d	file:
+SIMULATE_VERSION_MAJOR	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define SIMULATE_VERSION_MAJOR /;"	d	file:
+SIMULATE_VERSION_MAJOR	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define SIMULATE_VERSION_MAJOR /;"	d	file:
+SIMULATE_VERSION_MINOR	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define SIMULATE_VERSION_MINOR /;"	d	file:
+SIMULATE_VERSION_MINOR	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define SIMULATE_VERSION_MINOR /;"	d	file:
+SIMULATE_VERSION_MINOR	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define SIMULATE_VERSION_MINOR /;"	d	file:
+SIMULATE_VERSION_MINOR	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define SIMULATE_VERSION_MINOR /;"	d	file:
+SIMULATE_VERSION_PATCH	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define SIMULATE_VERSION_PATCH /;"	d	file:
+SIMULATE_VERSION_PATCH	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define SIMULATE_VERSION_PATCH /;"	d	file:
+SIMULATE_VERSION_PATCH	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define SIMULATE_VERSION_PATCH /;"	d	file:
+SIMULATE_VERSION_PATCH	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define SIMULATE_VERSION_PATCH /;"	d	file:
+STRINGIFY	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#define STRINGIFY(/;"	d	file:
+STRINGIFY	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#define STRINGIFY(/;"	d	file:
+STRINGIFY_HELPER	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#define STRINGIFY_HELPER(/;"	d	file:
+STRINGIFY_HELPER	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#define STRINGIFY_HELPER(/;"	d	file:
+UTILS_H	src/utils.h	/^#define UTILS_H$/;"	d
+XORSWAP	src/utils.c	/^#define XORSWAP(/;"	d	file:
+XORSWAP_UNSAFE	src/utils.c	/^#define XORSWAP_UNSAFE(/;"	d	file:
+__anon519700030108	src/utils.h	/^typedef struct {$/;"	s
+__anon519700030208	src/utils.h	/^typedef struct {$/;"	s
+__anon519700030308	src/utils.h	/^typedef struct{$/;"	s
+__anon64a593d70103	src/jpgd.h	/^	{$/;"	g	namespace:jpgd
+__anon64a593d70203	src/jpgd.h	/^		{$/;"	g	class:jpgd::jpeg_decoder
+__has_include	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^#  define __has_include(/;"	d	file:
+__has_include	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define __has_include(/;"	d	file:
+_convolve	src/utils.c	/^void _convolve(const unsigned int height, const unsigned int width, const float* input, const Ke/;"	f	typeref:typename:void
+_createGaussianKernel	src/utils.c	/^Kernel _createGaussianKernel(const unsigned int height, const unsigned int width,$/;"	f	typeref:typename:Kernel
+_createGrid	src/utils.c	/^void _createGrid(const unsigned int height, const unsigned int width, const float target_x, cons/;"	f	typeref:typename:void
+_createGridFloat	src/utils.c	/^void _createGridFloat(const unsigned int height, const unsigned int width, const float target_x,/;"	f	typeref:typename:void
+_destroyKernel	src/utils.c	/^void _destroyKernel(Kernel *kern)$/;"	f	typeref:typename:void
+_permuteRGB	src/utils.c	/^void _permuteRGB(const unsigned int in_height, const unsigned int in_width,$/;"	f	typeref:typename:void
+_permuteRGB_char	src/utils.c	/^void _permuteRGB_char(const unsigned int in_height, const unsigned int in_width,$/;"	f	typeref:typename:void
+_ul_bilinear_regulargrid	src/utils.c	/^void _ul_bilinear_regulargrid(const unsigned char *ya, const unsigned int stride, const float *x/;"	f	typeref:typename:void
+_ul_nearestneighbors_regulargrid	src/utils.c	/^void _ul_nearestneighbors_regulargrid(const unsigned char *ya, const unsigned int stride, const /;"	f	typeref:typename:void
+_unpermuteRGB	src/utils.c	/^void _unpermuteRGB(const unsigned int out_height, const unsigned int out_width,$/;"	f	typeref:typename:void
+ac_table	src/jpgd.h	/^			bool ac_table;$/;"	m	struct:jpgd::jpeg_decoder::huff_tables	typeref:typename:bool
+all	src/build/Makefile	/^all: cmake_check_build_system$/;"	t
+alloc	src/jpgd.cpp	/^	void* jpeg_decoder::alloc(size_t nSize, bool zero)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void *
+alloc_aligned	src/jpgd.cpp	/^	void* jpeg_decoder::alloc_aligned(size_t nSize, uint32_t align, bool zero)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void *
+allocateurMemoire.c.i	src/build/Makefile	/^allocateurMemoire.c.i:$/;"	t
+allocateurMemoire.c.o	src/build/Makefile	/^allocateurMemoire.c.o:$/;"	t
+allocateurMemoire.c.s	src/build/Makefile	/^allocateurMemoire.c.s:$/;"	t
+allocateurMemoire.i	src/build/Makefile	/^allocateurMemoire.i: allocateurMemoire.c.i$/;"	t
+allocateurMemoire.o	src/build/Makefile	/^allocateurMemoire.o: allocateurMemoire.c.o$/;"	t
+allocateurMemoire.s	src/build/Makefile	/^allocateurMemoire.s: allocateurMemoire.c.s$/;"	t
+attenteEcrivain	src/commMemoirePartagee.c	/^int attenteEcrivain(struct memPartage *zone)$/;"	f	typeref:typename:int
+attenteLecteur	src/commMemoirePartagee.c	/^int attenteLecteur(struct memPartage *zone)$/;"	f	typeref:typename:int
+attenteLecteurAsync	src/commMemoirePartagee.c	/^int attenteLecteurAsync(struct memPartage *zone)$/;"	f	typeref:typename:int
+begin_decoding	src/jpgd.cpp	/^	int jpeg_decoder::begin_decoding()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+block_len_x	src/jpgd.h	/^			int block_len_x, block_len_y;$/;"	m	struct:jpgd::jpeg_decoder::coeff_buf	typeref:typename:int
+block_len_y	src/jpgd.h	/^			int block_len_x, block_len_y;$/;"	m	struct:jpgd::jpeg_decoder::coeff_buf	typeref:typename:int
+block_num_x	src/jpgd.h	/^			int block_num_x, block_num_y;$/;"	m	struct:jpgd::jpeg_decoder::coeff_buf	typeref:typename:int
+block_num_y	src/jpgd.h	/^			int block_num_x, block_num_y;$/;"	m	struct:jpgd::jpeg_decoder::coeff_buf	typeref:typename:int
+block_size	src/jpgd.h	/^			int block_size;$/;"	m	struct:jpgd::jpeg_decoder::coeff_buf	typeref:typename:int
+cFlagBoxChromaFiltering	src/jpgd.h	/^			cFlagBoxChromaFiltering = 1,$/;"	e	enum:jpgd::jpeg_decoder::__anon64a593d70203
+cFlagDisableSIMD	src/jpgd.h	/^			cFlagDisableSIMD = 2$/;"	e	enum:jpgd::jpeg_decoder::__anon64a593d70203
+calc_mcu_block_order	src/jpgd.cpp	/^	bool jpeg_decoder::calc_mcu_block_order()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:bool
+canaux	src/commMemoirePartagee.h	/^    uint16_t canaux;$/;"	m	struct:memPartageHeader	typeref:typename:uint16_t
+canaux	src/decodeur.c	/^        uint32_t canaux;$/;"	m	struct:videoInfos	typeref:typename:uint32_t	file:
+check_huff_tables	src/jpgd.cpp	/^	void jpeg_decoder::check_huff_tables()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+check_quant_tables	src/jpgd.cpp	/^	void jpeg_decoder::check_quant_tables()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+check_sample_buf_ofs	src/jpgd.h	/^		inline int check_sample_buf_ofs(int ofs) const { assert(ofs >= 0); assert(ofs < m_max_blocks_p/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+clamp	src/jpgd.h	/^		static inline uint8 clamp(int i)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:uint8
+clean	src/build/Makefile	/^clean:$/;"	t
+clean/fast	src/build/Makefile	/^clean\/fast: clean$/;"	t
+close	src/jpgd.cpp	/^	void jpeg_decoder_file_stream::close()$/;"	f	class:jpgd::jpeg_decoder_file_stream	typeref:typename:void
+close	src/jpgd.h	/^		void close() { m_pSrc_data = NULL; m_ofs = 0; m_size = 0; }$/;"	f	class:jpgd::jpeg_decoder_mem_stream	typeref:typename:void
+cmake_check_build_system	src/build/Makefile	/^cmake_check_build_system:$/;"	t
+cmake_force	src/build/Makefile	/^cmake_force:$/;"	t
+code_size	src/jpgd.h	/^			uint8 code_size[JPGD_HUFF_CODE_SIZE_MAX_LENGTH];$/;"	m	struct:jpgd::jpeg_decoder::huff_tables	typeref:typename:uint8[]
+coeff_buf	src/jpgd.h	/^		struct coeff_buf$/;"	s	class:jpgd::jpeg_decoder
+coeff_buf_getp	src/jpgd.cpp	/^	inline jpgd_block_coeff_t* jpeg_decoder::coeff_buf_getp(coeff_buf* cb, int block_x, int block_y/;"	f	class:jpgd::jpeg_decoder	typeref:typename:jpgd_block_coeff_t *
+coeff_buf_open	src/jpgd.cpp	/^	jpeg_decoder::coeff_buf* jpeg_decoder::coeff_buf_open(int block_num_x, int block_num_y, int blo/;"	f	class:jpgd::jpeg_decoder	typeref:typename:jpeg_decoder::coeff_buf *
+commMemoirePartagee.c.i	src/build/Makefile	/^commMemoirePartagee.c.i:$/;"	t
+commMemoirePartagee.c.o	src/build/Makefile	/^commMemoirePartagee.c.o:$/;"	t
+commMemoirePartagee.c.s	src/build/Makefile	/^commMemoirePartagee.c.s:$/;"	t
+commMemoirePartagee.i	src/build/Makefile	/^commMemoirePartagee.i: commMemoirePartagee.c.i$/;"	t
+commMemoirePartagee.o	src/build/Makefile	/^commMemoirePartagee.o: commMemoirePartagee.c.o$/;"	t
+commMemoirePartagee.s	src/build/Makefile	/^commMemoirePartagee.s: commMemoirePartagee.c.s$/;"	t
+compositeur	src/build/Makefile	/^compositeur: cmake_check_build_system$/;"	t
+compositeur.c.i	src/build/Makefile	/^compositeur.c.i:$/;"	t
+compositeur.c.o	src/build/Makefile	/^compositeur.c.o:$/;"	t
+compositeur.c.s	src/build/Makefile	/^compositeur.c.s:$/;"	t
+compositeur.i	src/build/Makefile	/^compositeur.i: compositeur.c.i$/;"	t
+compositeur.o	src/build/Makefile	/^compositeur.o: compositeur.c.o$/;"	t
+compositeur.s	src/build/Makefile	/^compositeur.s: compositeur.c.s$/;"	t
+compositeur/fast	src/build/Makefile	/^compositeur\/fast:$/;"	t
+const	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define const$/;"	d	file:
+convertToGray	src/utils.c	/^void convertToGray(const unsigned char* input, const unsigned int in_height, const unsigned int /;"	f	typeref:typename:void
+convertisseur	src/build/Makefile	/^convertisseur: cmake_check_build_system$/;"	t
+convertisseur/fast	src/build/Makefile	/^convertisseur\/fast:$/;"	t
+convertisseurgris.c.i	src/build/Makefile	/^convertisseurgris.c.i:$/;"	t
+convertisseurgris.c.o	src/build/Makefile	/^convertisseurgris.c.o:$/;"	t
+convertisseurgris.c.s	src/build/Makefile	/^convertisseurgris.c.s:$/;"	t
+convertisseurgris.i	src/build/Makefile	/^convertisseurgris.i: convertisseurgris.c.i$/;"	t
+convertisseurgris.o	src/build/Makefile	/^convertisseurgris.o: convertisseurgris.c.o$/;"	t
+convertisseurgris.s	src/build/Makefile	/^convertisseurgris.s: convertisseurgris.c.s$/;"	t
+copieCompteur	src/commMemoirePartagee.h	/^    uint32_t copieCompteur;             \/\/ Permet de se rappeler le compteur de l'autre proces/;"	m	struct:memPartage	typeref:typename:uint32_t
+create_look_ups	src/jpgd.cpp	/^	void jpeg_decoder::create_look_ups()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+data	src/commMemoirePartagee.h	/^    unsigned char* data;$/;"	m	struct:memPartage	typeref:typename:unsigned char *
+data	src/utils.h	/^    char *data;$/;"	m	struct:__anon519700030308	typeref:typename:char *
+data	src/utils.h	/^    float *data;$/;"	m	struct:__anon519700030108	typeref:typename:float *
+decode	src/jpgd.cpp	/^	int jpeg_decoder::decode(const void** pScan_line, uint* pScan_line_len)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+decode_block_ac_first	src/jpgd.cpp	/^	void jpeg_decoder::decode_block_ac_first(jpeg_decoder* pD, int component_id, int block_x, int b/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+decode_block_ac_refine	src/jpgd.cpp	/^	void jpeg_decoder::decode_block_ac_refine(jpeg_decoder* pD, int component_id, int block_x, int /;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+decode_block_dc_first	src/jpgd.cpp	/^	void jpeg_decoder::decode_block_dc_first(jpeg_decoder* pD, int component_id, int block_x, int b/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+decode_block_dc_refine	src/jpgd.cpp	/^	void jpeg_decoder::decode_block_dc_refine(jpeg_decoder* pD, int component_id, int block_x, int /;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+decode_init	src/jpgd.cpp	/^	void jpeg_decoder::decode_init(jpeg_decoder_stream* pStream, uint32_t flags)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+decode_next_mcu_row	src/jpgd.cpp	/^	int jpeg_decoder::decode_next_mcu_row()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+decode_next_row	src/jpgd.cpp	/^	void jpeg_decoder::decode_next_row()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+decode_scan	src/jpgd.cpp	/^	void jpeg_decoder::decode_scan(pDecode_block_func decode_block_func)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+decode_start	src/jpgd.cpp	/^	void jpeg_decoder::decode_start()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+decodeur	src/build/Makefile	/^decodeur: cmake_check_build_system$/;"	t
+decodeur.c.i	src/build/Makefile	/^decodeur.c.i:$/;"	t
+decodeur.c.o	src/build/Makefile	/^decodeur.c.o:$/;"	t
+decodeur.c.s	src/build/Makefile	/^decodeur.c.s:$/;"	t
+decodeur.i	src/build/Makefile	/^decodeur.i: decodeur.c.i$/;"	t
+decodeur.o	src/build/Makefile	/^decodeur.o: decodeur.c.o$/;"	t
+decodeur.s	src/build/Makefile	/^decodeur.s: decodeur.c.s$/;"	t
+decodeur/fast	src/build/Makefile	/^decodeur\/fast:$/;"	t
+decompress_jpeg_image_from_file	src/jpgd.cpp	/^	unsigned char* decompress_jpeg_image_from_file(const char* pSrc_filename, int* width, int* heig/;"	f	namespace:jpgd	typeref:typename:unsigned char *
+decompress_jpeg_image_from_memory	src/jpgd.cpp	/^	unsigned char* decompress_jpeg_image_from_memory(const unsigned char* pSrc_data, int src_data_s/;"	f	namespace:jpgd	typeref:typename:unsigned char *
+decompress_jpeg_image_from_stream	src/jpgd.cpp	/^	unsigned char* decompress_jpeg_image_from_stream(jpeg_decoder_stream* pStream, int* width, int*/;"	f	namespace:jpgd	typeref:typename:unsigned char *
+default_target	src/build/Makefile	/^default_target: all$/;"	t
+depend	src/build/Makefile	/^depend:$/;"	t
+dequantize_ac	src/jpgd.cpp	/^	static inline int dequantize_ac(int c, int q) { c *= q; return c; }$/;"	f	namespace:jpgd	typeref:typename:int	file:
+dernier_etat	src/utils.h	/^    unsigned int dernier_etat;$/;"	m	struct:__anon519700030308	typeref:typename:unsigned int
+derniere_sauvegarde	src/utils.h	/^    uint64_t derniere_sauvegarde;$/;"	m	struct:__anon519700030308	typeref:typename:uint64_t
+ecrireImage	src/compositeur.c	/^void ecrireImage(const int position, const int total,$/;"	f	typeref:typename:void
+edit_cache	src/build/Makefile	/^edit_cache:$/;"	t
+edit_cache/fast	src/build/Makefile	/^edit_cache\/fast: edit_cache$/;"	t
+enregistreImage	src/utils.c	/^void enregistreImage(const unsigned char* input, const unsigned int in_height, const unsigned in/;"	f	typeref:typename:void
+evenementProfilage	src/utils.c	/^void evenementProfilage(InfosProfilage *dataprof, unsigned int type){$/;"	f	typeref:typename:void
+fd	src/commMemoirePartagee.h	/^    int fd;$/;"	m	struct:memPartage	typeref:typename:int
+fd	src/utils.h	/^    FILE* fd;$/;"	m	struct:__anon519700030308	typeref:typename:FILE *
+filtreur	src/build/Makefile	/^filtreur: cmake_check_build_system$/;"	t
+filtreur.c.i	src/build/Makefile	/^filtreur.c.i:$/;"	t
+filtreur.c.o	src/build/Makefile	/^filtreur.c.o:$/;"	t
+filtreur.c.s	src/build/Makefile	/^filtreur.c.s:$/;"	t
+filtreur.i	src/build/Makefile	/^filtreur.i: filtreur.c.i$/;"	t
+filtreur.o	src/build/Makefile	/^filtreur.o: filtreur.c.o$/;"	t
+filtreur.s	src/build/Makefile	/^filtreur.s: filtreur.c.s$/;"	t
+filtreur/fast	src/build/Makefile	/^filtreur\/fast:$/;"	t
+find_eoi	src/jpgd.cpp	/^	void jpeg_decoder::find_eoi()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+fix_in_buffer	src/jpgd.cpp	/^	void jpeg_decoder::fix_in_buffer()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+fps	src/commMemoirePartagee.h	/^    uint16_t fps;$/;"	m	struct:memPartageHeader	typeref:typename:uint16_t
+fps	src/decodeur.c	/^        uint32_t fps;$/;"	m	struct:videoInfos	typeref:typename:uint32_t	file:
+frameReader	src/commMemoirePartagee.h	/^    uint32_t frameReader;$/;"	m	struct:memPartageHeader	typeref:typename:uint32_t
+frameWriter	src/commMemoirePartagee.h	/^    uint32_t frameWriter;$/;"	m	struct:memPartageHeader	typeref:typename:uint32_t
+free_all_blocks	src/jpgd.cpp	/^	void jpeg_decoder::free_all_blocks()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+g_ZAG	src/jpgd.cpp	/^	static int g_ZAG[64] = { 0,1,8,16,9,2,3,10,17,24,32,25,18,11,4,5,12,19,26,33,40,48,41,34,27,20,/;"	v	namespace:jpgd	typeref:typename:int[64]	file:
+get_bits	src/jpgd.cpp	/^	inline uint jpeg_decoder::get_bits(int num_bits)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:uint
+get_bits_no_markers	src/jpgd.cpp	/^	inline uint jpeg_decoder::get_bits_no_markers(int num_bits)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:uint
+get_bytes_per_pixel	src/jpgd.h	/^		inline int get_bytes_per_pixel() const { return m_dest_bytes_per_pixel; }$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+get_bytes_per_scan_line	src/jpgd.h	/^		inline int get_bytes_per_scan_line() const { return m_image_x_size * get_bytes_per_pixel(); }$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+get_char	src/jpgd.cpp	/^	inline uint jpeg_decoder::get_char()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:uint
+get_char	src/jpgd.cpp	/^	inline uint jpeg_decoder::get_char(bool* pPadding_flag)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:uint
+get_error_code	src/jpgd.h	/^		inline jpgd_status get_error_code() const { return m_error_code; }$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:jpgd_status
+get_height	src/jpgd.h	/^		inline int get_height() const { return m_image_y_size; }$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+get_num_components	src/jpgd.h	/^		inline int get_num_components() const { return m_comps_in_frame; }$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+get_octet	src/jpgd.cpp	/^	inline uint8 jpeg_decoder::get_octet()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:uint8
+get_time	src/compositeur.c	/^double get_time()$/;"	f	typeref:typename:double
+get_total_bytes_read	src/jpgd.h	/^		inline int get_total_bytes_read() const { return m_total_bytes_read; }$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+get_width	src/jpgd.h	/^		inline int get_width() const { return m_image_x_size; }$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+gray_convert	src/jpgd.cpp	/^	void jpeg_decoder::gray_convert()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+hauteur	src/commMemoirePartagee.h	/^    uint16_t hauteur;$/;"	m	struct:memPartageHeader	typeref:typename:uint16_t
+hauteur	src/decodeur.c	/^        uint32_t hauteur;$/;"	m	struct:videoInfos	typeref:typename:uint32_t	file:
+header	src/commMemoirePartagee.h	/^    struct memPartageHeader *header;$/;"	m	struct:memPartage	typeref:struct:memPartageHeader *
+header	src/decodeur.c	/^const char header[] = "SETR";$/;"	v	typeref:typename:const char[]
+height	src/utils.h	/^    unsigned int width, height;$/;"	m	struct:__anon519700030108	typeref:typename:unsigned int
+help	src/build/Makefile	/^help:$/;"	t
+highpassFilter	src/utils.c	/^void highpassFilter(const unsigned int height, const unsigned int width, const unsigned char *in/;"	f	typeref:typename:void
+huff_decode	src/jpgd.cpp	/^	inline int jpeg_decoder::huff_decode(huff_tables* pH)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+huff_decode	src/jpgd.cpp	/^	inline int jpeg_decoder::huff_decode(huff_tables* pH, int& extra_bits)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+huff_tables	src/jpgd.h	/^		struct huff_tables$/;"	s	class:jpgd::jpeg_decoder
+i	src/utils.h	/^    unsigned int *i, *j;$/;"	m	struct:__anon519700030208	typeref:typename:unsigned int *
+i_f	src/utils.h	/^    float *i_f, *j_f;$/;"	m	struct:__anon519700030208	typeref:typename:float *
+idct	src/jpgd.cpp	/^		static void idct(int* pTemp, const jpgd_block_coeff_t* pSrc)$/;"	f	struct:jpgd::Row	typeref:typename:void	file:
+idct	src/jpgd.cpp	/^		static void idct(uint8* pDst_ptr, const int* pTemp)$/;"	f	struct:jpgd::Col	typeref:typename:void	file:
+idct	src/jpgd.cpp	/^	static void idct(const jpgd_block_coeff_t* pSrc_ptr, uint8* pDst_ptr, int block_max_zag, bool u/;"	f	namespace:jpgd	typeref:typename:void	file:
+info_arch	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^char const* info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";$/;"	v	typeref:typename:char const *
+info_arch	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";$/;"	v	typeref:typename:char const *
+info_compiler	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^char const* info_compiler = "INFO" ":" "compiler[" COMPILER_ID "]";$/;"	v	typeref:typename:char const *
+info_compiler	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* info_compiler = "INFO" ":" "compiler[" COMPILER_ID "]";$/;"	v	typeref:typename:char const *
+info_cray	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^char const *info_cray = "INFO" ":" "compiler_wrapper[CrayPrgEnv]";$/;"	v	typeref:typename:char const *
+info_cray	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const *info_cray = "INFO" ":" "compiler_wrapper[CrayPrgEnv]";$/;"	v	typeref:typename:char const *
+info_language_extensions_default	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^const char* info_language_extensions_default = "INFO" ":" "extensions_default["$/;"	v	typeref:typename:const char *
+info_language_extensions_default	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^const char* info_language_extensions_default = "INFO" ":" "extensions_default["$/;"	v	typeref:typename:const char *
+info_language_standard_default	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^const char* info_language_standard_default =$/;"	v	typeref:typename:const char *
+info_language_standard_default	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^const char* info_language_standard_default = "INFO" ":" "standard_default["$/;"	v	typeref:typename:const char *
+info_platform	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^char const* info_platform = "INFO" ":" "platform[" PLATFORM_ID "]";$/;"	v	typeref:typename:char const *
+info_platform	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* info_platform = "INFO" ":" "platform[" PLATFORM_ID "]";$/;"	v	typeref:typename:char const *
+info_simulate	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^char const* info_simulate = "INFO" ":" "simulate[" SIMULATE_ID "]";$/;"	v	typeref:typename:char const *
+info_simulate	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* info_simulate = "INFO" ":" "simulate[" SIMULATE_ID "]";$/;"	v	typeref:typename:char const *
+info_simulate_version	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^char const info_simulate_version[] = {$/;"	v	typeref:typename:char const[]
+info_simulate_version	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const info_simulate_version[] = {$/;"	v	typeref:typename:char const[]
+info_version	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^char const info_version[] = {$/;"	v	typeref:typename:char const[]
+info_version	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^char const* info_version = "INFO" ":" "compiler_version[" COMPILER_VERSION "]";$/;"	v	typeref:typename:char const *
+info_version	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const info_version[] = {$/;"	v	typeref:typename:char const[]
+info_version	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* info_version = "INFO" ":" "compiler_version[" COMPILER_VERSION "]";$/;"	v	typeref:typename:char const *
+info_version_internal	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^char const info_version_internal[] = {$/;"	v	typeref:typename:char const[]
+info_version_internal	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^char const* info_version_internal = "INFO" ":" "compiler_version_internal[" COMPILER_VERSION_INT/;"	v	typeref:typename:char const *
+info_version_internal	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const info_version_internal[] = {$/;"	v	typeref:typename:char const[]
+info_version_internal	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* info_version_internal = "INFO" ":" "compiler_version_internal[" COMPILER_VERSION_INT/;"	v	typeref:typename:char const *
+init	src/jpgd.cpp	/^	void jpeg_decoder::init(jpeg_decoder_stream* pStream, uint32_t flags)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+initMemoirePartageeEcrivain	src/commMemoirePartagee.c	/^int initMemoirePartageeEcrivain(const char* identifiant,$/;"	f	typeref:typename:int
+initMemoirePartageeLecteur	src/commMemoirePartagee.c	/^int initMemoirePartageeLecteur(const char* identifiant,$/;"	f	typeref:typename:int
+initProfilage	src/utils.c	/^void initProfilage(InfosProfilage *dataprof, const char *chemin_enregistrement){$/;"	f	typeref:typename:void
+init_frame	src/jpgd.cpp	/^	void jpeg_decoder::init_frame()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+init_free_list	src/allocateurMemoire.c	/^void init_free_list()$/;"	f	typeref:typename:void
+init_progressive	src/jpgd.cpp	/^	void jpeg_decoder::init_progressive()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+init_scan	src/jpgd.cpp	/^	int jpeg_decoder::init_scan()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+init_sequential	src/jpgd.cpp	/^	void jpeg_decoder::init_sequential()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+int16	src/jpgd.h	/^	typedef   signed short int16;$/;"	t	namespace:jpgd	typeref:typename:signed short
+int32	src/jpgd.h	/^	typedef   signed int   int32;$/;"	t	namespace:jpgd	typeref:typename:signed int
+internal	src/allocateurMemoire.c	/^#define internal /;"	d	file:
+j	src/utils.h	/^    unsigned int *i, *j;$/;"	m	struct:__anon519700030208	typeref:typename:unsigned int *
+j_f	src/utils.h	/^    float *i_f, *j_f;$/;"	m	struct:__anon519700030208	typeref:typename:float *
+jpeg_decoder	src/jpgd.cpp	/^	jpeg_decoder::jpeg_decoder(jpeg_decoder_stream* pStream, uint32_t flags)$/;"	f	class:jpgd::jpeg_decoder
+jpeg_decoder	src/jpgd.h	/^	class jpeg_decoder$/;"	c	namespace:jpgd
+jpeg_decoder_file_stream	src/jpgd.cpp	/^	jpeg_decoder_file_stream::jpeg_decoder_file_stream()$/;"	f	class:jpgd::jpeg_decoder_file_stream
+jpeg_decoder_file_stream	src/jpgd.h	/^	class jpeg_decoder_file_stream : public jpeg_decoder_stream$/;"	c	namespace:jpgd
+jpeg_decoder_mem_stream	src/jpgd.h	/^		jpeg_decoder_mem_stream() : m_pSrc_data(NULL), m_ofs(0), m_size(0) { }$/;"	f	class:jpgd::jpeg_decoder_mem_stream
+jpeg_decoder_mem_stream	src/jpgd.h	/^		jpeg_decoder_mem_stream(const uint8* pSrc_data, uint size) : m_pSrc_data(pSrc_data), m_ofs(0),/;"	f	class:jpgd::jpeg_decoder_mem_stream
+jpeg_decoder_mem_stream	src/jpgd.h	/^	class jpeg_decoder_mem_stream : public jpeg_decoder_stream$/;"	c	namespace:jpgd
+jpeg_decoder_stream	src/jpgd.h	/^		jpeg_decoder_stream() { }$/;"	f	class:jpgd::jpeg_decoder_stream
+jpeg_decoder_stream	src/jpgd.h	/^	class jpeg_decoder_stream$/;"	c	namespace:jpgd
+jpgd	src/jpgd.cpp	/^namespace jpgd {$/;"	n	file:
+jpgd	src/jpgd.h	/^namespace jpgd$/;"	n
+jpgd.cpp.i	src/build/Makefile	/^jpgd.cpp.i:$/;"	t
+jpgd.cpp.o	src/build/Makefile	/^jpgd.cpp.o:$/;"	t
+jpgd.cpp.s	src/build/Makefile	/^jpgd.cpp.s:$/;"	t
+jpgd.i	src/build/Makefile	/^jpgd.i: jpgd.cpp.i$/;"	t
+jpgd.o	src/build/Makefile	/^jpgd.o: jpgd.cpp.o$/;"	t
+jpgd.s	src/build/Makefile	/^jpgd.s: jpgd.cpp.s$/;"	t
+jpgd_block_coeff_t	src/jpgd.h	/^	typedef int16 jpgd_block_coeff_t;$/;"	t	namespace:jpgd	typeref:typename:int16
+jpgd_free	src/jpgd.cpp	/^  static inline void jpgd_free(void *p) { tempsreel_free(p); }$/;"	f	namespace:jpgd	typeref:typename:void	file:
+jpgd_malloc	src/jpgd.cpp	/^  static inline void *jpgd_malloc(size_t nSize) { return tempsreel_malloc(nSize); }$/;"	f	namespace:jpgd	typeref:typename:void *	file:
+jpgd_quant_t	src/jpgd.h	/^	typedef int16 jpgd_quant_t;$/;"	t	namespace:jpgd	typeref:typename:int16
+jpgd_status	src/jpgd.h	/^	enum jpgd_status$/;"	g	namespace:jpgd
+largeur	src/commMemoirePartagee.h	/^    uint16_t largeur;$/;"	m	struct:memPartageHeader	typeref:typename:uint16_t
+largeur	src/decodeur.c	/^        uint32_t largeur;$/;"	m	struct:videoInfos	typeref:typename:uint32_t	file:
+left_shifti	src/jpgd.cpp	/^	static inline int left_shifti(int val, uint32_t bits)$/;"	f	namespace:jpgd	typeref:typename:int	file:
+length	src/utils.h	/^    size_t length;$/;"	m	struct:__anon519700030308	typeref:typename:size_t
+load_next_row	src/jpgd.cpp	/^	void jpeg_decoder::load_next_row()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+locate_sof_marker	src/jpgd.cpp	/^	void jpeg_decoder::locate_sof_marker()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+locate_soi_marker	src/jpgd.cpp	/^	void jpeg_decoder::locate_soi_marker()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+locate_sos_marker	src/jpgd.cpp	/^	int jpeg_decoder::locate_sos_marker()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+look_up	src/jpgd.h	/^			uint  look_up[256];$/;"	m	struct:jpgd::jpeg_decoder::huff_tables	typeref:typename:uint[256]
+look_up2	src/jpgd.h	/^			uint  look_up2[256];$/;"	m	struct:jpgd::jpeg_decoder::huff_tables	typeref:typename:uint[256]
+lowpassFilter	src/utils.c	/^void lowpassFilter(const unsigned int height, const unsigned int width, const unsigned char *inp/;"	f	typeref:typename:void
+m_ac_coeffs	src/jpgd.h	/^		coeff_buf* m_ac_coeffs[JPGD_MAX_COMPONENTS];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:coeff_buf * []
+m_bit_buf	src/jpgd.h	/^		uint m_bit_buf;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:uint
+m_bits_left	src/jpgd.h	/^		int m_bits_left;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_block_y_mcu	src/jpgd.h	/^		int m_block_y_mcu[JPGD_MAX_COMPONENTS];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[]
+m_blocks_per_mcu	src/jpgd.h	/^		int m_blocks_per_mcu;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_cbb	src/jpgd.h	/^		int m_cbb[256];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[256]
+m_cbg	src/jpgd.h	/^		int m_cbg[256];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[256]
+m_comp_ac_tab	src/jpgd.h	/^		int m_comp_ac_tab[JPGD_MAX_COMPONENTS];       \/\/ component's AC Huffman coding table selecto/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[]
+m_comp_dc_tab	src/jpgd.h	/^		int m_comp_dc_tab[JPGD_MAX_COMPONENTS];       \/\/ component's DC Huffman coding table selecto/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[]
+m_comp_h_blocks	src/jpgd.h	/^		int m_comp_h_blocks[JPGD_MAX_COMPONENTS];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[]
+m_comp_h_samp	src/jpgd.h	/^		int m_comp_h_samp[JPGD_MAX_COMPONENTS];       \/\/ component's horizontal sampling factor$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[]
+m_comp_ident	src/jpgd.h	/^		int m_comp_ident[JPGD_MAX_COMPONENTS];        \/\/ component's ID$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[]
+m_comp_list	src/jpgd.h	/^		int m_comp_list[JPGD_MAX_COMPS_IN_SCAN];      \/\/ components in this scan$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[]
+m_comp_quant	src/jpgd.h	/^		int m_comp_quant[JPGD_MAX_COMPONENTS];        \/\/ component's quantization table selector$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[]
+m_comp_v_blocks	src/jpgd.h	/^		int m_comp_v_blocks[JPGD_MAX_COMPONENTS];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[]
+m_comp_v_samp	src/jpgd.h	/^		int m_comp_v_samp[JPGD_MAX_COMPONENTS];       \/\/ component's vertical sampling factor$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[]
+m_comps_in_frame	src/jpgd.h	/^		int m_comps_in_frame;                         \/\/ # of components in frame$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_comps_in_scan	src/jpgd.h	/^		int m_comps_in_scan;                          \/\/ # of components in scan$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_crg	src/jpgd.h	/^		int m_crg[256];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[256]
+m_crr	src/jpgd.h	/^		int m_crr[256];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[256]
+m_data	src/jpgd.h	/^			char m_data[1];$/;"	m	struct:jpgd::jpeg_decoder::mem_block	typeref:typename:char[1]
+m_dc_coeffs	src/jpgd.h	/^		coeff_buf* m_dc_coeffs[JPGD_MAX_COMPONENTS];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:coeff_buf * []
+m_dest_bytes_per_pixel	src/jpgd.h	/^		int m_dest_bytes_per_pixel;                   \/\/ 4 (RGB) or 1 (Y)$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_dest_bytes_per_scan_line	src/jpgd.h	/^		int m_dest_bytes_per_scan_line;               \/\/ rounded up$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_eob_run	src/jpgd.h	/^		int m_eob_run;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_eof_flag	src/jpgd.h	/^		bool m_eof_flag, m_error_flag;$/;"	m	class:jpgd::jpeg_decoder_file_stream	typeref:typename:bool
+m_eof_flag	src/jpgd.h	/^		bool m_eof_flag;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:bool
+m_error_code	src/jpgd.h	/^		jpgd_status m_error_code;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:jpgd_status
+m_error_flag	src/jpgd.h	/^		bool m_eof_flag, m_error_flag;$/;"	m	class:jpgd::jpeg_decoder_file_stream	typeref:typename:bool
+m_flags	src/jpgd.h	/^		uint32_t m_flags;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:uint32_t
+m_has_sse2	src/jpgd.h	/^		bool m_has_sse2;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:bool
+m_huff_ac	src/jpgd.h	/^		uint8 m_huff_ac[JPGD_MAX_HUFF_TABLES];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:uint8[]
+m_huff_num	src/jpgd.h	/^		uint8* m_huff_num[JPGD_MAX_HUFF_TABLES];      \/\/ pointer to number of Huffman codes per bit /;"	m	class:jpgd::jpeg_decoder	typeref:typename:uint8 * []
+m_huff_val	src/jpgd.h	/^		uint8* m_huff_val[JPGD_MAX_HUFF_TABLES];      \/\/ pointer to Huffman codes per bit size$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:uint8 * []
+m_image_x_size	src/jpgd.h	/^		int m_image_x_size;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_image_y_size	src/jpgd.h	/^		int m_image_y_size;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_in_buf	src/jpgd.h	/^		uint8 m_in_buf[JPGD_IN_BUF_SIZE + 128];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:uint8[]
+m_in_buf_left	src/jpgd.h	/^		int m_in_buf_left;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_in_buf_pad_end	src/jpgd.h	/^		uint8 m_in_buf_pad_end[64];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:uint8[64]
+m_in_buf_pad_start	src/jpgd.h	/^		uint8 m_in_buf_pad_start[64];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:uint8[64]
+m_jmp_state	src/jpgd.h	/^		jmp_buf m_jmp_state;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:jmp_buf
+m_last_dc_val	src/jpgd.h	/^		uint m_last_dc_val[JPGD_MAX_COMPONENTS];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:uint[]
+m_max_blocks_per_mcu	src/jpgd.h	/^		int m_max_blocks_per_mcu;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_max_blocks_per_row	src/jpgd.h	/^		int m_max_blocks_per_row;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_max_mcu_x_size	src/jpgd.h	/^		int m_max_mcu_x_size;                         \/\/ MCU's max. X size in pixels$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_max_mcu_y_size	src/jpgd.h	/^		int m_max_mcu_y_size;                         \/\/ MCU's max. Y size in pixels$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_max_mcus_per_col	src/jpgd.h	/^		int m_max_mcus_per_col;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_max_mcus_per_row	src/jpgd.h	/^		int m_max_mcus_per_row;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_mcu_block_max_zag	src/jpgd.h	/^		int m_mcu_block_max_zag[JPGD_MAX_BLOCKS_PER_MCU];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[]
+m_mcu_lines_left	src/jpgd.h	/^		int m_mcu_lines_left;                         \/\/ total # lines left in this MCU$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_mcu_org	src/jpgd.h	/^		int m_mcu_org[JPGD_MAX_BLOCKS_PER_MCU];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int[]
+m_mcus_per_col	src/jpgd.h	/^		int m_mcus_per_row, m_mcus_per_col;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_mcus_per_row	src/jpgd.h	/^		int m_mcus_per_row, m_mcus_per_col;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_next_restart_num	src/jpgd.h	/^		int m_next_restart_num;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_num_buffered_scanlines	src/jpgd.h	/^		int m_num_buffered_scanlines;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_ofs	src/jpgd.h	/^		uint m_ofs, m_size;$/;"	m	class:jpgd::jpeg_decoder_mem_stream	typeref:typename:uint
+m_pFile	src/jpgd.h	/^		FILE* m_pFile;$/;"	m	class:jpgd::jpeg_decoder_file_stream	typeref:typename:FILE *
+m_pHuff_tabs	src/jpgd.h	/^		huff_tables* m_pHuff_tabs[JPGD_MAX_HUFF_TABLES];$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:huff_tables * []
+m_pIn_buf_ofs	src/jpgd.h	/^		uint8* m_pIn_buf_ofs;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:uint8 *
+m_pMCU_coefficients	src/jpgd.h	/^		jpgd_block_coeff_t* m_pMCU_coefficients;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:jpgd_block_coeff_t *
+m_pMem_blocks	src/jpgd.h	/^		mem_block* m_pMem_blocks;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:mem_block *
+m_pNext	src/jpgd.h	/^			mem_block* m_pNext;$/;"	m	struct:jpgd::jpeg_decoder::mem_block	typeref:typename:mem_block *
+m_pSample_buf	src/jpgd.h	/^		uint8* m_pSample_buf;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:uint8 *
+m_pSample_buf_prev	src/jpgd.h	/^		uint8* m_pSample_buf_prev;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:uint8 *
+m_pScan_line_0	src/jpgd.h	/^		uint8* m_pScan_line_0;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:uint8 *
+m_pScan_line_1	src/jpgd.h	/^		uint8* m_pScan_line_1;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:uint8 *
+m_pSrc_data	src/jpgd.h	/^		const uint8* m_pSrc_data;$/;"	m	class:jpgd::jpeg_decoder_mem_stream	typeref:typename:const uint8 *
+m_pStream	src/jpgd.h	/^		jpeg_decoder_stream* m_pStream;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:jpeg_decoder_stream *
+m_progressive_flag	src/jpgd.h	/^		int m_progressive_flag;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_quant	src/jpgd.h	/^		jpgd_quant_t* m_quant[JPGD_MAX_QUANT_TABLES]; \/\/ pointer to quantization tables$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:jpgd_quant_t * []
+m_ready_flag	src/jpgd.h	/^		bool m_ready_flag;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:bool
+m_real_dest_bytes_per_scan_line	src/jpgd.h	/^		int m_real_dest_bytes_per_scan_line;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_restart_interval	src/jpgd.h	/^		int m_restart_interval;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_restarts_left	src/jpgd.h	/^		int m_restarts_left;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_sample_buf_prev_valid	src/jpgd.h	/^		bool m_sample_buf_prev_valid;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:bool
+m_scan_type	src/jpgd.h	/^		int m_scan_type;                              \/\/ Gray, Yh1v1, Yh1v2, Yh2v1, Yh2v2 (CMYK111, /;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_size	src/jpgd.h	/^			size_t m_size;$/;"	m	struct:jpgd::jpeg_decoder::mem_block	typeref:typename:size_t
+m_size	src/jpgd.h	/^		uint m_ofs, m_size;$/;"	m	class:jpgd::jpeg_decoder_mem_stream	typeref:typename:uint
+m_spectral_end	src/jpgd.h	/^		int m_spectral_end;                           \/\/ spectral selection end$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_spectral_start	src/jpgd.h	/^		int m_spectral_start;                         \/\/ spectral selection start$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_successive_high	src/jpgd.h	/^		int m_successive_high;                        \/\/ successive approximation high$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_successive_low	src/jpgd.h	/^		int m_successive_low;                         \/\/ successive approximation low$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_tem_flag	src/jpgd.h	/^		int m_tem_flag;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_total_bytes_read	src/jpgd.h	/^		int m_total_bytes_read;$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_total_lines_left	src/jpgd.h	/^		int m_total_lines_left;                       \/\/ total # lines left in image$/;"	m	class:jpgd::jpeg_decoder	typeref:typename:int
+m_used_count	src/jpgd.h	/^			size_t m_used_count;$/;"	m	struct:jpgd::jpeg_decoder::mem_block	typeref:typename:size_t
+main	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^int main(argc, argv) int argc; char *argv[];$/;"	f
+main	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^void main() {}$/;"	f	typeref:typename:void
+main	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^int main(int argc, char* argv[])$/;"	f	typeref:typename:int
+main	src/compositeur.c	/^int main(int argc, char* argv[])$/;"	f	typeref:typename:int
+main	src/convertisseurgris.c	/^int main(int argc, char* argv[]){$/;"	f	typeref:typename:int
+main	src/decodeur.c	/^int main(int argc, char* argv[]){$/;"	f	typeref:typename:int
+main	src/filtreur.c	/^int main(int argc, char* argv[]){$/;"	f	typeref:typename:int
+main	src/redimensionneur.c	/^int main(int argc, char* argv[]){$/;"	f	typeref:typename:int
+make_huff_table	src/jpgd.cpp	/^	void jpeg_decoder::make_huff_table(int index, huff_tables* pH)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+max	src/utils.c	/^#define max(/;"	d	file:
+memPartage	src/commMemoirePartagee.h	/^struct memPartage{$/;"	s
+memPartageHeader	src/commMemoirePartagee.h	/^struct memPartageHeader{$/;"	s
+mem_block	src/jpgd.h	/^		struct mem_block$/;"	s	class:jpgd::jpeg_decoder
+min	src/utils.c	/^#define min(/;"	d	file:
+mutex	src/commMemoirePartagee.h	/^    pthread_mutex_t mutex;$/;"	m	struct:memPartageHeader	typeref:typename:pthread_mutex_t
+next_marker	src/jpgd.cpp	/^	int jpeg_decoder::next_marker()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+open	src/jpgd.cpp	/^	bool jpeg_decoder_file_stream::open(const char* Pfilename)$/;"	f	class:jpgd::jpeg_decoder_file_stream	typeref:typename:bool
+open	src/jpgd.cpp	/^	bool jpeg_decoder_mem_stream::open(const uint8* pSrc_data, uint size)$/;"	f	class:jpgd::jpeg_decoder_mem_stream	typeref:typename:bool
+pData	src/jpgd.h	/^			uint8* pData;$/;"	m	struct:jpgd::jpeg_decoder::coeff_buf	typeref:typename:uint8 *
+pDecode_block_func	src/jpgd.h	/^		typedef void (*pDecode_block_func)(jpeg_decoder*, int, int, int);$/;"	t	class:jpgd::jpeg_decoder	typeref:typename:void (*)(jpeg_decoder *,int,int,int)
+pos	src/utils.h	/^    unsigned int pos;$/;"	m	struct:__anon519700030308	typeref:typename:unsigned int
+preinstall	src/build/Makefile	/^preinstall: all$/;"	t
+preinstall/fast	src/build/Makefile	/^preinstall\/fast:$/;"	t
+prep_in_buffer	src/jpgd.cpp	/^	void jpeg_decoder::prep_in_buffer()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+prepareMemoire	src/allocateurMemoire.c	/^int prepareMemoire(size_t tailleImageEntree, size_t tailleImageSortie)$/;"	f	typeref:typename:int
+process_markers	src/jpgd.cpp	/^	int jpeg_decoder::process_markers()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:int
+process_restart	src/jpgd.cpp	/^	void jpeg_decoder::process_restart()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+qnxnto	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^char const* qnxnto = "INFO" ":" "qnxnto[]";$/;"	v	typeref:typename:char const *
+qnxnto	src/build/CMakeFiles/3.22.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* qnxnto = "INFO" ":" "qnxnto[]";$/;"	v	typeref:typename:char const *
+read	src/jpgd.cpp	/^	int jpeg_decoder_file_stream::read(uint8* pBuf, int max_bytes_to_read, bool* pEOF_flag)$/;"	f	class:jpgd::jpeg_decoder_file_stream	typeref:typename:int
+read	src/jpgd.cpp	/^	int jpeg_decoder_mem_stream::read(uint8* pBuf, int max_bytes_to_read, bool* pEOF_flag)$/;"	f	class:jpgd::jpeg_decoder_mem_stream	typeref:typename:int
+read_dht_marker	src/jpgd.cpp	/^	void jpeg_decoder::read_dht_marker()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+read_dqt_marker	src/jpgd.cpp	/^	void jpeg_decoder::read_dqt_marker()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+read_dri_marker	src/jpgd.cpp	/^	void jpeg_decoder::read_dri_marker()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+read_sof_marker	src/jpgd.cpp	/^	void jpeg_decoder::read_sof_marker()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+read_sos_marker	src/jpgd.cpp	/^	void jpeg_decoder::read_sos_marker()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+rebuild_cache	src/build/Makefile	/^rebuild_cache:$/;"	t
+rebuild_cache/fast	src/build/Makefile	/^rebuild_cache\/fast: rebuild_cache$/;"	t
+redimensionneur	src/build/Makefile	/^redimensionneur: cmake_check_build_system$/;"	t
+redimensionneur.c.i	src/build/Makefile	/^redimensionneur.c.i:$/;"	t
+redimensionneur.c.o	src/build/Makefile	/^redimensionneur.c.o:$/;"	t
+redimensionneur.c.s	src/build/Makefile	/^redimensionneur.c.s:$/;"	t
+redimensionneur.i	src/build/Makefile	/^redimensionneur.i: redimensionneur.c.i$/;"	t
+redimensionneur.o	src/build/Makefile	/^redimensionneur.o: redimensionneur.c.o$/;"	t
+redimensionneur.s	src/build/Makefile	/^redimensionneur.s: redimensionneur.c.s$/;"	t
+redimensionneur/fast	src/build/Makefile	/^redimensionneur\/fast:$/;"	t
+resizeBilinear	src/utils.c	/^void resizeBilinear(const unsigned char* input, const unsigned int in_height, const unsigned int/;"	f	typeref:typename:void
+resizeBilinearInit	src/utils.c	/^ResizeGrid resizeBilinearInit(const unsigned int out_height, const unsigned int out_width, const/;"	f	typeref:typename:ResizeGrid
+resizeDestroy	src/utils.c	/^void resizeDestroy(ResizeGrid rg)$/;"	f	typeref:typename:void
+resizeNearestNeighbor	src/utils.c	/^void resizeNearestNeighbor(const unsigned char* input, const unsigned int in_height, const unsig/;"	f	typeref:typename:void
+resizeNearestNeighborInit	src/utils.c	/^ResizeGrid resizeNearestNeighborInit(const unsigned int out_height, const unsigned int out_width/;"	f	typeref:typename:ResizeGrid
+s_extend_offset	src/jpgd.cpp	/^	static const int s_extend_offset[16] = { 0, -1, -3, -7, -15, -31, -63, -127, -255, -511, -1023,/;"	v	namespace:jpgd	typeref:typename:const int[16]	file:
+s_extend_test	src/jpgd.cpp	/^	static const int s_extend_test[16] = { 0, 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x004/;"	v	namespace:jpgd	typeref:typename:const int[16]	file:
+s_idct_col_table	src/jpgd.cpp	/^	static const uint8 s_idct_col_table[] = $/;"	v	namespace:jpgd	typeref:typename:const uint8[]	file:
+s_idct_row_table	src/jpgd.cpp	/^	static const uint8 s_idct_row_table[] =$/;"	v	namespace:jpgd	typeref:typename:const uint8[]	file:
+sched_attr	src/schedsupp.h	/^struct sched_attr {$/;"	s
+sched_deadline	src/schedsupp.h	/^    __u64 sched_deadline;$/;"	m	struct:sched_attr	typeref:typename:__u64
+sched_flags	src/schedsupp.h	/^    __u64 sched_flags;$/;"	m	struct:sched_attr	typeref:typename:__u64
+sched_getattr	src/schedsupp.h	/^int sched_getattr(pid_t pid,$/;"	f	typeref:typename:int
+sched_nice	src/schedsupp.h	/^    __s32 sched_nice;$/;"	m	struct:sched_attr	typeref:typename:__s32
+sched_period	src/schedsupp.h	/^    __u64 sched_period;$/;"	m	struct:sched_attr	typeref:typename:__u64
+sched_policy	src/schedsupp.h	/^    __u32 sched_policy;$/;"	m	struct:sched_attr	typeref:typename:__u32
+sched_priority	src/schedsupp.h	/^    __u32 sched_priority;$/;"	m	struct:sched_attr	typeref:typename:__u32
+sched_runtime	src/schedsupp.h	/^    __u64 sched_runtime;$/;"	m	struct:sched_attr	typeref:typename:__u64
+sched_setattr	src/schedsupp.h	/^int sched_setattr(pid_t pid,$/;"	f	typeref:typename:int
+size	src/schedsupp.h	/^    __u32 size;$/;"	m	struct:sched_attr	typeref:typename:__u32
+skip_variable_marker	src/jpgd.cpp	/^	void jpeg_decoder::skip_variable_marker()$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+stop_decoding	src/jpgd.cpp	/^	JPGD_NORETURN void jpeg_decoder::stop_decoding(jpgd_status status)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:JPGD_NORETURN void
+stuff_char	src/jpgd.cpp	/^	inline void jpeg_decoder::stuff_char(uint8 q)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+tailleDonnees	src/commMemoirePartagee.h	/^    size_t tailleDonnees;$/;"	m	struct:memPartage	typeref:typename:size_t
+tempsreel_free	src/allocateurMemoire.c	/^void tempsreel_free(void* ptr)$/;"	f	typeref:typename:void
+tempsreel_malloc	src/allocateurMemoire.c	/^void* tempsreel_malloc(size_t taille)$/;"	f	typeref:typename:void *
+transform_mcu	src/jpgd.cpp	/^	void jpeg_decoder::transform_mcu(int mcu_row)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+tree	src/jpgd.h	/^			uint  tree[JPGD_HUFF_TREE_MAX_LENGTH];$/;"	m	struct:jpgd::jpeg_decoder::huff_tables	typeref:typename:uint[]
+uint	src/jpgd.h	/^	typedef unsigned int   uint;$/;"	t	namespace:jpgd	typeref:typename:unsigned int
+uint16	src/jpgd.h	/^	typedef unsigned short uint16;$/;"	t	namespace:jpgd	typeref:typename:unsigned short
+uint8	src/jpgd.h	/^	typedef unsigned char  uint8;$/;"	t	namespace:jpgd	typeref:typename:unsigned char
+utils.c.i	src/build/Makefile	/^utils.c.i:$/;"	t
+utils.c.o	src/build/Makefile	/^utils.c.o:$/;"	t
+utils.c.s	src/build/Makefile	/^utils.c.s:$/;"	t
+utils.i	src/build/Makefile	/^utils.i: utils.c.i$/;"	t
+utils.o	src/build/Makefile	/^utils.o: utils.c.o$/;"	t
+utils.s	src/build/Makefile	/^utils.s: utils.c.s$/;"	t
+videoInfos	src/decodeur.c	/^struct videoInfos{$/;"	s	file:
+volatile	src/build/CMakeFiles/3.22.1/CompilerIdC/CMakeCCompilerId.c	/^# define volatile$/;"	d	file:
+width	src/utils.h	/^    unsigned int width, height;$/;"	m	struct:__anon519700030108	typeref:typename:unsigned int
+word_clear	src/jpgd.cpp	/^	void jpeg_decoder::word_clear(void* p, uint16 c, uint n)$/;"	f	class:jpgd::jpeg_decoder	typeref:typename:void
+~jpeg_decoder	src/jpgd.cpp	/^	jpeg_decoder::~jpeg_decoder()$/;"	f	class:jpgd::jpeg_decoder
+~jpeg_decoder_file_stream	src/jpgd.cpp	/^	jpeg_decoder_file_stream::~jpeg_decoder_file_stream()$/;"	f	class:jpgd::jpeg_decoder_file_stream
+~jpeg_decoder_mem_stream	src/jpgd.h	/^		virtual ~jpeg_decoder_mem_stream() { }$/;"	f	class:jpgd::jpeg_decoder_mem_stream
+~jpeg_decoder_stream	src/jpgd.h	/^		virtual ~jpeg_decoder_stream() { }$/;"	f	class:jpgd::jpeg_decoder_stream

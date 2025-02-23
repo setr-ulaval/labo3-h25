@@ -28,6 +28,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <fcntl.h>
+#include <stdbool.h>
 
 #include <sys/ioctl.h>
 
@@ -193,7 +194,6 @@ void ecrireImage(const int position, const int total,
 }
 
 
-
 int main(int argc, char* argv[])
 {
     // TODO
@@ -214,7 +214,7 @@ int main(int argc, char* argv[])
     if(strcmp(argv[1], "--debug") == 0){
         // Mode debug, vous pouvez changer ces valeurs pour ce qui convient dans vos tests
         printf("Mode debug selectionne pour le compositeur\n");
-        entree[0] = (char*)"/mem3";
+        entree[0] = (char*)"/mem1";
 		nbrActifs = 1;
     }
     else{
@@ -295,6 +295,10 @@ int main(int argc, char* argv[])
     }
 
     printf("Initialisation convertisseur, mode d'ordonnancement=%i\n", modeOrdonnanceur);
+    switch (modeOrdonnanceur) {
+        case ORDONNANCEMENT_NORT:
+            break;
+    };
 
     // On desactive le buffering pour les printf(), pour qu'il soit possible de les voir depuis votre ordinateur
 	setbuf(stdout, NULL);
@@ -372,7 +376,9 @@ int main(int argc, char* argv[])
     }
 
 	struct memPartage* tableau_zone_lecteur[4];
+    struct memHeader tableau_header[4] = {{0}, {0}, {0}, {0}};
 	unsigned char* tableau_image_data[4];
+    bool is_image_copied[4] = {false,false,false,false};
 	char error_message[100];
 
 	for (int i = 0; i < nbrActifs; ++i)
@@ -431,26 +437,30 @@ int main(int argc, char* argv[])
             // Exemple d'appel à ecrireImage (n'oubliez pas de remplacer les arguments commençant par A_REMPLIR!)
 
         
-        for (int i = 0; i < nbrActifs; ++i) {
-            
-            pthread_mutex_lock(&(tableau_zone_lecteur[i]->header->mutex));
+        for (int i = 0; i < nbrActifs; ++i) {            
+
+            evenementProfilage(&profInfos, ETAT_TRAITEMENT);
+
+            if (!pthread_mutex_trylock(&(tableau_zone_lecteur[i]->header->mutex)))
+                continue;
             
             tableau_zone_lecteur[i]->header->frameReader++;
 
-            if (tableau_zone_lecteur[i]->data != NULL && tableau_image_data[i] != NULL) {
-                memcpy(tableau_image_data[i], tableau_zone_lecteur[i]->data, tableau_zone_lecteur[i]->tailleDonnees);
-            } else {
-                printf("Error: Null pointer in memcpy at index %d\n", i);
-                pthread_mutex_unlock(&(tableau_zone_lecteur[i]->header->mutex));
-                exit(1);
-            }
+            memcpy(tableau_image_data[i], tableau_zone_lecteur[i]->data, tableau_zone_lecteur[i]->tailleDonnees);
+            tableau_header[i].hauteur = tableau_zone_lecteur[i]->header->hauteur;
+            tableau_header[i].largeur = tableau_zone_lecteur[i]->header->largeur;
+            tableau_header[i].canaux = tableau_zone_lecteur[i]->header->canaux;
+            is_image_copied[i] = true;
 
             tableau_zone_lecteur[i]->copieCompteur = tableau_zone_lecteur[i]->header->frameWriter;
             pthread_mutex_unlock(&(tableau_zone_lecteur[i]->header->mutex));
 
+            
+            evenementProfilage(&profInfos, ETAT_ATTENTE_MUTEXLECTURE);
             results_wait = attenteLecteurAsync(tableau_zone_lecteur[i]);
             if (results_wait == -1) continue;
-
+            
+            evenementProfilage(&profInfos, ETAT_TRAITEMENT);
             ecrireImage(i, 
                         nbrActifs, 
                         fbfd, 
@@ -460,12 +470,10 @@ int main(int argc, char* argv[])
                         &vinfo, 
                         finfo.line_length,
                         tableau_image_data[i],
-                        tableau_zone_lecteur[i]->header->hauteur,
-                        tableau_zone_lecteur[i]->header->largeur,
-                        tableau_zone_lecteur[i]->header->canaux);
-
-        }
-			
+                        tableau_header[i].hauteur,
+                        tableau_header[i].largeur,
+                        tableau_header[i].canaux);
+        }      
     }
 
 

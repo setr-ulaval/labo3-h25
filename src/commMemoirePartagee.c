@@ -67,8 +67,7 @@ int initMemoirePartageeLecteur(const char* identifiant,
       usleep(DELAI_INIT_READER_USEC);
    }
 
-   struct stat sb;
-   memset(&sb, 0, sizeof(struct stat));
+   struct stat sb = {0};
    while (sb.st_size == 0)
    {
       fstat(zone->fd, &sb);
@@ -98,39 +97,30 @@ int initMemoirePartageeLecteur(const char* identifiant,
 
 int attenteEcrivain(struct memPartage *zone)
 {
-    pthread_mutex_lock(&(zone->header->mutex));
     while(zone->header->frameReader == zone->copieCompteur)
     {
-        pthread_mutex_unlock(&(zone->header->mutex));
         usleep(DELAI_INIT_READER_USEC);
-        pthread_mutex_lock(&(zone->header->mutex));
     }
-    pthread_mutex_unlock(&(zone->header->mutex));
     return 0;
 }
 
 int attenteLecteur(struct memPartage *zone)
 {
-    pthread_mutex_lock(&(zone->header->mutex));
     while(zone->header->frameWriter == zone->copieCompteur)
     {
-        pthread_mutex_unlock(&(zone->header->mutex));
         usleep(DELAI_INIT_READER_USEC);
-        pthread_mutex_lock(&(zone->header->mutex));
     }
-    pthread_mutex_unlock(&(zone->header->mutex));
+
     return 0;
 }
 
 int attenteLecteurAsync(struct memPartage *zone)
 {
     int result = 0;
-    pthread_mutex_lock(&(zone->header->mutex));
     
     if (zone->header->frameWriter == zone->copieCompteur) {
         result = -1; // Toujours pas de nouveau frame
     }
     
-    pthread_mutex_unlock(&(zone->header->mutex));
     return result;
 }
