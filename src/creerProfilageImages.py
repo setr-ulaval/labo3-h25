@@ -22,6 +22,14 @@ COULEUR_MAPPING = {
     40: "#f542ef",
     50: "#00CCFF",
 }
+COULEUR_MAPPING = {     # Voir https://jfly.uni-koeln.de/color/
+    0: "#000000",
+    10: "#404040",
+    20: "#F0E442",
+    30: "#009E73",
+    40: "#D55E00",
+    50: "#56B4E9",
+}
 NS_TO_MS = 1e6
 
 
@@ -58,6 +66,18 @@ if __name__ == "__main__":
         "Liste des derniers evenements par processus (voir le header utils.h pour la definition de chaque valeur numerique)"
     )
     for fpath in files:
+        # Validation
+        with open(fpath) as f:
+            d = f.readlines()
+            if len(d) < 3:
+                print(f"Attention, le fichier {fpath.stem} possède moins de 2 lignes et sera ignoré!")
+                continue
+            if any(len(ligne) < 10 for ligne in d[:-1]):
+                print(f"Attention, le fichier {fpath.stem} possède des lignes invalides (moins de 10 caractères) et sera ignoré!")
+                continue
+            if any(ligne.count(",") != 1 for ligne in d[:-1]):
+                print(f"Attention, le fichier {fpath.stem} possède des lignes invalides (sans caractère de séparation) et sera ignoré!")
+                continue
         data[fpath.stem] = np.loadtxt(fpath, delimiter=",")
         print(
             f"Dernier evenement pour {fpath.stem.partition('-')[2]} : {int(data[fpath.stem][-1,0])} au temps t={data[fpath.stem][-1,1]/1e9:.6f}"
@@ -87,8 +107,8 @@ if __name__ == "__main__":
             ax.add_patch(r)
 
     ax.set_yticks(
-        [(i + 0.5) for i in range(len(files))],
-        labels=[f.stem.partition("-")[2] for f in files],
+        [(i + 0.5) for i in range(len(data))],
+        labels=[k.partition("-")[2] for k in data.keys()],
     )
     graphpos = ax.get_position()
     ax.set_position(
