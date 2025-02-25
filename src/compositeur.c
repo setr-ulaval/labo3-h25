@@ -215,8 +215,7 @@ int main(int argc, char* argv[])
         // Mode debug, vous pouvez changer ces valeurs pour ce qui convient dans vos tests
         printf("Mode debug selectionne pour le compositeur\n");
         entree[0] = (char*)"/mem1";
-        entree[1] = (char*)"/mem2";
-		nbrActifs = 2;
+		nbrActifs = 1;
     }
     else{
         int c;
@@ -296,10 +295,8 @@ int main(int argc, char* argv[])
     }
 
     printf("Initialisation convertisseur, mode d'ordonnancement=%i\n", modeOrdonnanceur);
-    switch (modeOrdonnanceur) {
-        case ORDONNANCEMENT_NORT:
-            break;
-    };
+    
+    setOrdonnanceur(modeOrdonnanceur, runtime, deadline, period);
 
     // On desactive le buffering pour les printf(), pour qu'il soit possible de les voir depuis votre ordinateur
 	setbuf(stdout, NULL);
@@ -418,7 +415,32 @@ int main(int argc, char* argv[])
 		tableau_image_data[i] = image_data;
 	}
 
-	int results_wait;
+
+    FILE *fstats = fopen("stats.txt", "w");
+	if (!fstats) {
+		perror("Erreur lors de l'ouverture de stats.txt");
+		exit(EXIT_FAILURE);
+	}
+
+	long double current_time, start_time, fps_time;
+    double elapsed_time;
+
+	long double last_frame_time[4] = {0, 0, 0, 0};
+ 	int frame_count[4] = {0, 0, 0, 0};
+    long double max_frame_time[4] = {0, 0, 0, 0};
+
+    for (int i = 0; i < nbrActifs; ++i) {
+        last_frame_time[i] = get_time();
+        frame_count[i] = 0;
+        max_frame_time[i] = 0;
+    }
+
+    start_time = get_time();
+    fps_time = start_time;
+	int max_fps;
+	double min_frame_time;
+	long double frame_time_ms;
+    double elapsed_fps_time;
 
     while(1){
             // Boucle principale du programme
@@ -436,13 +458,32 @@ int main(int argc, char* argv[])
         
             // Exemple d'appel à ecrireImage (n'oubliez pas de remplacer les arguments commençant par A_REMPLIR!)
 
-        
         for (int i = 0; i < nbrActifs; ++i) {            
-
             evenementProfilage(&profInfos, ETAT_ATTENTE_MUTEXLECTURE);
-            if(attenteLecteurAsync(tableau_zone_lecteur[i])) continue;
-                            
+            if(pthread_mutex_trylock(&(tableau_zone_lecteur[i]->header->mutex)))
+            {
+                evenementProfilage(&profInfos, ETAT_ENPAUSE);
+                usleep(DELAI_INIT_READER_USEC);
+                continue;
+            }
+            if(attenteLecteurAsync(tableau_zone_lecteur[i])) 
+            {
+                pthread_mutex_unlock(&(tableau_zone_lecteur[i]->header->mutex));
+                continue;
+            }
+            
             evenementProfilage(&profInfos, ETAT_TRAITEMENT);
+            current_time = get_time();
+            max_fps = tableau_zone_lecteur[i]->header->fps;
+            min_frame_time = 1 / (double)max_fps;
+            elapsed_time = current_time - last_frame_time[i];
+
+            if (elapsed_time < min_frame_time) {
+                pthread_mutex_unlock(&(tableau_zone_lecteur[i]->header->mutex));
+                continue; // Ignore ce flux s'il va trop vite
+            }
+                            
+            evenementProfilage(&profInfos, ETAT_TRAITEMENT);    
             tableau_zone_lecteur[i]->header->frameReader++;
 
             memcpy(tableau_image_data[i], tableau_zone_lecteur[i]->data, tableau_zone_lecteur[i]->tailleDonnees);
@@ -465,7 +506,28 @@ int main(int argc, char* argv[])
                         tableau_header[i].hauteur,
                         tableau_header[i].largeur,
                         tableau_header[i].canaux);
-        }      
+
+            frame_count[i]++;
+            frame_time_ms = elapsed_time * 1000.0;
+            if (frame_time_ms > max_frame_time[i]) {
+                max_frame_time[i] = frame_time_ms;
+            }
+            last_frame_time[i] = get_time();
+        }
+
+        elapsed_fps_time = current_time - fps_time;
+        if (elapsed_fps_time >= 5.0) {
+			fprintf(fstats, "[%.1f] ", current_time - start_time);
+			for (int i = 0; i < nbrActifs; ++i) {
+				double avg_fps = frame_count[i] / elapsed_fps_time;
+				fprintf(fstats, "Entree %d: moy=%.1f fps, max=%.1Lf ms | ", i + 1, avg_fps, max_frame_time[i]);
+				frame_count[i] = 0;
+				max_frame_time[i] = 0;
+			}
+			fprintf(fstats, "\n");
+            fflush(fstats);
+			fps_time = current_time;
+		}      
     }
 
 

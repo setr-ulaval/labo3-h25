@@ -130,6 +130,8 @@ int main(int argc, char* argv[]){
         sortie = argv[optind+1];
     }
 
+    setOrdonnanceur(modeOrdonnanceur, runtime, deadline, period);
+
     printf("Initialisation filtreur, entree=%s, sortie=%s, mode d'ordonnancement=%i\n", entree, sortie, modeOrdonnanceur);
 
     struct memPartage zone_lecteur = {0};
@@ -163,8 +165,10 @@ int main(int argc, char* argv[]){
     zone_ecrivain.header->frameWriter ++;
 
     while(1)
-    {        
+    {
+        evenementProfilage(&profInfos, ETAT_ATTENTE_MUTEXLECTURE);        
         pthread_mutex_lock(&(zone_lecteur.header->mutex));
+        evenementProfilage(&profInfos, ETAT_TRAITEMENT); 
         zone_lecteur.header->frameReader++;
 
         memcpy(image_data, zone_lecteur.data, zone_lecteur.tailleDonnees);
@@ -186,14 +190,18 @@ int main(int argc, char* argv[]){
         }
         pthread_mutex_unlock(&(zone_lecteur.header->mutex));
 
+        evenementProfilage(&profInfos, ETAT_ENPAUSE); 
         attenteLecteur(&zone_lecteur);
+        evenementProfilage(&profInfos, ETAT_TRAITEMENT); 
 
         memcpy(zone_ecrivain.data, image_data_filtered, zone_ecrivain.tailleDonnees);
         zone_ecrivain.copieCompteur = zone_ecrivain.header->frameReader;
         pthread_mutex_unlock(&(zone_ecrivain.header->mutex));
 
+        evenementProfilage(&profInfos, ETAT_ENPAUSE); 
         attenteEcrivain(&zone_ecrivain);
 
+        evenementProfilage(&profInfos, ETAT_ATTENTE_MUTEXECRITURE); 
         pthread_mutex_lock(&(zone_ecrivain.header->mutex));
         zone_ecrivain.header->frameWriter++;
     }

@@ -82,8 +82,12 @@ int main(int argc, char* argv[]){
     if(strcmp(argv[1], "--debug") == 0){
         // Mode debug, vous pouvez changer ces valeurs pour ce qui convient dans vos tests
         printf("Mode debug selectionne pour le decodeur\n");
-        entree = (char*)"/home/pi/projects/laboratoire3/240p/02_Sintel.ulv";
+        entree = (char*)"/home/pi/projects/laboratoire3/480p/02_Sintel.ulv";
         sortie = (char*)"/mem1";
+        runtime = 16;
+        deadline = 33;
+        period = 33;
+        modeOrdonnanceur = ORDONNANCEMENT_DEADLINE;
     }
     else{
         int c;
@@ -149,6 +153,8 @@ int main(int argc, char* argv[]){
         entree = argv[optind];
         sortie = argv[optind+1];
     }
+
+    setOrdonnanceur(modeOrdonnanceur, runtime, deadline, period);
     
     int fd;
 
@@ -244,10 +250,10 @@ int main(int argc, char* argv[]){
             zone.copieCompteur = zone.header->frameReader;
             pthread_mutex_unlock(&(zone.header->mutex));
 
-            evenementProfilage(&profInfos, ETAT_ATTENTE_MUTEXECRITURE);
+            evenementProfilage(&profInfos, ETAT_ENPAUSE);
             attenteEcrivain(&zone);
-            evenementProfilage(&profInfos, ETAT_TRAITEMENT);
 
+            evenementProfilage(&profInfos, ETAT_ATTENTE_MUTEXECRITURE);
             pthread_mutex_lock(&(zone.header->mutex));
             zone.header->frameWriter++;
             // sprintf(save_ppm_file_path, "/home/pi/projects/laboratoire3/image%d.ppm", image_count);
