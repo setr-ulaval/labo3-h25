@@ -381,7 +381,7 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < nbrActifs; ++i)
 	{
 		// Allocate memory for zone_lecteur
-		struct memPartage* zone_lecteur = (struct memPartage*)tempsreel_malloc(sizeof(struct memPartage));
+		struct memPartage* zone_lecteur = (struct memPartage*)malloc(sizeof(struct memPartage));
 		if (!zone_lecteur)
 		{
 			perror("Allocation failed for zone_lecteur");
@@ -404,6 +404,12 @@ int main(int argc, char* argv[])
 		ASSERT_MSG(tableau_zone_lecteur[i]->header->largeur == 427, error_message);
 
 		// Allocate memory for image_data
+
+        if(prepareMemoire(tableau_zone_lecteur[i]->tailleDonnees, tableau_zone_lecteur[i]->tailleDonnees))
+        {
+            perror("Cannot allocate memory");
+            exit(EXIT_FAILURE);
+        }
 		unsigned char* image_data = (unsigned char*)tempsreel_malloc(tableau_zone_lecteur[i]->tailleDonnees);
         pthread_mutex_unlock(&(tableau_zone_lecteur[i]->header->mutex));
 		if (!image_data)

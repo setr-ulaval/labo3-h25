@@ -34,10 +34,9 @@ int prepareMemoire(size_t tailleImageEntree, size_t tailleImageSortie)
     {
         BUFFER = (char*)malloc(MAX_ALLOC * MEM_SLOTS);
         init_free_list();
-        return 0;
     }
 
-    return 1;
+    return 0;
 }
 
 // TODO: Implementez ici votre allocateur memoire utilisant l'interface decrite dans allocateurMemoire.h
@@ -45,11 +44,6 @@ void* tempsreel_malloc(size_t taille)
 {
 
     assert (taille <= MAX_ALLOC);
-    if (!BUFFER)
-    {
-        BUFFER = (char*)malloc(MAX_ALLOC * MEM_SLOTS);
-        init_free_list();
-    }
 
     if (!BUFFER)
     {

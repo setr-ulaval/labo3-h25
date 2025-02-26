@@ -43,8 +43,29 @@ int initMemoirePartageeEcrivain(const char* identifiant,
    // Configuration du mutex pour le partage entre processus
    pthread_mutexattr_t attr;
    pthread_mutexattr_init(&attr);
+    /* 
+    * Allows the mutex to be shared between multiple processes.
+    * - Default: PTHREAD_PROCESS_PRIVATE (mutex is only accessible within a single process).
+    * - PTHREAD_PROCESS_SHARED: Enables the mutex to be used across processes, 
+    *   assuming it is placed in shared memory (e.g., via mmap or shm).
+    */
    pthread_mutexattr_setpshared(&attr, PTHREAD_PROCESS_SHARED);
+    /*
+    * Enables robustness for the mutex to handle crashes.
+    * - Default: PTHREAD_MUTEX_STALLED (if a thread holding the mutex crashes, it remains locked forever).
+    * - PTHREAD_MUTEX_ROBUST: If a thread holding the mutex crashes, another thread can 
+    *   recover the mutex by calling `pthread_mutex_consistent()` after acquiring it.
+    */
    pthread_mutexattr_setrobust(&attr, PTHREAD_MUTEX_ROBUST);
+    /*
+    * Enables priority inheritance to prevent priority inversion.
+    * - Default: PTHREAD_PRIO_NONE (no priority adjustments).
+    * - PTHREAD_PRIO_INHERIT: If a high-priority thread is blocked on this mutex, 
+    *   the lower-priority thread holding it temporarily inherits the higher priority.
+    * - PTHREAD_PRIO_PROTECT: The mutex has a fixed priority ceiling, and any thread 
+    *   locking it gets that priority to prevent priority inversion.
+    */
+   pthread_mutexattr_setprotocol(&attr, PTHREAD_PRIO_INHERIT);
    int res = pthread_mutex_init(&(zone->header->mutex), &attr);
    pthread_mutexattr_destroy(&attr);
    if (res != 0) {

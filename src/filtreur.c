@@ -157,7 +157,11 @@ int main(int argc, char* argv[]){
                             &headerInfos);
 
     
-
+    if(prepareMemoire(zone_lecteur.tailleDonnees, zone_lecteur.tailleDonnees))
+    {
+        perror("Cannot allocate memory");
+        exit(EXIT_FAILURE);
+    }
     unsigned char* image_data = (unsigned char*)tempsreel_malloc(zone_lecteur.tailleDonnees);
     unsigned char* image_data_filtered = (unsigned char*)tempsreel_malloc(zone_lecteur.tailleDonnees);
 

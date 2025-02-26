@@ -223,6 +223,12 @@ int main(int argc, char* argv[]){
                             sizeof(headerInfos)+frame_size,
                             &headerInfos);
 
+    if(prepareMemoire(1280*720 *3 *sizeof(float), frame_size))
+    {
+        perror("Cannot allocate memory");
+        exit(EXIT_FAILURE);
+    }
+
     unsigned char* compress_image_data = (unsigned char*)tempsreel_malloc(frame_size);
 
     uint32_t image_size = UINT32_MAX; 
