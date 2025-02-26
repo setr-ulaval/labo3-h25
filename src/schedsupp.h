@@ -65,11 +65,11 @@ void setOrdonnanceur(int modeOrdonnanceur, int runtime, int deadline, int period
         break;
     case ORDONNANCEMENT_RR:
         policy = SCHED_RR;
-        param.sched_priority = 1;
+        param.sched_priority = 0;
         break;
     case ORDONNANCEMENT_FIFO:
         policy = SCHED_FIFO;
-        param.sched_priority = 1;
+        param.sched_priority = 0;
         break;
     case ORDONNANCEMENT_DEADLINE:
         policy = SCHED_DEADLINE;

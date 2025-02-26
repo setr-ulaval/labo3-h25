@@ -428,9 +428,10 @@ int main(int argc, char* argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	long double current_time, start_time, fps_time;
+	long double current_time, start_time, running_time;
     double elapsed_time;
-
+    
+    long double first_frame_time[4] = {0, 0, 0, 0};
 	long double last_frame_time[4] = {0, 0, 0, 0};
  	int frame_count[4] = {0, 0, 0, 0};
     long double max_frame_time[4] = {0, 0, 0, 0};
@@ -442,7 +443,6 @@ int main(int argc, char* argv[])
     }
 
     start_time = get_time();
-    fps_time = start_time;
 	int max_fps;
 	double min_frame_time;
 	long double frame_time_ms;
@@ -482,9 +482,8 @@ int main(int argc, char* argv[])
             current_time = get_time();
             max_fps = tableau_zone_lecteur[i]->header->fps;
             min_frame_time = 1 / (double)max_fps;
-            elapsed_time = current_time - last_frame_time[i];
 
-            if (elapsed_time < min_frame_time) {
+            if ((current_time - last_frame_time[i]) < min_frame_time) {
                 pthread_mutex_unlock(&(tableau_zone_lecteur[i]->header->mutex));
                 continue; // Ignore ce flux s'il va trop vite
             }
@@ -500,6 +499,12 @@ int main(int argc, char* argv[])
             tableau_zone_lecteur[i]->copieCompteur = tableau_zone_lecteur[i]->header->frameWriter;
             pthread_mutex_unlock(&(tableau_zone_lecteur[i]->header->mutex));
 
+            elapsed_time = current_time - last_frame_time[i];
+            last_frame_time[i] = current_time;
+            if (frame_count[i] == 0)
+            {
+                first_frame_time[i] = current_time;
+            }
             ecrireImage(i, 
                         nbrActifs, 
                         fbfd, 
@@ -512,27 +517,26 @@ int main(int argc, char* argv[])
                         tableau_header[i].hauteur,
                         tableau_header[i].largeur,
                         tableau_header[i].canaux);
-
+            
             frame_count[i]++;
             frame_time_ms = elapsed_time * 1000.0;
             if (frame_time_ms > max_frame_time[i]) {
                 max_frame_time[i] = frame_time_ms;
             }
-            last_frame_time[i] = get_time();
         }
 
-        elapsed_fps_time = current_time - fps_time;
+        current_time = get_time();
+        elapsed_fps_time = current_time - running_time;
         if (elapsed_fps_time >= 5.0) {
-			fprintf(fstats, "[%.1f] ", current_time - start_time);
+			fprintf(fstats, "[%.1Lf] ", current_time - start_time);
 			for (int i = 0; i < nbrActifs; ++i) {
-				double avg_fps = frame_count[i] / elapsed_fps_time;
+				double avg_fps = (double)frame_count[i] / (double)(current_time - first_frame_time[i]);
 				fprintf(fstats, "Entree %d: moy=%.1f fps, max=%.1Lf ms | ", i + 1, avg_fps, max_frame_time[i]);
 				frame_count[i] = 0;
 				max_frame_time[i] = 0;
 			}
 			fprintf(fstats, "\n");
             fflush(fstats);
-			fps_time = current_time;
 		}      
     }
 

@@ -233,7 +233,6 @@ int main(int argc, char* argv[]){
 
     uint32_t image_size = UINT32_MAX; 
     size_t image_count = 0;
-    char save_ppm_file_path[50]; // Make sure the array is large enough
 
     pthread_mutex_lock(&(zone.header->mutex));
     zone.header->frameWriter ++;
