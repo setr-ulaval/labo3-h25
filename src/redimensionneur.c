@@ -149,13 +149,17 @@ int main(int argc, char* argv[]){
         printf("Paramètres de redimensionnement incomplets ou invalides.\n");
     }
 
-    struct memPartage zone_lecteur = {0};
+    struct memPartage zone_lecteur;
+    memset(&zone_lecteur, 0, sizeof(struct memPartage));
     
     initMemoirePartageeLecteur(entree,&zone_lecteur);
 
-    struct memPartage zone_ecrivain = {0};
-    struct memPartageHeader headerInfos_lecteur = {0};
-    struct memPartageHeader headerInfos_ecrivain = {0};
+    struct memPartage zone_ecrivain;
+    memset(&zone_ecrivain, 0, sizeof(struct memPartage));
+    struct memPartageHeader headerInfos_lecteur;
+    memset(&headerInfos_lecteur, 0, sizeof(struct memPartageHeader));
+    struct memPartageHeader headerInfos_ecrivain;
+    memset(&headerInfos_ecrivain, 0, sizeof(struct memPartageHeader));
     pthread_mutex_lock(&(zone_lecteur.header->mutex));
 
     headerInfos_lecteur.canaux = zone_lecteur.header->canaux;

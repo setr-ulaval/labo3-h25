@@ -374,7 +374,12 @@ int main(int argc, char* argv[])
     }
 
 	struct memPartage* tableau_zone_lecteur[4];
-    struct memHeader tableau_header[4] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+    struct memHeader tableau_header[4] = {
+        {0, 0, 0, 0},  // Initialize all members
+        {0, 0, 0, 0},  // Initialize all members
+        {0, 0, 0, 0},  // Initialize all members
+        {0, 0, 0, 0}   // Initialize all members
+    };
 	unsigned char* tableau_image_data[4];
 	char error_message[100];
 
@@ -537,6 +542,7 @@ int main(int argc, char* argv[])
 			}
 			fprintf(fstats, "\n");
             fflush(fstats);
+            running_time = current_time;
 		}      
     }
 

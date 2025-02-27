@@ -125,12 +125,15 @@ int main(int argc, char* argv[]){
     setOrdonnanceur(modeOrdonnanceur, runtime, deadline, period);
 
 
-    struct memPartage zone_lecteur = {0};
-    
+    struct memPartage zone_lecteur;
+    memset(&zone_lecteur, 0, sizeof(struct memPartage));
+
     initMemoirePartageeLecteur(entree,&zone_lecteur);
 
-    struct memPartage zone_ecrivain = {0};
-    struct memPartageHeader headerInfos = {0};
+    struct memPartage zone_ecrivain;
+    memset(&zone_ecrivain, 0, sizeof(struct memPartage));
+    struct memPartageHeader headerInfos;
+    memset(&headerInfos, 0, sizeof(struct memPartageHeader));
     pthread_mutex_lock(&(zone_lecteur.header->mutex));
 
     headerInfos.canaux = zone_lecteur.header->canaux;

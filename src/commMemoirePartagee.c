@@ -88,7 +88,7 @@ int initMemoirePartageeLecteur(const char* identifiant,
       usleep(DELAI_INIT_READER_USEC);
    }
 
-   struct stat sb = {0};
+   struct stat sb;
    memset(&sb, 0, sizeof(struct stat));
    while (sb.st_size == 0)
    {

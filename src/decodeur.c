@@ -207,8 +207,10 @@ int main(int argc, char* argv[]){
 
     size_t frame_size = video_info.largeur * video_info.hauteur * video_info.canaux;
 
-    struct memPartage zone = {0};
-    struct memPartageHeader headerInfos = {0};
+    struct memPartage zone;
+    memset(&zone, 0, sizeof(struct memPartage));
+    struct memPartageHeader headerInfos;
+    memset(&headerInfos, 0, sizeof(struct memPartageHeader));
 
     headerInfos.canaux = video_info.canaux;
     headerInfos.fps = video_info.fps;

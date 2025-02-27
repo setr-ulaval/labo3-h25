@@ -46,7 +46,8 @@ void setOrdonnanceur(int modeOrdonnanceur, int runtime, int deadline, int period
 {
     int policy;
     struct sched_param param;
-    struct sched_attr attr = {0};
+    struct sched_attr attr;
+    memset(&attr, 0, sizeof(struct sched_attr));
 
     // FDM: Assuming runtime, deadline and period in ms
 
@@ -65,11 +66,11 @@ void setOrdonnanceur(int modeOrdonnanceur, int runtime, int deadline, int period
         break;
     case ORDONNANCEMENT_RR:
         policy = SCHED_RR;
-        param.sched_priority = 0;
+        param.sched_priority = sched_get_priority_min(policy);
         break;
     case ORDONNANCEMENT_FIFO:
         policy = SCHED_FIFO;
-        param.sched_priority = 0;
+        param.sched_priority = sched_get_priority_min(policy);
         break;
     case ORDONNANCEMENT_DEADLINE:
         policy = SCHED_DEADLINE;
@@ -78,6 +79,8 @@ void setOrdonnanceur(int modeOrdonnanceur, int runtime, int deadline, int period
         printf("Unknown scheduling mode!\n");
         exit(EXIT_FAILURE);
     }   
+
+    printf("priority: %d", param.sched_priority);
 
     if (policy == SCHED_DEADLINE) {
         // SCHED_DEADLINE requires `sched_setattr`
@@ -106,7 +109,8 @@ void setOrdonnanceur(int modeOrdonnanceur, int runtime, int deadline, int period
     }
 
     if (current_policy == SCHED_DEADLINE) {
-        struct sched_attr get_attr = {0};
+        struct sched_attr get_attr;
+        memset(&get_attr, 0, sizeof(struct sched_attr));
         get_attr.size = sizeof(struct sched_attr);
         if (sched_getattr(0, &get_attr, sizeof(struct sched_attr), 0) != 0) {
             perror("sched_getattr failed");

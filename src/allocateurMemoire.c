@@ -10,6 +10,10 @@
 #include "allocateurMemoire.h"
 #include <stdbool.h>
 #include <assert.h>
+#include <stdlib.h>
+#include <sys/mman.h>
+#include <unistd.h>
+
 
 #define internal static
 #define MAX_ALLOC (1280*720 *3 *sizeof(float))
@@ -28,12 +32,28 @@ void init_free_list()
 
 int prepareMemoire(size_t tailleImageEntree, size_t tailleImageSortie)
 {
-    assert (tailleImageEntree <= MAX_ALLOC);
-    assert (tailleImageSortie <= MAX_ALLOC);
+    (void)tailleImageEntree; // Silence l'avertissement
+    (void)tailleImageSortie; // Silence l'avertissement
+    assert(tailleImageEntree <= MAX_ALLOC);
+    assert(tailleImageSortie <= MAX_ALLOC);
+    
     if (!BUFFER)
     {
+        // Allouer une zone mémoire suffisante
         BUFFER = (char*)malloc(MAX_ALLOC * MEM_SLOTS);
-        init_free_list();
+        if (!BUFFER) 
+        {
+            errno = ENOMEM;
+            exit(1); 
+        }
+
+        if (mlock(BUFFER, MAX_ALLOC * MEM_SLOTS) != 0)
+        {
+            perror("mlock failed");
+            exit(1);
+        }
+
+        init_free_list(); 
     }
 
     return 0;
@@ -42,7 +62,7 @@ int prepareMemoire(size_t tailleImageEntree, size_t tailleImageSortie)
 // TODO: Implementez ici votre allocateur memoire utilisant l'interface decrite dans allocateurMemoire.h
 void* tempsreel_malloc(size_t taille)
 {
-
+    (void)taille;
     assert (taille <= MAX_ALLOC);
 
     if (!BUFFER)
