@@ -474,7 +474,7 @@ int main(int argc, char* argv[])
             if(pthread_mutex_trylock(&(tableau_zone_lecteur[i]->header->mutex)))
             {
                 evenementProfilage(&profInfos, ETAT_ENPAUSE);
-                usleep(DELAI_INIT_READER_USEC);
+                // usleep(DELAI_INIT_READER_USEC);
                 continue;
             }
             if(attenteLecteurAsync(tableau_zone_lecteur[i])) 

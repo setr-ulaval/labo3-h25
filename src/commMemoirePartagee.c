@@ -85,7 +85,7 @@ int initMemoirePartageeLecteur(const char* identifiant,
    while (zone->fd == -1)
    {
       zone->fd = shm_open(identifiant, O_RDWR | O_CREAT, 0666); 
-      usleep(DELAI_INIT_READER_USEC);
+    //   usleep(DELAI_INIT_READER_USEC);
    }
 
    struct stat sb;
@@ -93,7 +93,7 @@ int initMemoirePartageeLecteur(const char* identifiant,
    while (sb.st_size == 0)
    {
       fstat(zone->fd, &sb);
-      usleep(DELAI_INIT_READER_USEC);
+    //   usleep(DELAI_INIT_READER_USEC);
    }
 
    void *addr = mmap(NULL, sb.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, zone->fd, 0);
@@ -101,14 +101,13 @@ int initMemoirePartageeLecteur(const char* identifiant,
 
    zone->header = (struct memPartageHeader *)addr;
 
-   pthread_mutex_lock(&(zone->header->mutex));
+   
    while(zone->header->frameWriter == 0)
    {
-       pthread_mutex_unlock(&(zone->header->mutex));
        usleep(DELAI_INIT_READER_USEC);
-       pthread_mutex_lock(&(zone->header->mutex));
    }
-   
+
+   pthread_mutex_lock(&(zone->header->mutex));
    zone->data = (unsigned char *)((unsigned char *)addr + sizeof(struct memPartageHeader));  
    zone->tailleDonnees = zone->header->hauteur * zone->header->largeur * zone->header->canaux;
    pthread_mutex_unlock(&(zone->header->mutex));
@@ -139,7 +138,7 @@ int attenteLecteurAsync(struct memPartage *zone)
 {
 
     if (zone->header->frameWriter == zone->copieCompteur) {
-        usleep(DELAI_INIT_READER_USEC);
+        // usleep(DELAI_INIT_READER_USEC);
         return -1; 
     }
 
