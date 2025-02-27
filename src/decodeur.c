@@ -69,5 +69,217 @@ int main(int argc, char* argv[]){
     // pour décoder une image JPEG contenue dans un buffer!
     // N'oubliez pas également que ce décodeur doit lire les fichiers ULV EN BOUCLE
 
+    // Code lisant les options sur la ligne de commande
+    char *entree, *sortie;                          // Zones memoires d'entree et de sortie
+    int modeOrdonnanceur = ORDONNANCEMENT_NORT;     // NORT est la valeur par defaut
+    unsigned int runtime, deadline, period;         // Dans le cas de l'ordonnanceur DEADLINE
+
+    if(argc < 2){
+        printf("Nombre d'arguments insuffisant\n");
+        return -1;
+    }
+
+    if(strcmp(argv[1], "--debug") == 0){
+        // Mode debug, vous pouvez changer ces valeurs pour ce qui convient dans vos tests
+        printf("Mode debug selectionne pour le decodeur\n");
+        entree = (char*)"/home/pi/projects/laboratoire3/480p/02_Sintel.ulv";
+        sortie = (char*)"/mem1";
+        runtime = 16;
+        deadline = 33;
+        period = 33;
+        modeOrdonnanceur = ORDONNANCEMENT_DEADLINE;
+    }
+    else{
+        int c;
+        int deadlineParamIndex = 0;
+        char* splitString;
+
+        opterr = 0;
+
+        while ((c = getopt (argc, argv, "s:d:")) != -1){
+            switch (c)
+                {
+                case 's':
+                    // On selectionne le mode d'ordonnancement
+                    if(strcmp(optarg, "NORT") == 0){
+                        modeOrdonnanceur = ORDONNANCEMENT_NORT;
+                    }
+                    else if(strcmp(optarg, "RR") == 0){
+                        modeOrdonnanceur = ORDONNANCEMENT_RR;
+                    }
+                    else if(strcmp(optarg, "FIFO") == 0){
+                        modeOrdonnanceur = ORDONNANCEMENT_FIFO;
+                    }
+                    else if(strcmp(optarg, "DEADLINE") == 0){
+                        modeOrdonnanceur = ORDONNANCEMENT_DEADLINE;
+                    }
+                    else{
+                        modeOrdonnanceur = ORDONNANCEMENT_NORT;
+                        printf("Mode d'ordonnancement %s non valide, defaut sur NORT\n", optarg);
+                    }
+                    break;
+                case 'd':
+                    // Dans le cas DEADLINE, on peut recevoir des parametres
+                    // Si un autre mode d'ordonnacement est selectionne, ces
+                    // parametres peuvent simplement etre ignores
+                    splitString = strtok(optarg, ",");
+                    while (splitString != NULL)
+                    {
+                        if(deadlineParamIndex == 0){
+                            // Runtime
+                            runtime = atoi(splitString);
+                        }
+                        else if(deadlineParamIndex == 1){
+                            deadline = atoi(splitString);
+                        }
+                        else{
+                            period = atoi(splitString);
+                            break;
+                        }
+                        deadlineParamIndex++;
+                        splitString = strtok(NULL, ",");
+                    }
+                    break;
+                default:
+                    continue;
+                }
+        }
+
+        // Ce qui suit est la description des zones memoires d'entree et de sortie
+        if(argc - optind < 2){
+            printf("Arguments manquants (fichier_entree flux_sortie)\n");
+            return -1;
+        }
+        entree = argv[optind];
+        sortie = argv[optind+1];
+    }
+
+    setOrdonnanceur(modeOrdonnanceur, runtime, deadline, period);
+    
+    int fd;
+
+    // Open file
+    fd = open(entree, O_RDONLY);
+    if (fd == -1) {
+        printf("Error opening file %s", strerror(errno));
+        return EXIT_FAILURE;
+    }
+
+    struct stat sb;
+    if (fstat(fd, &sb) == -1) {
+        perror("Erreur lors de la récupération de la taille du fichier");
+        close(fd);
+        return 1;
+    }
+    size_t file_size = sb.st_size;
+
+    // MAP_PRIVATE: 
+    //  Create a private copy-on-write mapping.  Updates to the mapping are not visible to other processes mapping the  same  file,
+    //   and  are  not  carried through to the underlying file.  It is unspecified whether changes made to the file after the mmap()
+    //   call are visible in the mapped region.
+    // MAP_POPULATE
+    //   Populate (prefault) page tables for a mapping.  For a file mapping, this causes read-ahead on the file.  This will help  to
+    //   reduce blocking on page faults later.  MAP_POPULATE is supported for private mappings only since Linux 2.6.23.
+
+    void* file_data = mmap(NULL, file_size, PROT_READ, MAP_PRIVATE | MAP_POPULATE, fd, 0);
+    if (file_data == MAP_FAILED) {
+        perror("Erreur lors du mapping du fichier en mémoire");
+        close(fd);
+        return 1;
+    }
+
+    unsigned char* video_buffer = (unsigned char*)file_data;
+    
+    if (memcmp(video_buffer, header, HEADER_SIZE) != 0) {
+        printf("Invalid file format: expected %.4s, got '%.4s'\n", header, video_buffer);
+        close(fd);
+        return EXIT_FAILURE;
+    }
+
+    video_buffer += HEADER_SIZE;
+
+    struct videoInfos video_info;
+
+    memcpy(&video_info, video_buffer, sizeof(video_info));
+
+    video_buffer += sizeof(video_info);
+    unsigned char* iterator = video_buffer;
+
+    size_t frame_size = video_info.largeur * video_info.hauteur * video_info.canaux;
+
+    struct memPartage zone;
+    memset(&zone, 0, sizeof(struct memPartage));
+    struct memPartageHeader headerInfos;
+    memset(&headerInfos, 0, sizeof(struct memPartageHeader));
+
+    headerInfos.canaux = video_info.canaux;
+    headerInfos.fps = video_info.fps;
+    headerInfos.hauteur = video_info.hauteur;
+    headerInfos.largeur = video_info.largeur;
+
+    zone.header = &headerInfos;
+    zone.tailleDonnees = frame_size;
+    
+    initMemoirePartageeEcrivain(sortie,
+                            &zone,
+                            sizeof(headerInfos)+frame_size,
+                            &headerInfos);
+
+    if(prepareMemoire(1280*720 *3 *sizeof(float), frame_size))
+    {
+        perror("Cannot allocate memory");
+        exit(EXIT_FAILURE);
+    }
+
+    unsigned char* compress_image_data = (unsigned char*)tempsreel_malloc(frame_size);
+
+    uint32_t image_size = UINT32_MAX; 
+    size_t image_count = 0;
+
+    pthread_mutex_lock(&(zone.header->mutex));
+    zone.header->frameWriter ++;
+
+    while(1)
+    { 
+        memcpy(&image_size, iterator, sizeof(image_size));
+        iterator += sizeof(image_size);
+        while (image_size > 0)
+        { 
+            evenementProfilage(&profInfos, ETAT_TRAITEMENT);
+            memcpy(compress_image_data, iterator, image_size);
+            iterator += image_size;
+            
+            unsigned char* image_data = jpgd::decompress_jpeg_image_from_memory(compress_image_data, image_size, (int*)&video_info.largeur, (int*)&video_info.hauteur, (int*)&video_info.canaux, video_info.canaux, 0);
+            
+            memcpy(zone.data, image_data, zone.tailleDonnees);
+
+            tempsreel_free(image_data); 
+            zone.copieCompteur = zone.header->frameReader;
+            pthread_mutex_unlock(&(zone.header->mutex));
+
+            evenementProfilage(&profInfos, ETAT_ENPAUSE);
+            attenteEcrivain(&zone);
+
+            evenementProfilage(&profInfos, ETAT_ATTENTE_MUTEXECRITURE);
+            pthread_mutex_lock(&(zone.header->mutex));
+            zone.header->frameWriter++;
+            // sprintf(save_ppm_file_path, "/home/pi/projects/laboratoire3/image%d.ppm", image_count);
+            // enregistreImage(image_data, video_info.hauteur, video_info.largeur, video_info.canaux, save_ppm_file_path);
+
+            image_count++;
+            memcpy(&image_size, iterator, sizeof(image_size));
+            iterator += sizeof(image_size);
+
+        }
+        iterator = video_buffer;
+
+        image_count = 0;
+    }
+    
+    tempsreel_free(compress_image_data); 
+    
+
+    close(fd);
+
     return 0;
 }

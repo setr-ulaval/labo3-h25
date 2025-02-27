@@ -28,6 +28,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <fcntl.h>
+#include <stdbool.h>
 
 #include <sys/ioctl.h>
 
@@ -64,6 +65,16 @@
 #include "commMemoirePartagee.h"
 #include "utils.h"
 
+#define ASSERT_MSG(condition, message)      \
+    do {                                    \
+        if (!(condition)) {                  \
+            printf("Assertion failed: %s\n", message); \
+            exit(EXIT_FAILURE);               \
+        }                                    \
+    } while (0)
+
+
+#define FILE_SIZE 1024
 
 // Fonction permettant de récupérer le temps courant sous forme double
 double get_time()
@@ -183,13 +194,110 @@ void ecrireImage(const int position, const int total,
 }
 
 
-
 int main(int argc, char* argv[])
 {
     // TODO
     // ÉCRIVEZ ICI votre code d'analyse des arguments du programme et d'initialisation des zones mémoire partagées
+
+	// Code lisant les options sur la ligne de commande
+    char *entree[4];    							// Zones memoires d'entree
+    int modeOrdonnanceur = ORDONNANCEMENT_NORT;     // NORT est la valeur par defaut
+    unsigned int runtime, deadline, period;         // Dans le cas de l'ordonnanceur DEADLINE
+
+    if(argc < 1){
+        printf("Nombre d'arguments insuffisant\n");
+        return -1;
+    }
+
     int nbrActifs;      // Après votre initialisation, cette variable DOIT contenir le nombre de flux vidéos actifs (de 1 à 4 inclusivement).
+
+    if(strcmp(argv[1], "--debug") == 0){
+        // Mode debug, vous pouvez changer ces valeurs pour ce qui convient dans vos tests
+        printf("Mode debug selectionne pour le compositeur\n");
+        entree[0] = (char*)"/mem1";
+		nbrActifs = 1;
+    }
+    else{
+        int c;
+        int deadlineParamIndex = 0;
+        char* splitString;
+
+        opterr = 0;
+
+        while ((c = getopt (argc, argv, "s:d:")) != -1){
+            switch (c)
+                {
+                case 's':
+                    // On selectionne le mode d'ordonnancement
+                    if(strcmp(optarg, "NORT") == 0){
+                        modeOrdonnanceur = ORDONNANCEMENT_NORT;
+                    }
+                    else if(strcmp(optarg, "RR") == 0){
+                        modeOrdonnanceur = ORDONNANCEMENT_RR;
+                    }
+                    else if(strcmp(optarg, "FIFO") == 0){
+                        modeOrdonnanceur = ORDONNANCEMENT_FIFO;
+                    }
+                    else if(strcmp(optarg, "DEADLINE") == 0){
+                        modeOrdonnanceur = ORDONNANCEMENT_DEADLINE;
+                    }
+                    else{
+                        modeOrdonnanceur = ORDONNANCEMENT_NORT;
+                        printf("Mode d'ordonnancement %s non valide, defaut sur NORT\n", optarg);
+                    }
+                    break;
+                case 'd':
+                    // Dans le cas DEADLINE, on peut recevoir des parametres
+                    // Si un autre mode d'ordonnacement est selectionne, ces
+                    // parametres peuvent simplement etre ignores
+                    splitString = strtok(optarg, ",");
+                    while (splitString != NULL)
+                    {
+                        if(deadlineParamIndex == 0){
+                            // Runtime
+                            runtime = atoi(splitString);
+                        }
+                        else if(deadlineParamIndex == 1){
+                            deadline = atoi(splitString);
+                        }
+                        else{
+                            period = atoi(splitString);
+                            break;
+                        }
+                        deadlineParamIndex++;
+                        splitString = strtok(NULL, ",");
+                    }
+                    break;
+                default:
+                    continue;
+                }
+        }
+
+        // Ce qui suit est la description des zones memoires d'entree
+        if(argc - optind < 1){
+            printf("Arguments manquants (fichier_entree)\n");
+            return -1;
+        }
+
+		if(argc - optind > 4){
+            printf("Trop de fichier d'entree, 4 maximum\n");
+            return -1;
+        }
+
+		for (int i = 0; i < (argc - optind); ++i)
+		{
+			entree[i] = (char*)(argv[optind + i]);
+			printf("Initialisation convertisseur, entree%d=%s\n", i, entree[i]);
+		}
+
+		nbrActifs = argc - optind;
+        
+    }
+
+    printf("Initialisation convertisseur, mode d'ordonnancement=%i\n", modeOrdonnanceur);
     
+    setOrdonnanceur(modeOrdonnanceur, runtime, deadline, period);
+
     // On desactive le buffering pour les printf(), pour qu'il soit possible de les voir depuis votre ordinateur
 	setbuf(stdout, NULL);
 	
@@ -265,6 +373,85 @@ int main(int argc, char* argv[])
 		return -1;
     }
 
+	struct memPartage* tableau_zone_lecteur[4];
+    struct memHeader tableau_header[4] = {
+        {0, 0, 0, 0},  // Initialize all members
+        {0, 0, 0, 0},  // Initialize all members
+        {0, 0, 0, 0},  // Initialize all members
+        {0, 0, 0, 0}   // Initialize all members
+    };
+	unsigned char* tableau_image_data[4];
+	char error_message[100];
+
+	for (int i = 0; i < nbrActifs; ++i)
+	{
+		// Allocate memory for zone_lecteur
+		struct memPartage* zone_lecteur = (struct memPartage*)malloc(sizeof(struct memPartage));
+		if (!zone_lecteur)
+		{
+			perror("Allocation failed for zone_lecteur");
+			exit(1);
+		}
+		
+		// Initialize memory to zero
+		memset(zone_lecteur, 0, sizeof(struct memPartage));
+
+		// Store pointers in the arrays
+		tableau_zone_lecteur[i] = zone_lecteur;
+		
+		// Initialize shared memory
+		initMemoirePartageeLecteur(entree[i], tableau_zone_lecteur[i]);
+
+        pthread_mutex_lock(&(tableau_zone_lecteur[i]->header->mutex));
+		sprintf(error_message, "Expected video height=240, got %d", tableau_zone_lecteur[i]->header->hauteur);
+		ASSERT_MSG(tableau_zone_lecteur[i]->header->hauteur == 240, error_message);
+		sprintf(error_message, "Expected video width=427, got %d", tableau_zone_lecteur[i]->header->largeur);
+		ASSERT_MSG(tableau_zone_lecteur[i]->header->largeur == 427, error_message);
+
+		// Allocate memory for image_data
+
+        if(prepareMemoire(tableau_zone_lecteur[i]->tailleDonnees, tableau_zone_lecteur[i]->tailleDonnees))
+        {
+            perror("Cannot allocate memory");
+            exit(EXIT_FAILURE);
+        }
+		unsigned char* image_data = (unsigned char*)tempsreel_malloc(tableau_zone_lecteur[i]->tailleDonnees);
+        pthread_mutex_unlock(&(tableau_zone_lecteur[i]->header->mutex));
+		if (!image_data)
+		{
+			perror("Allocation failed for image_data");
+			exit(1);
+		}
+
+		tableau_image_data[i] = image_data;
+	}
+
+
+    FILE *fstats = fopen("stats.txt", "w");
+	if (!fstats) {
+		perror("Erreur lors de l'ouverture de stats.txt");
+		exit(EXIT_FAILURE);
+	}
+
+	long double current_time, start_time, running_time;
+    double elapsed_time;
+    
+    long double first_frame_time[4] = {0, 0, 0, 0};
+	long double last_frame_time[4] = {0, 0, 0, 0};
+ 	int frame_count[4] = {0, 0, 0, 0};
+    long double max_frame_time[4] = {0, 0, 0, 0};
+
+    for (int i = 0; i < nbrActifs; ++i) {
+        last_frame_time[i] = get_time();
+        frame_count[i] = 0;
+        max_frame_time[i] = 0;
+    }
+
+    start_time = get_time();
+	int max_fps;
+	double min_frame_time;
+	long double frame_time_ms;
+    double elapsed_fps_time;
 
     while(1){
             // Boucle principale du programme
@@ -281,7 +468,49 @@ int main(int argc, char* argv[])
             // 427x240 (voir le commentaire en haut du document).
         
             // Exemple d'appel à ecrireImage (n'oubliez pas de remplacer les arguments commençant par A_REMPLIR!)
-            ecrireImage(A_REMPLIR_POSITION_ACTUELLE, 
+
+        for (int i = 0; i < nbrActifs; ++i) {            
+            evenementProfilage(&profInfos, ETAT_ATTENTE_MUTEXLECTURE);
+            if(pthread_mutex_trylock(&(tableau_zone_lecteur[i]->header->mutex)))
+            {
+                evenementProfilage(&profInfos, ETAT_ENPAUSE);
+                // usleep(DELAI_INIT_READER_USEC);
+                continue;
+            }
+            if(attenteLecteurAsync(tableau_zone_lecteur[i])) 
+            {
+                pthread_mutex_unlock(&(tableau_zone_lecteur[i]->header->mutex));
+                continue;
+            }
+            
+            evenementProfilage(&profInfos, ETAT_TRAITEMENT);
+            current_time = get_time();
+            max_fps = tableau_zone_lecteur[i]->header->fps;
+            min_frame_time = 1 / (double)max_fps;
+
+            if ((current_time - last_frame_time[i]) < min_frame_time) {
+                pthread_mutex_unlock(&(tableau_zone_lecteur[i]->header->mutex));
+                continue; // Ignore ce flux s'il va trop vite
+            }
+                            
+            evenementProfilage(&profInfos, ETAT_TRAITEMENT);    
+            tableau_zone_lecteur[i]->header->frameReader++;
+
+            memcpy(tableau_image_data[i], tableau_zone_lecteur[i]->data, tableau_zone_lecteur[i]->tailleDonnees);
+            tableau_header[i].hauteur = tableau_zone_lecteur[i]->header->hauteur;
+            tableau_header[i].largeur = tableau_zone_lecteur[i]->header->largeur;
+            tableau_header[i].canaux = tableau_zone_lecteur[i]->header->canaux;
+
+            tableau_zone_lecteur[i]->copieCompteur = tableau_zone_lecteur[i]->header->frameWriter;
+            pthread_mutex_unlock(&(tableau_zone_lecteur[i]->header->mutex));
+
+            elapsed_time = current_time - last_frame_time[i];
+            last_frame_time[i] = current_time;
+            if (frame_count[i] == 0)
+            {
+                first_frame_time[i] = current_time;
+            }
+            ecrireImage(i, 
                         nbrActifs, 
                         fbfd, 
                         fbp, 
@@ -289,10 +518,32 @@ int main(int argc, char* argv[])
                         vinfo.yres, 
                         &vinfo, 
                         finfo.line_length,
-                        A_REMPLIR_DONNEES_DE_LA_TRAME,
-                        A_REMPLIR_HAUTEUR_DE_LA_TRAME,
-                        A_REMPLIR_LARGEUR_DE_LA_TRAME,
-                        A_REMPLIR_NOMBRECANAUX_DANS_LA_TRAME);
+                        tableau_image_data[i],
+                        tableau_header[i].hauteur,
+                        tableau_header[i].largeur,
+                        tableau_header[i].canaux);
+            
+            frame_count[i]++;
+            frame_time_ms = elapsed_time * 1000.0;
+            if (frame_time_ms > max_frame_time[i]) {
+                max_frame_time[i] = frame_time_ms;
+            }
+        }
+
+        current_time = get_time();
+        elapsed_fps_time = current_time - running_time;
+        if (elapsed_fps_time >= 5.0) {
+			fprintf(fstats, "[%.1Lf] ", current_time - start_time);
+			for (int i = 0; i < nbrActifs; ++i) {
+				double avg_fps = (double)frame_count[i] / (double)(current_time - first_frame_time[i]);
+				fprintf(fstats, "Entree %d: moy=%.1f fps, max=%.1Lf ms | ", i + 1, avg_fps, max_frame_time[i]);
+				frame_count[i] = 0;
+				max_frame_time[i] = 0;
+			}
+			fprintf(fstats, "\n");
+            fflush(fstats);
+            running_time = current_time;
+		}      
     }
 
 

@@ -22,7 +22,7 @@
 #include <pthread.h>
 #include <string.h>
 
-#define DELAI_INIT_READER_USEC 1000
+#define DELAI_INIT_READER_USEC 100
 
 /* Architecture du buffer partagé (voir l'énoncé pour plus de détails) :
  *
@@ -47,6 +47,13 @@ struct memPartageHeader{
     pthread_mutex_t mutex;
     uint32_t frameWriter;
     uint32_t frameReader;
+    uint16_t hauteur;
+    uint16_t largeur;
+    uint16_t canaux;
+    uint16_t fps;
+};
+
+struct memHeader{
     uint16_t hauteur;
     uint16_t largeur;
     uint16_t canaux;
